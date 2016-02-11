@@ -12,6 +12,11 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
     protected $licenseValidatorFactory;
 
     /**
+     * @var \Magento\Framework\Module\PackageInfo
+     */
+    protected $packageInfo;
+
+    /**
      * @var \Swissup\Core\Model\ResourceModel\Module\RemoteCollection
      */
     protected $remoteCollection;
@@ -28,12 +33,14 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Swissup\Core\Model\Module\LicenseValidatorFactory $licenseValidatorFactory,
+        \Magento\Framework\Module\PackageInfo $packageInfo,
         \Swissup\Core\Model\ResourceModel\Module\RemoteCollection $remoteCollection,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->licenseValidatorFactory = $licenseValidatorFactory;
+        $this->packageInfo = $packageInfo;
         $this->remoteCollection = $remoteCollection;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -51,18 +58,9 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         parent::load($modelId, $field);
 
         $this->setId($modelId);
-        $this->setDepends(array());
-
-        // $xml = Mage::getConfig()->getNode('modules/' . $modelId);
-        // if ($xml) {
-        //     $data = $xml->asCanonicalArray();
-        //     if (isset($data['depends']) && is_array($data['depends'])) {
-        //         $data['depends'] = array_keys($data['depends']);
-        //     } else {
-        //         $data['depends'] = array();
-        //     }
-        //     $this->addData($data);
-        // }
+        $this->setDepends($this->packageInfo->getRequire($this->getCode()));
+        $this->setVersion($this->packageInfo->getVersion($this->getCode()));
+        $this->setPackageName($this->packageInfo->getPackageName($this->getCode()));
 
         return $this;
     }
