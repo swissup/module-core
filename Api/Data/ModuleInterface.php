@@ -46,28 +46,28 @@ interface ModuleInterface
     public function getId();
 
     /**
-     * Get identifier
+     * Get code
      *
      * @return string
      */
     public function getCode();
 
     /**
-     * Get title
+     * Get dataVersion
      *
      * @return string|null
      */
     public function getDataVersion();
 
     /**
-     * Get content
+     * Get identityKey
      *
      * @return string|null
      */
     public function getIdentityKey();
 
     /**
-     * Get creation time
+     * Get store ids
      *
      * @return string|null
      */
