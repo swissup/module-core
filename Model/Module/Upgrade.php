@@ -2,7 +2,9 @@
 
 namespace Swissup\Core\Model\Module;
 
-abstract class Upgrade
+use Swissup\Core\Api\Data\ModuleUpgradeInterface;
+
+abstract class Upgrade implements ModuleUpgradeInterface
 {
     protected $installer;
 
@@ -16,7 +18,26 @@ abstract class Upgrade
      */
     public function up()
     {
-        //
+    }
+
+    /**
+     * Retrieve the list of operation to run,
+     * including module depends.
+     *
+     * Supported operations:
+     *  configuration       @see runConfiguration
+     *  cmsblock            @see runCmsblock
+     *  cmspage             @see runCmspage
+     *  easyslide           @see runEasyslide
+     *  easybanner          @see runEasybanner
+     *  prolabels           @see runProlabels
+     *  productAttribute    @see runProductAttribute
+     *
+     * @return array
+     */
+    public function getOperations()
+    {
+        return [];
     }
 
     public function upgrade()
