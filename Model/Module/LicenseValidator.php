@@ -132,7 +132,7 @@ class LicenseValidator
         } catch (Exception $e) {
             $result = [
                 'error' => [
-                    'Sorry, try again in five minutes. Validation response parsing error: %s',
+                    'Sorry, try again in five minutes. Validation response parsing error: %1',
                     $e->getMessage()
                 ],
                 'response' => $response
