@@ -12,6 +12,16 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
     protected $licenseValidatorFactory;
 
     /**
+     * @var \Swissup\Core\Model\Module\InstallerFactory
+     */
+    protected $installerFactory;
+
+    /**
+     * @var \Swissup\Core\Model\Module\Installer
+     */
+    protected $installer;
+
+    /**
      * @var \Magento\Framework\Module\PackageInfo
      */
     protected $packageInfo;
@@ -33,6 +43,7 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Swissup\Core\Model\Module\LicenseValidatorFactory $licenseValidatorFactory,
+        \Swissup\Core\Model\Module\InstallerFactory $installerFactory,
         \Magento\Framework\Module\PackageInfo $packageInfo,
         \Swissup\Core\Model\ResourceModel\Module\RemoteCollection $remoteCollection,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -40,6 +51,7 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         array $data = []
     ) {
         $this->licenseValidatorFactory = $licenseValidatorFactory;
+        $this->installerFactory = $installerFactory;
         $this->packageInfo = $packageInfo;
         $this->remoteCollection = $remoteCollection;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -58,7 +70,8 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         parent::load($modelId, $field);
 
         $this->setId($modelId);
-        $this->setDepends($this->packageInfo->getRequire($this->getCode()));
+        // array_filter to remove empty items caused by non-magento modules requirements
+        $this->setDepends(array_filter($this->packageInfo->getRequire($this->getCode())));
         $this->setVersion($this->packageInfo->getVersion($this->getCode()));
         $this->setPackageName($this->packageInfo->getPackageName($this->getCode()));
 
@@ -67,8 +80,15 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
 
     public function up()
     {
-        // $this->getUpgradeProxy()->up();
-        $this->save();
+        $this->getInstaller()->up();
+    }
+
+    public function getInstaller()
+    {
+        if (null === $this->installer) {
+            $this->installer = $this->installerFactory->create(['module' => $this]);
+        }
+        return $this->installer;
     }
 
     public function validateLicense()
