@@ -107,7 +107,7 @@ class LicenseValidator
             $client->setParameterGet('domain', $this->request->getHttpHost());
             $response = $client->request();
             $responseBody = $response->getBody();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ['error' => ['Response error: %s', $e->getMessage()]];
         }
 
@@ -129,7 +129,7 @@ class LicenseValidator
             if (!is_array($result)) {
                 throw new \Exception('Decoding failed');
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = [
                 'error' => [
                     'Sorry, try again in five minutes. Validation response parsing error: %1',
