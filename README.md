@@ -5,6 +5,7 @@
 1. [Installation](#installation)
 2. [Swissup Installer Usage](#swissup-installer-usage)
 3. [Swissup Upgrade Class](#swissup-upgrade-class)
+4. [Popup Message Manager](#popup-message-manager)
 
 ### Installation
 
@@ -133,3 +134,23 @@ configuration   | runConfiguration  | Update Store Configuration
 cmsblock        | runCmsblock       | Create/backup cms blocks
 cmspage         | runCmspage        | Create/backup cms pages
 productAttribute| runProductAttribute| Create attribute if it does not exists
+
+### Popup Message Manager
+
+Popup message manager allows to show regular Magento messages with additional
+information in popup window.
+
+![Popup Message Example](/resources/docs/images/popup_message_example.gif)
+
+**Usage example**
+
+Inject `\Swissup\Helper\PopupMessageManager` component into your controller 
+action and use it instead of built-in `\Magento\Framework\Message\Manager`:
+
+```php
+$this->popupMessageManager->addError(
+    __('Decoding failed: Syntax error'),
+    $popupText,
+    $popupTitle
+);
+```
