@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="layout_generate_blocks_after">
-        <observer name="add_debug_info_block" instance="Swissup\Core\Observer\Backend\AddDebugInfoBlock" />
+        <observer name="swissup_add_popup_messages" instance="Swissup\Core\Observer\Backend\AddPopupMessages" />
     </event>
 </config>

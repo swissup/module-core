@@ -1,0 +1,26 @@
+<ul id="swissup-popup-messages" style="display: none">
+<?php foreach ($this->getData('popup_messenger')->getPopups(true) as $id => $message) : ?>
+    <li id="swissup-popup-<?php echo $id ?>">
+        <div class="swissup__popup-title"><?php echo $this->escapeHtml($message['title']) ?></div>
+        <div class="swissup__popup-text">
+            <pre><?php echo $this->escapeHtml($message['text']) ?></pre>
+        </div>
+    </li>
+<?php endforeach; ?>
+</ul>
+
+<script type="text/javascript">
+require([
+    'jquery',
+    'Magento_Ui/js/modal/alert'
+], function ($, alert) {
+    $('.swissup__action-info-message').click(function(e) {
+        e.preventDefault();
+        var context = '#swissup-popup-' + $(this).attr('data-target');
+        alert({
+            title: $('.swissup__popup-title', context).html(),
+            content: $('.swissup__popup-text', context).html()
+        });
+    });
+});
+</script>
