@@ -7,11 +7,6 @@ class PopupMessageManager
     const GROUP_ID = 'swissup_popup_messages';
 
     /**
-     * @var \Magento\Framework\View\Layout
-     */
-    protected $layout;
-
-    /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
@@ -22,11 +17,9 @@ class PopupMessageManager
     protected $session;
 
     public function __construct(
-        \Magento\Framework\View\Layout $layout,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Backend\Model\Session $session
     ) {
-        $this->layout = $layout;
         $this->messageManager = $messageManager;
         $this->session = $session;
     }
