@@ -24,32 +24,36 @@ class PopupMessageManager
         $this->session = $session;
     }
 
-    public function addError($message, $popupText, $popupTitle)
+    public function addError($message, $popupText = null, $popupTitle = null)
     {
         $popupId = $this->addPopup($popupText, $popupTitle);
         $this->messageManager->addError($this->getMessageText($message, $popupId));
     }
 
-    public function addWarning($message, $popupText, $popupTitle)
+    public function addWarning($message, $popupText = null, $popupTitle = null)
     {
         $popupId = $this->addPopup($popupText, $popupTitle);
         $this->messageManager->addWarning($this->getMessageText($message, $popupId));
     }
 
-    public function addNotice($message, $popupText, $popupTitle)
+    public function addNotice($message, $popupText = null, $popupTitle = null)
     {
         $popupId = $this->addPopup($popupText, $popupTitle);
         $this->messageManager->addNotice($this->getMessageText($message, $popupId));
     }
 
-    public function addSuccess($message, $popupText, $popupTitle)
+    public function addSuccess($message, $popupText = null, $popupTitle = null)
     {
         $popupId = $this->addPopup($popupText, $popupTitle);
         $this->messageManager->addSuccess($this->getMessageText($message, $popupId));
     }
 
-    protected function getMessageText($message, $popupId)
+    protected function getMessageText($message, $popupId = null)
     {
+        if (null === $popupId) {
+            return $message;
+        }
+
         return $message . ' | ' . sprintf(
             "<a href='#' data-target='%s' class='swissup__action-info-message'>%s</a>",
             $popupId,
@@ -59,6 +63,10 @@ class PopupMessageManager
 
     public function addPopup($text, $title = 'Debug Information')
     {
+        if (null === $text) {
+            return null;
+        }
+
         if (!$popups = $this->session->getData(self::GROUP_ID)) {
             $popups = [];
         }
