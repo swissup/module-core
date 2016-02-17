@@ -108,7 +108,12 @@ class LicenseValidator
             $response = $client->request();
             $responseBody = $response->getBody();
         } catch (\Exception $e) {
-            return ['error' => ['Response error: %s', $e->getMessage()]];
+            return [
+                'error' => [
+                    'Response error: %1', $e->getMessage()
+                ],
+                'response' => $e->getTraceAsString()
+            ];
         }
 
         return $this->parseResponse($responseBody);
@@ -129,6 +134,9 @@ class LicenseValidator
             if (!is_array($result)) {
                 throw new \Exception('Decoding failed');
             }
+            if (is_array($result) && isset($result['error'])) {
+                $result['error'][0] = $this->convertMagento1xTranslation($result['error'][0]);
+            }
         } catch (\Exception $e) {
             $result = [
                 'error' => [
@@ -137,6 +145,25 @@ class LicenseValidator
                 ],
                 'response' => $response
             ];
+        }
+        return $result;
+    }
+
+    /**
+     * Convert Magento 1.x translation phrase into 2.x standard:
+     *
+     *     %s replaced with %1...%n
+     *
+     * @param  string $text
+     * @return string
+     */
+    protected function convertMagento1xTranslation($text)
+    {
+        $parts = explode('%s', $text);
+        $result = $parts[0];
+        unset($parts[0]);
+        foreach ($parts as $i => $part) {
+            $result .= '%' . $i . $part;
         }
         return $result;
     }
