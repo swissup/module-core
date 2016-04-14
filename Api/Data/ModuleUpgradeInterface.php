@@ -10,9 +10,9 @@ interface ModuleUpgradeInterface
 
     public function up();
 
-    public function setInstaller();
+    public function setInstaller($installer);
 
-    public function setStoreIds();
+    public function setStoreIds(array $ids);
 
     public function getStoreIds();
 

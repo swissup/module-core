@@ -74,7 +74,7 @@ abstract class Upgrade implements ModuleUpgradeInterface
     /**
      * @return \Swissup\Core\Model\Module\MessageLogger
      */
-    protected function getMessageLogger()
+    public function getMessageLogger()
     {
         return $this->installer->getMessageLogger();
     }
