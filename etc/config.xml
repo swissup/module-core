@@ -4,7 +4,7 @@
         <swissup_core>
             <modules>
                 <use_https>0</use_https>
-                <url>swissuplabs.com/modules.json</url>
+                <url>swissup.github.io/packages/</url>
             </modules>
             <license>
                 <use_https>0</use_https>
