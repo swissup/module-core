@@ -4,7 +4,6 @@
         <add id="Swissup_Core::swissup" title="Swissup" module="Swissup_Core" sortOrder="55" resource="Swissup_Core::swissup"/>
         <add id="Swissup_Core::general" title="General" module="Swissup_Core" sortOrder="5" parent="Swissup_Core::swissup" resource="Swissup_Core::general"/>
 
-        <!-- Module Installer
         <add id="Swissup_Core::installer"
             title="Installer"
             module="Swissup_Core"
@@ -20,6 +19,5 @@
             action="swissup/installer/index"
             resource="Swissup_Core::installer_index"
         />
-         -->
     </menu>
 </config>

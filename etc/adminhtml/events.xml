@@ -3,4 +3,7 @@
     <event name="layout_generate_blocks_after">
         <observer name="swissup_add_popup_messages" instance="Swissup\Core\Observer\Backend\AddPopupMessages" />
     </event>
+    <event name="swissup_core_module_collection_load_before">
+        <observer name="swissup_fetch_remote_packages" instance="Swissup\Core\Observer\Backend\FetchRemotePackages" />
+    </event>
 </config>

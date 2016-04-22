@@ -25,6 +25,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->createSwissupCoreModuleTable($setup);
         }
 
+        if (version_compare($context->getVersion(), '1.1.0', '<')) {
+            $this->addComposerColumnsToSwissupCoreModuleTable($setup);
+        }
+
+        if (version_compare($context->getVersion(), '1.2.0', '<')) {
+            $this->addFullTextSearchIndex($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -42,5 +50,101 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ->addColumn('identity_key', Table::TYPE_TEXT, 255)
             ->addColumn('store_ids', Table::TYPE_TEXT, 64);
         $setup->getConnection()->createTable($table);
+    }
+
+    protected function addComposerColumnsToSwissupCoreModuleTable(SchemaSetupInterface $setup)
+    {
+        $table = $setup->getTable('swissup_core_module');
+        $setup->getConnection()->addColumn(
+            $table,
+            'name',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 50,
+                'after' => 'code',
+                'comment' => 'Package Name'
+            ]
+        );
+        $setup->getConnection()->addColumn(
+            $table,
+            'description',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 255,
+                'after' => 'name',
+                'comment' => 'Package Description'
+            ]
+        );
+        $setup->getConnection()->addColumn(
+            $table,
+            'type',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 32,
+                'comment' => 'Package Type'
+            ]
+        );
+        $setup->getConnection()->addColumn(
+            $table,
+            'version',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 50,
+                'comment' => 'Latest Version'
+            ]
+        );
+        $setup->getConnection()->addColumn(
+            $table,
+            'time',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
+                'comment' => 'Release Date'
+            ]
+        );
+        $setup->getConnection()->addColumn(
+            $table,
+            'link',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 255,
+                'default' => null,
+                'comment' => 'Module Homepage'
+            ]
+        );
+        $setup->getConnection()->addColumn(
+            $table,
+            'download_link',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 255,
+                'default' => null,
+                'comment' => 'Module Download Link'
+            ]
+        );
+        $setup->getConnection()->addColumn(
+            $table,
+            'identity_key_link',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 255,
+                'default' => null,
+                'comment' => 'Identity Key Link'
+            ]
+        );
+    }
+
+    protected function addFullTextSearchIndex(SchemaSetupInterface $setup)
+    {
+        $table = $setup->getTable('swissup_core_module');
+        $setup->getConnection()->addIndex(
+            $table,
+            $setup->getConnection()->getIndexName(
+                $table,
+                ['code', 'name', 'description'],
+                AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            ['code', 'name', 'description'],
+            AdapterInterface::INDEX_TYPE_FULLTEXT
+        );
     }
 }

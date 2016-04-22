@@ -7,8 +7,6 @@ class RemoteCollection extends \Magento\Framework\Data\Collection
     const XML_USE_HTTPS_PATH = 'swissup_core/modules/use_https';
     const XML_FEED_URL_PATH  = 'swissup_core/modules/url';
 
-    protected $collectedModules = array();
-
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
@@ -30,19 +28,27 @@ class RemoteCollection extends \Magento\Framework\Data\Collection
     protected $httpClientFactory;
 
     /**
+     * @var string
+     */
+    protected $_itemObjectClass = 'Swissup\Core\Model\Module';
+
+    /**
      * Constructor
      *
+     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      */
     public function __construct(
+        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
     ) {
+        parent::__construct($entityFactory);
         $this->request = $request;
         $this->scopeConfig = $scopeConfig;
         $this->jsonHelper = $jsonHelper;
@@ -64,35 +70,31 @@ class RemoteCollection extends \Magento\Framework\Data\Collection
         }
 
         try {
-            $modules = $this->fetchPackages($this->getFeedUrl());
-            // do not use remote response
-            // Need to rewrite Subscription_Checker logic
-            $modules = array(
-                'Swissup_Subscription' => array(
-                    'code'          => 'Swissup_Subscription',
-                    'version'       => '',
-                    'link'          => 'https://swissuplabs.com',
-                    'download_link' => 'https://swissuplabs.com/subscription/customer/products/',
-                    'identity_key_link' => 'https://swissuplabs.com/license/customer/identity/'
-                )
-            );
+            $packages = $this->fetchPackages($this->getFeedUrl());
         } catch (\Exception $e) {
-            $modules = array(
-                'Swissup_Subscription' => array(
-                    'code'          => 'Swissup_Subscription',
-                    'version'       => '',
-                    'link'          => 'https://swissuplabs.com',
-                    'download_link' => 'https://swissuplabs.com/subscription/customer/products/',
-                    'identity_key_link' => 'https://swissuplabs.com/license/customer/identity/'
-                )
-            );
+            // will use local collection instead
         }
-        foreach ($modules as $moduleName => $values) {
-            $values['id'] = $values['code'];
-            $this->collectedModules[$values['code']] = $values;
+
+        $modules = [];
+        foreach ($packages as $packageName => $info) {
+            $code = $this->convertPackageNameToModuleName($packageName);
+            $info['code'] = $code;
+            $modules[$code] = $info;
         }
+        // Swissup_SubscriptionChecker needs this module
+        $modules['Swissup_Subscription'] = array(
+            'code'          => 'Swissup_Subscription',
+            'name'          => 'swissup/subscription',
+            'type'          => 'subscription-plan',
+            'description'   => 'SwissUpLabs Modules Subscription',
+            'version'       => '',
+            'link'          => 'https://swissuplabs.com',
+            'download_link' => 'https://swissuplabs.com/subscription/customer/products/',
+            'identity_key_link' => 'https://swissuplabs.com/license/customer/identity/'
+        );
+
         // calculate totals
-        $this->_totalRecords = count($this->collectedModules);
+        $this->_totalRecords = count($modules);
         $this->_setIsLoaded();
 
         // paginate and add items
@@ -100,19 +102,26 @@ class RemoteCollection extends \Magento\Framework\Data\Collection
         $to = $from + $this->getPageSize() - 1;
         $isPaginated = $this->getPageSize() > 0;
         $cnt = 0;
-        foreach ($this->collectedModules as $row) {
+        foreach ($modules as $row) {
             $cnt++;
             if ($isPaginated && ($cnt < $from || $cnt > $to)) {
                 continue;
             }
-            $item = new $this->_itemObjectClass();
+            $item = $this->_entityFactory->create($this->_itemObjectClass);
             $this->addItem($item->addData($row));
-            if (!$item->hasId()) {
-                $item->setId($cnt);
-            }
         }
 
         return $this;
+    }
+
+    protected function convertPackageNameToModuleName($packageName)
+    {
+        list($vendor, $name) = explode('/', $packageName, 2);
+        $name = str_replace('theme-adminhtml-', '', $name);
+        $name = str_replace('theme-frontend-', '', $name);
+        $name = str_replace('-', ' ', $name);
+        $name = str_replace(' ', '', ucwords($name));
+        return ucfirst($vendor) . '_' . $name;
     }
 
     protected function fetchPackages($url)
@@ -130,7 +139,7 @@ class RemoteCollection extends \Magento\Framework\Data\Collection
 
         if (!empty($response['packages'])) {
             $modules = [];
-            foreach ($response['packages'] as $package => $info) {
+            foreach ($response['packages'] as $packageName => $info) {
                 $versions = array_keys($info);
                 $latestVersion = array_reduce(
                     $versions,
@@ -150,8 +159,7 @@ class RemoteCollection extends \Magento\Framework\Data\Collection
                     unset($info[$latestVersion][$key]);
                 }
 
-                $modules[$package] = $info[$latestVersion];
-                $modules[$package]['code'] = $package;
+                $modules[$packageName] = $info[$latestVersion];
             }
             return $modules;
         }

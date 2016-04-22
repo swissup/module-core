@@ -3,8 +3,16 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="swissup_installer_listing_data_source" xsi:type="string">Swissup\Core\Model\ResourceModel\Module\Grid\RemoteCollection</item>
+                <item name="swissup_installer_listing_data_source" xsi:type="string">Swissup\Core\Model\ResourceModel\Module\Grid\Collection</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Swissup\Core\Model\ResourceModel\Module\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">swissup_core_module</argument>
+            <argument name="eventPrefix" xsi:type="string">swissup_core_module_collection</argument>
+            <argument name="eventObject" xsi:type="string">module_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Swissup\Core\Model\ResourceModel\Module</argument>
         </arguments>
     </type>
     <virtualType name="SwissupInstallerModulesFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
@@ -17,7 +25,7 @@
     </virtualType>
     <virtualType name="SwissupInstallerModulesGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
-            <argument name="collection" xsi:type="object" shared="false">Swissup\Core\Model\ResourceModel\Module\RemoteCollection</argument>
+            <argument name="collection" xsi:type="object" shared="false">Swissup\Core\Model\ResourceModel\Module\Collection</argument>
             <argument name="filterPool" xsi:type="object" shared="false">SwissupInstallerModulesFilterPool</argument>
         </arguments>
     </virtualType>
