@@ -6,4 +6,7 @@
     <event name="swissup_core_module_collection_load_before">
         <observer name="swissup_fetch_remote_packages" instance="Swissup\Core\Observer\Backend\FetchRemotePackages" />
     </event>
+    <event name="swissup_core_module_collection_load_after">
+        <observer name="swissup_fetch_local_packages" instance="Swissup\Core\Observer\Backend\FetchLocalPackages" />
+    </event>
 </config>
