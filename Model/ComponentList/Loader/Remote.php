@@ -52,13 +52,15 @@ class Remote extends AbstractLoader
     {
         return [
             'description' => 'description',
+            'keywords' => 'keywords',
             'name' => 'name',
             'version' => 'latest_version',
             'type' => 'type',
             'time' => 'release_date',
-            'docs_link' => 'docs_link',
-            'download_link' => 'download_link',
-            'identity_key_link' => 'identity_key_link'
+            'extra.swissup.links.store' => 'link',
+            'extra.swissup.links.docs' => 'docs_link',
+            'extra.swissup.links.download' => 'download_link',
+            'extra.swissup.links.identity_key' => 'identity_key_link'
         ];
     }
 
@@ -100,9 +102,15 @@ class Remote extends AbstractLoader
             'type'          => 'subscription-plan',
             'description'   => 'SwissUpLabs Modules Subscription',
             'version'       => '',
-            'link'          => 'https://swissuplabs.com',
-            'download_link' => 'https://swissuplabs.com/subscription/customer/products/',
-            'identity_key_link' => 'https://swissuplabs.com/license/customer/identity/'
+            'extra' => [
+                'swissup' => [
+                    'links' => [
+                        'store' => 'https://swissuplabs.com',
+                        'download' => 'https://swissuplabs.com/subscription/customer/products/',
+                        'identity_key' => 'https://swissuplabs.com/license/customer/identity/'
+                    ]
+                ]
+            ]
         ]];
     }
 
