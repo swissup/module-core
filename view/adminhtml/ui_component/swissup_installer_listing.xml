@@ -100,7 +100,7 @@
             </argument>
         </column>
         <!-- @todo: custom render to mark outdated modules -->
-        <column name="local_version">
+        <column name="version">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filterable" xsi:type="boolean">false</item>
@@ -109,7 +109,7 @@
                 </item>
             </argument>
         </column>
-        <column name="version">
+        <column name="latest_version">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filterable" xsi:type="boolean">false</item>
@@ -118,7 +118,7 @@
                 </item>
             </argument>
         </column>
-        <column name="time" class="Magento\Ui\Component\Listing\Columns\Date">
+        <column name="release_date" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">dateRange</item>

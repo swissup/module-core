@@ -27,9 +27,9 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
     protected $packageInfo;
 
     /**
-     * @var \Swissup\Core\Model\ResourceModel\Module\RemoteCollection
+     * @var \Swissup\Core\Model\ComponentList\Loader\Remote
      */
-    protected $remoteCollection;
+    protected $remoteComponents;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -45,7 +45,7 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         \Swissup\Core\Model\Module\LicenseValidatorFactory $licenseValidatorFactory,
         \Swissup\Core\Model\Module\InstallerFactory $installerFactory,
         \Magento\Framework\Module\PackageInfo $packageInfo,
-        \Swissup\Core\Model\ResourceModel\Module\RemoteCollection $remoteCollection,
+        \Swissup\Core\Model\ComponentList\Loader\Remote $remoteComponents,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -53,7 +53,7 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         $this->licenseValidatorFactory = $licenseValidatorFactory;
         $this->installerFactory = $installerFactory;
         $this->packageInfo = $packageInfo;
-        $this->remoteCollection = $remoteCollection;
+        $this->remoteComponents = $remoteComponents;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -98,7 +98,11 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
 
     public function getRemote()
     {
-        return $this->remoteCollection->getItemById($this->getId());
+        $remoteData = $this->remoteComponents->getItemById($this->getId());
+        if (!$remoteData) {
+            return false;
+        }
+        return new \Magento\Framework\DataObject($remoteData);
     }
 
     /**

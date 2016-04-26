@@ -33,6 +33,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->addFullTextSearchIndex($setup);
         }
 
+        if (version_compare($context->getVersion(), '1.2.1', '<')) {
+            $this->addLatestVersionColumn($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -90,12 +94,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'length' => 50,
-                'comment' => 'Latest Version'
+                'comment' => 'Version'
             ]
         );
         $setup->getConnection()->addColumn(
             $table,
-            'time',
+            'release_date',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
                 'comment' => 'Release Date'
@@ -145,6 +149,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ),
             ['code', 'name', 'description'],
             AdapterInterface::INDEX_TYPE_FULLTEXT
+        );
+    }
+
+    protected function addLatestVersionColumn(SchemaSetupInterface $setup)
+    {
+        $table = $setup->getTable('swissup_core_module');
+        $setup->getConnection()->addColumn(
+            $table,
+            'latest_version',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 50,
+                'after' => 'version',
+                'comment' => 'Latest Version'
+            ]
         );
     }
 }
