@@ -81,6 +81,16 @@ class UpgradeSchema implements UpgradeSchemaInterface
         );
         $setup->getConnection()->addColumn(
             $table,
+            'keywords',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 255,
+                'after' => 'description',
+                'comment' => 'Keywords'
+            ]
+        );
+        $setup->getConnection()->addColumn(
+            $table,
             'type',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -144,10 +154,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $table,
             $setup->getConnection()->getIndexName(
                 $table,
-                ['code', 'name', 'description'],
+                ['code', 'name', 'description', 'keywords'],
                 AdapterInterface::INDEX_TYPE_FULLTEXT
             ),
-            ['code', 'name', 'description'],
+            ['code', 'name', 'description', 'keywords'],
             AdapterInterface::INDEX_TYPE_FULLTEXT
         );
     }
