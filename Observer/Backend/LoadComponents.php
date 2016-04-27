@@ -32,9 +32,6 @@ class LoadComponents implements \Magento\Framework\Event\ObserverInterface
         foreach ($components as $component) {
             $module = $this->moduleFactory->create()->load($component['code']);
             $module->addData($component);
-            if (!$module->getVersion()) {
-                $module->setVersion('N/A');
-            }
             $module->save();
         }
     }

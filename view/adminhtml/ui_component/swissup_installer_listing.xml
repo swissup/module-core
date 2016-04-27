@@ -99,22 +99,14 @@
                 </item>
             </argument>
         </column>
-        <!-- @todo: custom render to mark outdated modules -->
-        <column name="version">
+        <column name="version" class="Swissup\Core\Ui\Component\Listing\Columns\Version">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="filterable" xsi:type="boolean">false</item>
                     <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Local Version</item>
-                </item>
-            </argument>
-        </column>
-        <column name="latest_version">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filterable" xsi:type="boolean">false</item>
-                    <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Latest Version</item>
+                    <item name="label" xsi:type="string" translate="true">Version</item>
+                    <item name="compareWith" xsi:type="string">latest_version</item>
                 </item>
             </argument>
         </column>
@@ -125,7 +117,7 @@
                     <item name="sorting" xsi:type="string">desc</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
-                    <item name="label" xsi:type="string" translate="true">Release Date</item>
+                    <item name="label" xsi:type="string" translate="true">Latest Release Date</item>
                 </item>
             </argument>
         </column>
