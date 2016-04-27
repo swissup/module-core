@@ -58,6 +58,20 @@ class Collection extends \Swissup\Core\Model\ResourceModel\Module\Collection imp
     }
 
     /**
+     * Sort by locally available modules
+     *
+     * @return $this
+     */
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+        $this->getSelect()->order(
+            new \Zend_Db_Expr('IF (ISNULL(main_table.version), 0, 1) DESC')
+        );
+        return $this;
+    }
+
+    /**
      * @return AggregationInterface
      */
     public function getAggregations()
