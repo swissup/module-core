@@ -4,18 +4,18 @@
         <add id="Swissup_Core::swissup" title="Swissup" module="Swissup_Core" sortOrder="55" resource="Swissup_Core::swissup"/>
         <add id="Swissup_Core::general" title="General" module="Swissup_Core" sortOrder="5" parent="Swissup_Core::swissup" resource="Swissup_Core::general"/>
 
-        <add id="Swissup_Core::installer"
-            title="Installer"
+        <add id="Swissup_Core::services"
+            title="Services"
             module="Swissup_Core"
-            sortOrder="3"
+            sortOrder="0"
             parent="Swissup_Core::swissup"
-            resource="Swissup_Core::installer"
+            resource="Swissup_Core::services"
         />
         <add id="Swissup_Core::installer_index"
             title="Module Manager"
             module="Swissup_Core"
-            sortOrder="1"
-            parent="Swissup_Core::installer"
+            sortOrder="10"
+            parent="Swissup_Core::services"
             action="swissup/installer/index"
             resource="Swissup_Core::installer_index"
         />
