@@ -2,7 +2,7 @@
 
 namespace Swissup\Core\Observer\Backend;
 
-class LoadComponents implements \Magento\Framework\Event\ObserverInterface
+class AddComponentsData implements \Magento\Framework\Event\ObserverInterface
 {
     /**
      * @var \Swissup\Core\Model\ComponentList\Loader
@@ -28,10 +28,13 @@ class LoadComponents implements \Magento\Framework\Event\ObserverInterface
 
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        foreach ($this->loader->getItems() as $component) {
-            $module = $this->moduleFactory->create()->load($component['code']);
+        foreach ($observer->getModuleCollection() as $module) {
+            $component = $this->loader->getItemById($module->getCode());
+            if (!$component) {
+                $this->moduleFactory->create()->load($module->getCode())->delete();
+                continue;
+            }
             $module->addData($component);
-            $module->save();
         }
     }
 }

@@ -6,4 +6,7 @@
     <event name="swissup_core_module_collection_load_before">
         <observer name="swissup_load_components" instance="Swissup\Core\Observer\Backend\LoadComponents" />
     </event>
+    <event name="swissup_core_module_collection_load_after">
+        <observer name="swissup_add_components_data" instance="Swissup\Core\Observer\Backend\AddComponentsData" />
+    </event>
 </config>

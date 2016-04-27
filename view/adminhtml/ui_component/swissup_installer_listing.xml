@@ -130,12 +130,23 @@
                 </item>
             </argument>
         </column>
-        <!-- <actionsColumn name="actions" class="Magento\Cms\Ui\Component\Listing\Column\BlockActions">
+        <actionsColumn name="actions" class="Swissup\Core\Ui\Component\Listing\Columns\ModuleActions">
             <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">code</item>
+                <item name="links" xsi:type="array">
+                    <item name="homepage" xsi:type="array">
+                        <item name="label" xsi:type="string">View Module Homepage</item>
+                        <item name="key" xsi:type="string">link</item>
+                    </item>
+                    <item name="download" xsi:type="array">
+                        <item name="label" xsi:type="string">Download Latest Version</item>
+                        <item name="key" xsi:type="string">download_link</item>
+                    </item>
+                    <item name="docs" xsi:type="array">
+                        <item name="label" xsi:type="string">Read Documentation</item>
+                        <item name="key" xsi:type="string">docs_link</item>
+                    </item>
                 </item>
             </argument>
-        </actionsColumn> -->
+        </actionsColumn>
     </columns>
 </listing>
