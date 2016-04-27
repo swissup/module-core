@@ -62,6 +62,11 @@ abstract class AbstractLoader implements LoaderInterface
         return $this->items;
     }
 
+    public function getItems()
+    {
+        return $this->load();
+    }
+
     /**
      * @return bool
      */
