@@ -71,11 +71,12 @@ class Remote extends AbstractLoader
      */
     public function getComponentsInfo()
     {
-        $responseBody = $this->fetch($this->getFeedUrl());
-
         try {
+            // @todo store result to cache for 24 hours
+            $responseBody = $this->fetch($this->getFeedUrl());
             $response = $this->jsonHelper->jsonDecode($responseBody);
         } catch (Exception $e) {
+            $response = [];
             // Swissup_Subscription will be added below - used by
             // subscription activation module
         }

@@ -25,11 +25,11 @@ class Version extends \Magento\Ui\Component\Listing\Columns\Column
 
     protected function prepareItem(array $item)
     {
-        $currentVersion = $item[$this->getData('name')];
-        if (!$currentVersion) {
+        if (empty($item[$this->getData('name')])) {
             return __('N/A');
         }
 
+        $currentVersion = $item[$this->getData('name')];
         $latestVersion = $item[$this->getData('config/compareWith')];
         $result = version_compare($currentVersion, $latestVersion, '>=');
         if ($result) {
