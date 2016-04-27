@@ -14,6 +14,10 @@ class Loader
      */
     protected $remoteLoader;
 
+    protected $items = [];
+
+    protected $isLoaded = false;
+
     /**
      * @param \Swissup\Core\Model\ComponentList\Loader\Local  $localLoader
      * @param \Swissup\Core\Model\ComponentList\Loader\Remote $remoteLoader
@@ -33,9 +37,48 @@ class Loader
      */
     public function load()
     {
-        return array_replace_recursive(
+        if ($this->isLoaded()) {
+            return $this->items;
+        }
+
+        $this->setIsLoaded(true);
+        $this->items = array_replace_recursive(
             $this->localLoader->load(),
             $this->remoteLoader->load()
         );
+        return $this->items;
+    }
+
+    public function getItems()
+    {
+        return $this->load();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLoaded()
+    {
+        return $this->isLoaded;
+    }
+
+    /**
+     * @param bool $flag
+     * @return $this
+     */
+    protected function setIsLoaded($flag = true)
+    {
+        $this->isLoaded = $flag;
+        return $this;
+    }
+
+    public function getItemById($id)
+    {
+        $this->load();
+
+        if (!isset($this->items[$id])) {
+            return false;
+        }
+        return $this->items[$id];
     }
 }
