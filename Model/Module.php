@@ -32,6 +32,11 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
     protected $remoteComponents;
 
     /**
+     * @var \Swissup\Core\Model\ComponentList\Loader\Local
+     */
+    protected $localComponents;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Swissup\Core\Model\Module\LicenseValidator $licenseValidator
@@ -46,6 +51,7 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         \Swissup\Core\Model\Module\InstallerFactory $installerFactory,
         \Magento\Framework\Module\PackageInfo $packageInfo,
         \Swissup\Core\Model\ComponentList\Loader\Remote $remoteComponents,
+        \Swissup\Core\Model\ComponentList\Loader\Local $localComponents,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -54,6 +60,7 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         $this->installerFactory = $installerFactory;
         $this->packageInfo = $packageInfo;
         $this->remoteComponents = $remoteComponents;
+        $this->localComponents = $localComponents;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -91,6 +98,16 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         return $this->installer;
     }
 
+    /**
+     * Check is module already installed at any store
+     *
+     * @return boolean
+     */
+    public function isInstalled()
+    {
+        return $this->getDataVersion() && strlen((string)$this->getStoreIds());
+    }
+
     public function validateLicense()
     {
         return $this->licenseValidatorFactory->create(['module' => $this])->validate();
@@ -103,6 +120,15 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
             return false;
         }
         return new \Magento\Framework\DataObject($remoteData);
+    }
+
+    public function getLocal()
+    {
+        $localData = $this->localComponents->getItemById($this->getId());
+        if (!$localData) {
+            return false;
+        }
+        return new \Magento\Framework\DataObject($localData);
     }
 
     /**
