@@ -56,6 +56,11 @@ class ModuleActions extends \Magento\Ui\Component\Listing\Columns\Column
             return $dataSource;
         }
 
+        $hasSubscription = false;
+        if ($subscription = $this->moduleFactory->create()->load('Swissup_SubscriptionChecker')) {
+            $hasSubscription = (bool) $subscription->getLocal();
+        }
+
         foreach ($dataSource['data']['items'] as & $item) {
 
             // add installer links
@@ -89,6 +94,10 @@ class ModuleActions extends \Magento\Ui\Component\Listing\Columns\Column
             // add external links
             foreach ($this->getData('links') as $link) {
                 if (empty($item[$link['key']])) {
+                    continue;
+                }
+
+                if ($link['key'] === 'download_link' && !$hasSubscription) {
                     continue;
                 }
 
