@@ -171,7 +171,11 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
      */
     public function getNewStores()
     {
-        return $this->getNewStoreIds();
+        $storeIds = $this->getNewStoreIds();
+        if (!$storeIds) {
+            return [];
+        }
+        return $storeIds;
     }
 
     /**
