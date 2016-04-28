@@ -105,7 +105,7 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
      */
     public function isInstalled()
     {
-        return $this->getDataVersion() && strlen((string)$this->getStoreIds());
+        return $this->getDataVersion() && $this->getOldStores();
     }
 
     public function validateLicense()
