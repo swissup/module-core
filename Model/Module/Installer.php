@@ -28,28 +28,20 @@ class Installer
     protected $messageLogger;
 
     /**
-     * @var \Magento\Framework\Module\Dir
-     */
-    protected $moduleDir;
-
-    /**
      * Constructor
      *
      * @param \Swissup\Core\Model\Module $module
      * @param \Swissup\Core\Model\ModuleFactory $moduleFactory
      * @param \Swissup\Core\Model\Module\MessageLogger $messageLogger
-     * @param \Magento\Framework\Module\Dir $moduleDir
      */
     public function __construct(
         \Swissup\Core\Model\Module $module,
         \Swissup\Core\Model\ModuleFactory $moduleFactory,
-        \Swissup\Core\Model\Module\MessageLogger $messageLogger,
-        \Magento\Framework\Module\Dir $moduleDir
+        \Swissup\Core\Model\Module\MessageLogger $messageLogger
     ) {
         $this->module = $module;
         $this->moduleFactory = $moduleFactory;
         $this->messageLogger = $messageLogger;
-        $this->moduleDir = $moduleDir;
     }
 
     /**
@@ -222,11 +214,10 @@ class Installer
      */
     public function getUpgradesDir()
     {
-        $dir = $this->moduleDir->getDir($this->module->getCode());
-        if (!$dir) {
+        if (!$this->module->getLocal() || !$this->module->getLocal()->getPath()) {
             return null;
         }
-        return $dir . '/Upgrades';
+        return $this->module->getLocal()->getPath() . '/Upgrades';
     }
 
     /**
