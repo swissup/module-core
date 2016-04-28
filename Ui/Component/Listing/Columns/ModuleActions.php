@@ -102,32 +102,10 @@ class ModuleActions extends \Magento\Ui\Component\Listing\Columns\Column
                 }
 
                 $item[$this->getData('name')][$link['key']] = [
-                    '_target' => 'blank',
                     'href'  => $item[$link['key']],
                     'label' => __($link['label'])
                 ];
             }
-
-            // $item[$this->getData('name')] = [
-            //     'edit' => [
-            //         'href' => $this->urlBuilder->getUrl(
-            //             static::URL_PATH_EDIT,
-            //             [
-            //                 'code' => $item['code']
-            //             ]
-            //         ),
-            //         'label' => __('Edit')
-            //     ],
-            //     'details' => [
-            //         'href' => $this->urlBuilder->getUrl(
-            //             static::URL_PATH_DETAILS,
-            //             [
-            //                 'code' => $item['code']
-            //             ]
-            //         ),
-            //         'label' => __('Details')
-            //     ]
-            // ];
         }
         return $dataSource;
     }
