@@ -5,20 +5,22 @@ namespace Swissup\Core\Ui\Component\Listing\Columns;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Swissup\Core\Model\ModuleFactory;
 
 class ModuleActions extends \Magento\Ui\Component\Listing\Columns\Column
 {
-    /**
-     * Url path
-     */
-    const URL_PATH_EDIT = 'cms/block/edit';
-    const URL_PATH_DELETE = 'cms/block/delete';
-    const URL_PATH_DETAILS = 'cms/block/details';
+    const URL_PATH_INSTALL = 'swissup/installer/install';
+    const URL_PATH_UPGRADE = 'swissup/installer/upgrade';
 
     /**
      * @var UrlInterface
      */
     protected $urlBuilder;
+
+    /**
+     * @var \Swissup\Core\Model\ModuleFactory
+     */
+    protected $moduleFactory;
 
     /**
      * Constructor
@@ -33,10 +35,12 @@ class ModuleActions extends \Magento\Ui\Component\Listing\Columns\Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         UrlInterface $urlBuilder,
+        ModuleFactory $moduleFactory,
         array $components = [],
         array $data = []
     ) {
         $this->urlBuilder = $urlBuilder;
+        $this->moduleFactory = $moduleFactory;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -53,6 +57,36 @@ class ModuleActions extends \Magento\Ui\Component\Listing\Columns\Column
         }
 
         foreach ($dataSource['data']['items'] as & $item) {
+
+            // add installer links
+            $module = $this->moduleFactory->create()->load($item['code']);
+            if ($module->getInstaller()->hasUpgradesDir()) {
+                $item[$this->getData('name')]['installer'] = [
+                    'href' => $this->urlBuilder->getUrl(
+                        static::URL_PATH_INSTALL,
+                        [
+                            'code' => $item['code']
+                        ]
+                    ),
+                    'label' => __('Open Installer')
+                ];
+
+                if ($module->isInstalled() &&
+                    $module->getInstaller()->getUpgradesToRun()) {
+
+                    $item[$this->getData('name')]['upgrade'] = [
+                        'href' => $this->urlBuilder->getUrl(
+                            static::URL_PATH_UPGRADE,
+                            [
+                                'code' => $item['code']
+                            ]
+                        ),
+                        'label' => __('Run Upgrades')
+                    ];
+                }
+            }
+
+            // add external links
             foreach ($this->getData('links') as $link) {
                 if (empty($item[$link['key']])) {
                     continue;
