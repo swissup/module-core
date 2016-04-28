@@ -60,6 +60,8 @@ class Remote extends AbstractLoader
             'extra.swissup.links.store' => 'link',
             'extra.swissup.links.docs' => 'docs_link',
             'extra.swissup.links.download' => 'download_link',
+            'extra.swissup.links.changelog' => 'changelog_link',
+            'extra.swissup.links.marketplace' => 'marketplace_link',
             'extra.swissup.links.identity_key' => 'identity_key_link'
         ];
     }
