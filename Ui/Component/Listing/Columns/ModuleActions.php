@@ -9,7 +9,7 @@ use Swissup\Core\Model\ModuleFactory;
 
 class ModuleActions extends \Magento\Ui\Component\Listing\Columns\Column
 {
-    const URL_PATH_INSTALL = 'swissup/installer/install';
+    const URL_PATH_INSTALL = 'swissup/installer/form';
     const URL_PATH_UPGRADE = 'swissup/installer/upgrade';
 
     /**
