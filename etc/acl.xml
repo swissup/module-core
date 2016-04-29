@@ -4,8 +4,10 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Swissup_Core::swissup">
-                    <resource id="Swissup_Core::installer" title="Installer" sortOrder="0">
-                        <resource id="Swissup_Core::module_manager" title="Module Manager" sortOrder="10" />
+                    <resource id="Swissup_Core::services" title="Services" sortOrder="0">
+                        <resource id="Swissup_Core::installer_index" title="Module Manager" sortOrder="10" />
+                        <resource id="Swissup_Core::installer_form" title="Module Installer" sortOrder="20" />
+                        <resource id="Swissup_Core::installer_upgrade" title="Module Updater" sortOrder="30" />
                     </resource>
                 </resource>
             </resource>
