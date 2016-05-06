@@ -21,6 +21,8 @@ class Install extends \Magento\Backend\App\Action
             ->setNewStores($params['installer']['new_stores']);
         $model->up();
 
+        // @todo flush cache
+
         $groupedErrors = $model->getInstaller()->getMessageLogger()->getErrors();
         if (count($groupedErrors)) {
             foreach ($groupedErrors as $type => $errors) {
