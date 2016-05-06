@@ -84,7 +84,7 @@
                 </argument>
             </field>
         </container>
-        <field name="old_stores">
+        <field name="store_labels">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="label" xsi:type="string" translate="true">Module is currently installed on</item>

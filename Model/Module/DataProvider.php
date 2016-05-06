@@ -66,7 +66,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             if (!$oldStores) {
                 $oldStores = __('None');
             }
-            $result['general']['old_stores'] = $oldStores;
+            $result['general']['store_labels'] = $oldStores;
 
             $this->loadedData[$module->getCode()] = $result;
         }
