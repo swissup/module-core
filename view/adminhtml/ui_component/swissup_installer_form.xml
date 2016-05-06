@@ -17,7 +17,7 @@
                 <item name="class" xsi:type="string">back</item>
                 <item name="url" xsi:type="string">*/*/</item>
             </item>
-            <item name="install" xsi:type="array">
+            <item name="save" xsi:type="array">
                 <item name="name" xsi:type="string">install</item>
                 <item name="label" xsi:type="string" translate="true">Install</item>
                 <item name="class" xsi:type="string">primary</item>
@@ -34,6 +34,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="submit_url" xsi:type="url" path="swissup/installer/install"/>
+                    <item name="validate_url" xsi:type="url" path="swissup/installer/validate"/>
                 </item>
             </argument>
         </argument>
@@ -49,15 +50,15 @@
                 <item name="label" xsi:type="string" translate="true">General</item>
             </item>
         </argument>
-        <!-- <field name="description">
+        <field name="code">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Description</item>
+                    <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="formElement" xsi:type="string">input</item>
                 </item>
             </argument>
-        </field> -->
+        </field>
         <container name="installer">
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
@@ -66,17 +67,15 @@
                     <item name="label" xsi:type="string" translate="true">Select stores to install or reinstall module</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="string">installer</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>
             <field name="new_stores">
                 <argument name="data" xsi:type="array">
                     <item name="options" xsi:type="object">Swissup\Core\Model\Config\Source\Store\All</item>
                     <item name="config" xsi:type="array">
-                        <!-- <item name="label" xsi:type="string" translate="true">Select stores to install or reinstall module</item> -->
                         <item name="dataType" xsi:type="string">number</item>
                         <item name="formElement" xsi:type="string">multiselect</item>
-
-                        <!-- <item name="source" xsi:type="string">customer</item> -->
                         <item name="validation" xsi:type="array">
                             <item name="required-entry" xsi:type="boolean">true</item>
                         </item>
@@ -90,6 +89,7 @@
                     <item name="label" xsi:type="string" translate="true">Module is currently installed on</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
                 </item>
             </argument>
         </field>
