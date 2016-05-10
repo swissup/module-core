@@ -28,6 +28,11 @@ class Installer
     protected $messageLogger;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
      * Constructor
      *
      * @param \Swissup\Core\Model\Module $module
@@ -37,11 +42,13 @@ class Installer
     public function __construct(
         \Swissup\Core\Model\Module $module,
         \Swissup\Core\Model\ModuleFactory $moduleFactory,
-        \Swissup\Core\Model\Module\MessageLogger $messageLogger
+        \Swissup\Core\Model\Module\MessageLogger $messageLogger,
+        \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         $this->module = $module;
         $this->moduleFactory = $moduleFactory;
         $this->messageLogger = $messageLogger;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -201,7 +208,7 @@ class Installer
         $namespace = str_replace('_', '\\', $this->module->getCode()) . '\\Upgrades';
         $className = $namespace . '\\' . $className;
 
-        $upgrade = new $className;
+        $upgrade = $this->objectManager->create($className);
         $upgrade->setInstaller($this);
 
         return $upgrade;
