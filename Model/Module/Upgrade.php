@@ -57,8 +57,7 @@ abstract class Upgrade implements ModuleUpgradeInterface
      */
     public function setStoreIds(array $ids)
     {
-        // @todo test with isSingleStoreMode
-        $this->_storeIds = $ids;
+        $this->storeIds = $ids;
         return $this;
     }
     /**
