@@ -57,6 +57,9 @@ abstract class Upgrade implements ModuleUpgradeInterface
      */
     public function setStoreIds(array $ids)
     {
+        if ($this->storeManager->isSingleStoreMode()) {
+            $ids = [$this->storeManager->getStore()->getId()];
+        }
         $this->storeIds = $ids;
         return $this;
     }
