@@ -93,7 +93,7 @@ class ProductAttribute extends \Swissup\Core\Model\Module\UpgradeCommands\Abstra
                 try {
                     $model->save();
                 } catch (Exception $e) {
-                    // $this->_fault('product_attribute_save', $e);
+                    $this->fault('product_attribute_save', $e);
                 }
             }
 
@@ -101,7 +101,7 @@ class ProductAttribute extends \Swissup\Core\Model\Module\UpgradeCommands\Abstra
                 try {
                     $model->save();
                 } catch (Exception $e) {
-                    // $this->_fault('product_attribute_save', $e);
+                    $this->fault('product_attribute_save', $e);
                 }
             }
         }

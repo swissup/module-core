@@ -58,9 +58,9 @@ class CmsPage extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractCommand
                 try {
                     $page->save();
                 } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-                    // $this->_fault('cmspage_backup', $e);
+                    $this->fault('cmspage_backup', $e);
                 } catch (Exception $e) {
-                    // $this->_fault('cmspage_backup', $e);
+                    $this->fault('cmspage_backup', $e);
                 }
             }
 
@@ -71,9 +71,9 @@ class CmsPage extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractCommand
                     ->setStores($this->getStoreIds()) // see Magento\Cms\Model\ResourceModel\Page::_afterSave
                     ->save();
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-                // $this->_fault('cmspage_save', $e);
+                $this->fault('cmspage_save', $e);
             } catch (Exception $e) {
-                // $this->_fault('cmspage_save', $e);
+                $this->fault('cmspage_save', $e);
             }
         }
     }

@@ -83,6 +83,20 @@ abstract class AbstractCommand
     }
 
     /**
+     * Log installation errors
+     *
+     * @param string $type
+     * @param Exception $e
+     */
+    protected function fault($type, Exception $e)
+    {
+        $this->getMessageLogger()->addError($type, array(
+            'message' => $e->getMessage(),
+            'trace'   => $e->getTraceAsString()
+        ));
+    }
+
+    /**
      * Returns unique string. Used to backup existing pages, blocks, etc
      * This method is not 100% bullet proof, but there is very low chance to
      * receive duplicate string.
