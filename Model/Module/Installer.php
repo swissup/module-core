@@ -209,7 +209,7 @@ class Installer
         $className = $namespace . '\\' . $className;
 
         $upgrade = $this->objectManager->create($className);
-        $upgrade->setInstaller($this);
+        $upgrade->setMessageLogger($this->getMessageLogger());
 
         return $upgrade;
     }
