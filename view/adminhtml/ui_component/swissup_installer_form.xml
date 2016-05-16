@@ -50,12 +50,16 @@
                 <item name="label" xsi:type="string" translate="true">General</item>
             </item>
         </argument>
-        <field name="code">
+        <field name="identity_key">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">Identity key</item>
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="component" xsi:type="string">Swissup_Core/js/form/element/identity-key</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
         </field>
