@@ -83,7 +83,6 @@
                     <item name="label" xsi:type="string" translate="true">Module is currently installed on</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">textarea</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
                 </item>
             </argument>
         </field>
