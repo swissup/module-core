@@ -12,13 +12,13 @@ class Install extends \Magento\Backend\App\Action
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $params = $this->getRequest()->getPostValue('general');
-        if (empty($params['code']) || empty($params['installer']['new_stores'])) {
+        if (empty($params['code']) || empty($params['new_stores'])) {
             return $resultRedirect->setPath('*/*/index');
         }
 
         $model = $this->_objectManager->create('Swissup\Core\Model\Module')
             ->load($params['code'])
-            ->setNewStores($params['installer']['new_stores']);
+            ->setNewStores($params['new_stores']);
         $model->up();
 
         // @todo flush cache
