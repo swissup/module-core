@@ -86,9 +86,9 @@ abstract class AbstractCommand
      * Log installation errors
      *
      * @param string $type
-     * @param Exception $e
+     * @param $e
      */
-    protected function fault($type, Exception $e)
+    protected function fault($type, $e)
     {
         $this->getMessageLogger()->addError($type, array(
             'message' => $e->getMessage(),
