@@ -96,8 +96,10 @@ class LicenseValidator
             $client->setParameterGet('key', $secret);
             $client->setParameterGet('suffix', $suffix);
 
-            $purchaseCode = $this->module->getSwissupPurchaseCode() ?
-                $this->module->getSwissupPurchaseCode() : $this->module->getCode();
+            $purchaseCode = $this->module->getRemote()->getPurchaseCode();
+            if (!$purchaseCode) {
+                $purchaseCode = $this->module->getCode();
+            }
 
             $client->setParameterGet('module', $purchaseCode);
             $client->setParameterGet('module_code', $this->module->getCode());
