@@ -57,7 +57,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $result['general'] = $module->getData();
 
             $oldStores = implode(
-                ", ",
+                "\n",
                 array_intersect_key(
                     $stores,
                     array_flip($module->getOldStores())
