@@ -6,6 +6,23 @@ class Install extends \Magento\Backend\App\Action
 {
     const ADMIN_RESOURCE = 'Swissup_Core::installer_install';
 
+    /**
+     * @var \Swissup\Core\Helper\PopupMessageManager
+     */
+    protected $popupMessageManager;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Swissup\Core\Helper\PopupMessageManager $popupMessageManager
+    ) {
+        parent::__construct($context);
+        $this->popupMessageManager = $popupMessageManager;
+    }
+
     public function execute()
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
@@ -19,6 +36,26 @@ class Install extends \Magento\Backend\App\Action
         $model = $this->_objectManager->create('Swissup\Core\Model\Module')
             ->load($params['code'])
             ->setNewStores($params['new_stores']);
+
+        if (!empty($params['identity_key'])) {
+            $model->setIdentityKey($params['identity_key']);
+        }
+
+        $result = $model->validateLicense();
+        if (is_array($result) && isset($result['error'])) {
+            $error = call_user_func_array('__', $result['error']);
+            if (isset($result['response'])) {
+                $this->popupMessageManager->addError(
+                    $error,
+                    $result['response'],
+                    'License validation response'
+                );
+            } else {
+                $this->messageManager->addError($error);
+            }
+            return $resultRedirect->setPath('*/*/form', ['code' => $params['code']]);
+        }
+
         $model->up();
 
         // @todo flush cache
@@ -35,7 +72,7 @@ class Install extends \Magento\Backend\App\Action
                     $this->messageManager->addError($message);
                 }
             }
-            return $resultRedirect->setPath('*/*/index');
+            return $resultRedirect->setPath('*/*/form', ['code' => $params['code']]);
         }
 
         $this->messageManager->addSuccess(__('Module successfully installed'));
