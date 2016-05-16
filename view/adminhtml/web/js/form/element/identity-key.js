@@ -8,6 +8,15 @@ define([
 
         initialize: function () {
             this._super();
+
+            if (this.source.data.general.identity_key_link) {
+                this.notice = this.notice
+                    .replace(
+                        '{{identity_key_link}}',
+                        this.source.data.general.identity_key_link
+                    );
+            }
+
             this.updateStatus();
         },
 
