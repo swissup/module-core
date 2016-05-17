@@ -3,7 +3,6 @@
 namespace Swissup\Core\Controller\Adminhtml\Installer;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 
 class Form extends \Magento\Backend\App\Action
@@ -16,24 +15,15 @@ class Form extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $coreRegistry = null;
-
-    /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
-        Registry $coreRegistry,
         PageFactory $resultPageFactory
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
-        $this->coreRegistry = $coreRegistry;
     }
 
     /**
@@ -51,8 +41,6 @@ class Form extends \Magento\Backend\App\Action
         if (!empty($data) && !empty($data['general'])) {
             $model->addData($data['general']);
         }
-
-        $this->coreRegistry->register('swissup_module', $model);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
