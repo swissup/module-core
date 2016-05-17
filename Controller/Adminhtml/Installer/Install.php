@@ -65,6 +65,7 @@ class Install extends \Magento\Backend\App\Action
 
         $groupedErrors = $model->getInstaller()->getMessageLogger()->getErrors();
         if (count($groupedErrors)) {
+            $popupMessages = [];
             foreach ($groupedErrors as $type => $errors) {
                 foreach ($errors as $error) {
                     if (is_array($error)) {
@@ -72,9 +73,14 @@ class Install extends \Magento\Backend\App\Action
                     } else {
                         $message = $error;
                     }
-                    $this->messageManager->addError($message);
+                    $popupMessages[$type][] = $message;
                 }
             }
+            $this->popupMessageManager->addWarning(
+                __('Module installed, but some operations where failed'),
+                $popupMessages,
+                'Installation errors'
+            );
             return $resultRedirect->setPath('*/*/form', ['code' => $params['code']]);
         }
 
