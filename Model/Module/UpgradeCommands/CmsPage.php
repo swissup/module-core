@@ -90,8 +90,13 @@ class CmsPage extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractCommand
         $urlCollection = $this->objectManager
             ->create('Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection')
             ->addFieldToFilter('entity_type', $entityType)
-            ->addFieldToFilter('request_path', ['in' => $requestPaths])
-            ->addFieldToFilter('store_id', ['in' => $this->getStoreIds()]);
+            ->addFieldToFilter('request_path', ['in' => $requestPaths]);
+
+        $storeIds = $this->getStoreIds();
+        if (in_array(0, $storeIds)) {
+            $storeIds = array_keys($this->storeManager->getStores(true));
+        }
+        $urlCollection->addFieldToFilter('store_id', ['in' => $storeIds]);
 
         foreach ($urlCollection as $item) {
             $item->delete();
