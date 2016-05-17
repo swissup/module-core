@@ -70,6 +70,9 @@ class PopupMessageManager
         if (!$popups = $this->session->getData(self::GROUP_ID)) {
             $popups = [];
         }
+        if (!is_string($text)) {
+            $text = print_r($text, true);
+        }
         $popups[] = [
             'title' => $title,
             'text'  => $text
