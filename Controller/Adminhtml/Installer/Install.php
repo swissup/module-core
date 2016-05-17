@@ -33,6 +33,9 @@ class Install extends \Magento\Backend\App\Action
             return $resultRedirect->setPath('*/*/index');
         }
 
+        $session = $this->_objectManager->get('Magento\Backend\Model\Session');
+        $session->setFormData($this->getRequest()->getPostValue());
+
         $model = $this->_objectManager->create('Swissup\Core\Model\Module')
             ->load($params['code'])
             ->setNewStores($params['new_stores']);
@@ -75,6 +78,7 @@ class Install extends \Magento\Backend\App\Action
             return $resultRedirect->setPath('*/*/form', ['code' => $params['code']]);
         }
 
+        $session->setFormData(false);
         $this->messageManager->addSuccess(__('Module successfully installed'));
         return $resultRedirect->setPath('*/*/index');
     }

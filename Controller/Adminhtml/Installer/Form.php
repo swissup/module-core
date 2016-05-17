@@ -48,8 +48,8 @@ class Form extends \Magento\Backend\App\Action
 
         $session = $this->_objectManager->get('Magento\Backend\Model\Session');
         $data = $session->getFormData(true);
-        if (!empty($data)) {
-            $model->addData($data);
+        if (!empty($data) && !empty($data['general'])) {
+            $model->addData($data['general']);
         }
 
         $this->coreRegistry->register('swissup_module', $model);
