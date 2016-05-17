@@ -91,7 +91,7 @@ class Products extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractComman
                 foreach ($visibleProducts as $product) {
                     $product->addAttributeUpdate(
                         $attribute->getAttributeCode(),
-                        0, // value
+                        (int)in_array(0, $this->getStoreIds()), // value
                         0  // storeId
                     );
 
