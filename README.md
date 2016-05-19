@@ -87,38 +87,36 @@ class InitialInstallation extends \Swissup\Core\Model\Module\Upgrade
         // Additional logic may be placed here.
     }
 
-    public function getOperations()
+    public function getCommands()
     {
         return [
-            'configuration' => [
-                'design' => [
-                    'package/name' => 'argento',
-                    'theme' => [
-                        'template' => 'argento',
-                        'skin'     => 'argento',
-                        'layout'   => 'argento'
-                    ]
-                ],
-                'navigationpro/top/enabled' => 1
+            'Configuration' => [
+                'prolabels/on_sale/product/active'  => 1,
+                'prolabels/on_sale/category/active' => 1,
+                'prolabels/is_new/product/active'   => 1,
+                'prolabels/is_new/category/active'  => 1,
             ],
 
-            'cmsblock' => [
+            'CmsBlock' => [
                 'header_callout' => [
                     'title' => 'header_callout',
                     'identifier' => 'header_callout',
-                    'status' => 1,
-                    'content' => <<<HTML
-HEADER_CALLOUT
-HTML
+                    'is_active' => 1,
+                    'content' => 'content'
                 ]
             ]
 
-            'productAttribute' => [
+            'ProductAttribute' => [
                 [
                     'attribute_code' => 'featured',
                     'frontend_label' => array('Featured'),
                     'default_value'  => 0
                 ]
+            ],
+
+            'Products' => [
+                'featured'       => 6,
+                'news_from_date' => 6
             ]
         ];
     }
@@ -126,14 +124,17 @@ HTML
 
 ```
 
-**Supported Operations**
+**Supported Commands**
 
-Key | Method | Description
-----|--------|------------
-configuration   | runConfiguration  | Update Store Configuration
-cmsblock        | runCmsblock       | Create/backup cms blocks
-cmspage         | runCmspage        | Create/backup cms pages
-productAttribute| runProductAttribute| Create attribute if it does not exists
+Key/ClassName   | Description
+----------------|------------
+Configuration   | Update store configuration
+CmsBlock        | Create/backup cms blocks
+CmsPage         | Create/backup cms pages
+Easyslide       | Create slider if it does not exists
+ProductAttribute| Create attribute if it does not exists
+Easybanner      | Create placeholders and banners
+Products        | Create featured, new, special, and any other products
 
 ### Popup Message Manager
 
