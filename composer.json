@@ -1,8 +1,8 @@
 {
     "name": "swissup/core",
-    "description": "N/A",
+    "description": "Swissup module manager. Module installer. Popup message manager.",
     "type": "magento2-module",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "license": "OSL-3.0",
     "require": {
         "php": "~5.5.0|~5.6.0|~7.0.0"
