@@ -7,6 +7,8 @@ class Remote extends AbstractLoader
     const XML_USE_HTTPS_PATH = 'swissup_core/modules/use_https';
     const XML_FEED_URL_PATH  = 'swissup_core/modules/url';
 
+    const RESPONSE_CACHE_KEY = 'swissup_components_remote_response';
+
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
@@ -28,6 +30,11 @@ class Remote extends AbstractLoader
     protected $httpClientFactory;
 
     /**
+     * @var \Magento\Framework\App\CacheInterface
+     */
+    protected $cache;
+
+    /**
      * @param \Swissup\Core\Helper\Component                     $componentHelper
      * @param \Magento\Framework\App\RequestInterface            $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -39,13 +46,15 @@ class Remote extends AbstractLoader
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
+        \Magento\Framework\App\CacheInterface $cache
     ) {
         parent::__construct($componentHelper);
         $this->request = $request;
         $this->scopeConfig = $scopeConfig;
         $this->jsonHelper = $jsonHelper;
         $this->httpClientFactory = $httpClientFactory;
+        $this->cache = $cache;
     }
 
     public function getMapping()
@@ -75,8 +84,10 @@ class Remote extends AbstractLoader
     public function getComponentsInfo()
     {
         try {
-            // @todo store result to cache for 24 hours
-            $responseBody = $this->fetch($this->getFeedUrl());
+            if (!$responseBody = $this->cache->load(self::RESPONSE_CACHE_KEY)) {
+                $responseBody = $this->fetch($this->getFeedUrl());
+                $this->cache->save($responseBody, self::RESPONSE_CACHE_KEY, [], 86400);
+            }
             $response = $this->jsonHelper->jsonDecode($responseBody);
         } catch (Exception $e) {
             $response = [];
