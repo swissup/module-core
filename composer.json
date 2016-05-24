@@ -1,8 +1,16 @@
 {
     "name": "swissup/core",
-    "description": "Swissup module manager. Module installer. Popup message manager.",
+    "description": "Swissup core module. Add menu and config placeholders",
+    "keywords": [
+        "core",
+        "installer",
+        "notifier",
+        "swissup services",
+        "module manager",
+        "popup messenger"
+    ],
     "type": "magento2-module",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "license": "OSL-3.0",
     "require": {
         "php": "~5.5.0|~5.6.0|~7.0.0"
