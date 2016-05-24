@@ -23,51 +23,73 @@ class CmsPage extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractCommand
      */
     public function execute($data)
     {
-        // bugfix: cleanup links in url_rewrite table before creating new pages.
-        // Related to https://github.com/magento/magento2/issues/4113
-        $this->cleanupUrlRewrites(
-            'cms-page',
-            array_map(
-                function ($item) {
-                    return $item['identifier'];
-                },
-                $data
-            )
+        $identifiers = array_map(
+            function ($item) {
+                return $item['identifier'];
+            },
+            $data
         );
 
+        // bugfix: cleanup links in url_rewrite table before creating new pages.
+        // Related to https://github.com/magento/magento2/issues/4113
+        $this->cleanupUrlRewrites('cms-page', $identifiers);
+
         $isSingleStoreMode = $this->storeManager->isSingleStoreMode();
+
+        // 1. Backup existing pages by:
+        //    - creating page clone with backup identifier
+        //    - or by unassign from store that will be used by new page
+        $collection = $this->objectManager
+            ->create('Magento\Cms\Model\ResourceModel\Page\Collection')
+            ->addStoreFilter($this->getStoreIds())
+            ->addFieldToFilter('identifier', ['in' => $identifiers]);
+
+        foreach ($collection as $page) {
+            $page->load($page->getId()); // load stores
+            $storesToLeave = array_diff($page->getStoreId(), $this->getStoreIds());
+            if (count($storesToLeave) && !$isSingleStoreMode) {
+                // unassign page from stores that will have new pages
+                $page->setStores($storesToLeave);
+            } else {
+                // duplicate page, because original page will be used for new content
+                $page = $this->objectManager->create('Magento\Cms\Model\Page')
+                    ->addData($page->getData())
+                    ->unsPageId()
+                    ->setIsActive(0)
+                    ->setIdentifier($this->getBackupIdentifier($page->getIdentifier()));
+            }
+
+            try {
+                $page->save();
+            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                $this->fault('cmspage_backup', $e);
+            } catch (Exception $e) {
+                $this->fault('cmspage_backup', $e);
+            }
+        }
+
+        // 2. create new page or write page content to the old page if
+        //    identifier and stores are the same
         foreach ($data as $itemData) {
-            // 1. backup existing pages
-            $collection = $this->objectManager
-                ->create('Magento\Cms\Model\ResourceModel\Page\Collection')
-                ->addStoreFilter($this->getStoreIds())
-                ->addFieldToFilter('identifier', $itemData['identifier']);
+            $page = $collection->getItemByColumnValue(
+                'identifier',
+                $itemData['identifier']
+            );
 
-            foreach ($collection as $page) {
-                $page->load($page->getId()); // load stores
-                $storesToLeave = array_diff($page->getStoreId(), $this->getStoreIds());
-                if (count($storesToLeave) && !$isSingleStoreMode) {
-                    // unassign page from stores that will have new pages
-                    $page->setStores($storesToLeave);
-                } else {
-                    // disable page, because it has not store to assign to
-                    $page->setIsActive(0)
-                        ->setIdentifier($this->getBackupIdentifier($page->getIdentifier()));
-                }
-
-                try {
-                    $page->save();
-                } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-                    $this->fault('cmspage_backup', $e);
-                } catch (Exception $e) {
-                    $this->fault('cmspage_backup', $e);
+            $canUseExistingPage = false;
+            if ($page) {
+                $diff = array_diff($page->getStoreId(), $this->getStoreIds());
+                if (!count($diff)) {
+                    $canUseExistingPage = true;
                 }
             }
 
-            // 2. create new page
+            if (!$canUseExistingPage) {
+                $page = $this->objectManager->create('Magento\Cms\Model\Page');
+            }
+
             try {
-                $this->objectManager->create('Magento\Cms\Model\Page')
-                    ->setData($itemData)
+                $page->addData($itemData)
                     ->setStores($this->getStoreIds()) // see Magento\Cms\Model\ResourceModel\Page::_afterSave
                     ->save();
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
