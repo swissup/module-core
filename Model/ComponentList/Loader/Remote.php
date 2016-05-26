@@ -109,6 +109,11 @@ class Remote extends AbstractLoader
                     }
                     return $carry;
                 });
+                if (!empty($info[$latestVersion]['type']) &&
+                    $info[$latestVersion]['type'] === 'metapackage') {
+
+                    continue;
+                }
                 yield [$packageName, $info[$latestVersion]];
             }
         }
