@@ -42,6 +42,7 @@ class CmsPage extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractCommand
         $collection = $this->objectManager
             ->create('Magento\Cms\Model\ResourceModel\Page\Collection')
             ->addStoreFilter($this->getStoreIds())
+            ->addFieldToFilter('is_active', 1)
             ->addFieldToFilter('identifier', ['in' => $identifiers]);
 
         foreach ($collection as $page) {
@@ -71,16 +72,17 @@ class CmsPage extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractCommand
         // 2. create new page or write page content to the old page if
         //    identifier and stores are the same
         foreach ($data as $itemData) {
-            $page = $collection->getItemByColumnValue(
+            $pages = $collection->getItemsByColumnValue(
                 'identifier',
                 $itemData['identifier']
             );
 
             $canUseExistingPage = false;
-            if ($page) {
+            foreach ($pages as $page) {
                 $diff = array_diff($page->getStoreId(), $this->getStoreIds());
                 if (!count($diff)) {
                     $canUseExistingPage = true;
+                    break;
                 }
             }
 
