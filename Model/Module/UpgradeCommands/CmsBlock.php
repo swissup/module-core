@@ -44,9 +44,7 @@ class CmsBlock extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractComman
 
                 try {
                     $block->save();
-                } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-                    $this->fault('cmsblock_backup', $e);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->fault('cmsblock_backup', $e);
                 }
             }
@@ -57,9 +55,7 @@ class CmsBlock extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractComman
                     ->setData($itemData)
                     ->setStores($this->getStoreIds()) // see Magento\Cms\Model\ResourceModel\Block::_afterSave
                     ->save();
-            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-                $this->fault('cmsblock_save', $e);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->fault('cmsblock_save', $e);
             }
         }

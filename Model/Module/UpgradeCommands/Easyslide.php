@@ -41,7 +41,7 @@ class Easyslide extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractComma
 
             try {
                 $slider->setData($itemData)->save();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->fault('easyslide_slider_save', $e);
                 continue;
             }
@@ -58,7 +58,7 @@ class Easyslide extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractComma
                         ->create('Swissup\EasySlide\Model\Slides')
                         ->setData(array_merge($slideDefaults, $slide))
                         ->save();
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->fault('easyslide_slide_save', $e);
                     continue;
                 }

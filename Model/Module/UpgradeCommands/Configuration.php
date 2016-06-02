@@ -86,7 +86,7 @@ class Configuration extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractC
                     /** @var \Magento\Config\Model\Config $configModel  */
                     $configModel = $this->configFactory->create(['data' => $configData]);
                     $configModel->save();
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->fault('configuration_save', $e);
                 }
             }

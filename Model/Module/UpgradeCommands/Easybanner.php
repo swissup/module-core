@@ -73,7 +73,7 @@ class Easybanner extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractComm
                     $placeholder
                         ->setData(array_merge($placeholderDefaults, $placeholderData))
                         ->save();
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->fault('easybanner_placeholder_save', $e);
                     continue;
                 }
@@ -108,7 +108,7 @@ class Easybanner extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractComm
 
                 try {
                     $banner->save();
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->fault('easybanner_banner_save', $e);
                 }
                 $bannerDefaults['sort_order'] += 5;

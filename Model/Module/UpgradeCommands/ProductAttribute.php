@@ -92,7 +92,7 @@ class ProductAttribute extends \Swissup\Core\Model\Module\UpgradeCommands\Abstra
                 $model->setAttributeGroupId($set->getDefaultGroupId());
                 try {
                     $model->save();
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->fault('product_attribute_save', $e);
                 }
             }
@@ -100,7 +100,7 @@ class ProductAttribute extends \Swissup\Core\Model\Module\UpgradeCommands\Abstra
             if (!$attributeSets->count()) {
                 try {
                     $model->save();
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->fault('product_attribute_save', $e);
                 }
             }
