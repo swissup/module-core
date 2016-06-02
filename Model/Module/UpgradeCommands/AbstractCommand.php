@@ -49,7 +49,7 @@ abstract class AbstractCommand
     public function setStoreIds(array $ids)
     {
         if ($this->storeManager->isSingleStoreMode()) {
-            $ids = [$this->storeManager->getStore()->getId()];
+            $ids = [\Magento\Store\Model\Store::DEFAULT_STORE_ID];
         }
         $this->storeIds = $ids;
         return $this;
