@@ -3,7 +3,7 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Swissup_Core::swissup">
+                <resource id="Swissup_Core::swissup" title="Swissup">
                     <resource id="Swissup_Core::services" title="Services" sortOrder="0">
                         <resource id="Swissup_Core::installer_index" title="Module Manager" sortOrder="10" />
                         <resource id="Swissup_Core::installer_form" title="Installer Form" sortOrder="20" />
