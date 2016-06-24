@@ -2,6 +2,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <swissup_core>
+            <notification>
+                <enabled>1</enabled>
+                <use_https>1</use_https>
+                <feed_url>swissuplabs.com/notifier</feed_url>
+            </notification>
             <modules>
                 <use_https>0</use_https>
                 <url>swissup.github.io/packages</url>
