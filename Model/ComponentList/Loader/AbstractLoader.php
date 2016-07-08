@@ -34,7 +34,7 @@ abstract class AbstractLoader implements LoaderInterface
 
         try {
             $components = $this->getComponentsInfo();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return [];
         }
 

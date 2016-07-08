@@ -82,7 +82,7 @@ class Local extends AbstractLoader
                     $config = $this->jsonDecoder->decode($config);
                     $config['path'] = $path;
                     yield [$config['name'], $config];
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     // skip module
                 }
             }

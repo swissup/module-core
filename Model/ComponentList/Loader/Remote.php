@@ -89,7 +89,7 @@ class Remote extends AbstractLoader
                 $this->cache->save($responseBody, self::RESPONSE_CACHE_KEY, [], 86400);
             }
             $response = $this->jsonHelper->jsonDecode($responseBody);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $response = [];
             // Swissup_Subscription will be added below - used by
             // subscription activation module
