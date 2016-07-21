@@ -4,6 +4,7 @@
         <tab id="swissup_checkout" sortOrder="295">
             <label>Swissup Checkout</label>
         </tab>
+        <!-- @todo: rename to swissup_config -->
         <tab id="swissup" sortOrder="300">
             <label>Swissup</label>
         </tab>

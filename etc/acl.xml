@@ -13,5 +13,17 @@
                 </resource>
             </resource>
         </resources>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Swissup_Core::swissup_checkout" title="Swissup Checkout" sortOrder="295"/>
+                            <resource id="Swissup_Core::swissup_config" title="Swissup" sortOrder="300"/>
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
     </acl>
 </config>
