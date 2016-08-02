@@ -11,10 +11,6 @@
                         <resource id="Swissup_Core::installer_upgrade" title="Run Upgrades" sortOrder="40" />
                     </resource>
                 </resource>
-            </resource>
-        </resources>
-        <resources>
-            <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
