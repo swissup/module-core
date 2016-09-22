@@ -20,13 +20,21 @@ class Easytabs extends AbstractCommand
                 ->load($itemData['alias'], 'alias');
 
             if ($tab->getId()) {
-                continue;
+                $storeIds = array_unique(
+                    array_merge($tab->getStores(), $this->getStoreIds())
+                );
+
+                if (!array_diff($storeIds, $tab->getStores())) {
+                    // tab is already assigned to requested store
+                    continue;
+                }
+            } else {
+                $tab->setData($itemData);
+                $storeIds = $this->getStoreIds();
             }
 
             try {
-                $tab->setData($itemData)
-                    ->setStores($this->getStoreIds())
-                    ->save();
+                $tab->setStores($storeIds)->save();
             } catch (\Exception $e) {
                 $this->fault('easytabs_tab_save', $e);
                 continue;
