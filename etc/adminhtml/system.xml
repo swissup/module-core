@@ -4,7 +4,7 @@
         <tab id="swissup_checkout" sortOrder="295">
             <label>Swissup Checkout</label>
         </tab>
-        <!-- @todo: rename to swissup_config -->
+
         <tab id="swissup" sortOrder="297">
             <label>Swissup</label>
         </tab>
@@ -13,7 +13,7 @@
             <class>separator-top</class>
             <tab>swissup</tab>
             <label>Core</label>
-            <resource>Swissup_Core::config_core</resource>
+            <resource>Swissup_Core::core_config</resource>
             <group id="notification" translate="label" type="text" sortOrder="250" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Notifications</label>
                 <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
