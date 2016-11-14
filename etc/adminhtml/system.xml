@@ -1,22 +1,18 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="swissup_checkout" sortOrder="295">
-            <label>Swissup Checkout</label>
-        </tab>
-
         <tab id="swissup" sortOrder="297">
             <label>Swissup</label>
         </tab>
-
         <section id="swissup_core" type="text" sortOrder="358" showInDefault="1" showInWebsite="0" showInStore="0">
             <class>separator-top</class>
             <tab>swissup</tab>
             <label>Core</label>
             <resource>Swissup_Core::core_config</resource>
-            <group id="notification" translate="label" type="text" sortOrder="250" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="notification" translate="label" type="text" sortOrder="250" showInDefault="1">
                 <label>Notifications</label>
-                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
