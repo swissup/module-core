@@ -77,10 +77,20 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         parent::load($modelId, $field);
 
         $this->setId($modelId);
-        // array_filter to remove empty items caused by non-magento modules requirements
-        $this->setDepends(array_filter($this->packageInfo->getRequire($this->getCode())));
-        $this->setVersion($this->packageInfo->getVersion($this->getCode()));
-        $this->setPackageName($this->packageInfo->getPackageName($this->getCode()));
+
+        try {
+            // array_filter to remove empty items caused by non-magento modules requirements
+            $depends = array_filter($this->packageInfo->getRequire($this->getCode()));
+            $version = $this->packageInfo->getVersion($this->getCode());
+            $packageName = $this->packageInfo->getPackageName($this->getCode());
+        } catch (\Exception $e) {
+            $depends = [];
+            $version = 'Synax error in third-party composer.json';
+            $packageName = $this->getCode();
+        }
+        $this->setDepends($depends);
+        $this->setVersion($version);
+        $this->setPackageName($packageName);
 
         return $this;
     }
