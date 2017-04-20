@@ -85,7 +85,7 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
             $packageName = $this->packageInfo->getPackageName($this->getCode());
         } catch (\Exception $e) {
             $depends = [];
-            $version = 'Synax error in third-party composer.json';
+            $version = $e->getMessage() . ' (Third-party composer.json)';
             $packageName = $this->getCode();
         }
         $this->setDepends($depends);
