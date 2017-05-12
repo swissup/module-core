@@ -44,20 +44,20 @@ class Install extends \Magento\Backend\App\Action
             $model->setIdentityKey($params['identity_key']);
         }
 
-        $result = $model->validateLicense();
-        if (is_array($result) && isset($result['error'])) {
-            $error = call_user_func_array('__', $result['error']);
-            if (isset($result['response'])) {
-                $this->popupMessageManager->addError(
-                    $error,
-                    $result['response'],
-                    'License validation response'
-                );
-            } else {
-                $this->messageManager->addError($error);
-            }
-            return $resultRedirect->setPath('*/*/form', ['code' => $params['code']]);
-        }
+        // $result = $model->validateLicense();
+        // if (is_array($result) && isset($result['error'])) {
+        //     $error = call_user_func_array('__', $result['error']);
+        //     if (isset($result['response'])) {
+        //         $this->popupMessageManager->addError(
+        //             $error,
+        //             $result['response'],
+        //             'License validation response'
+        //         );
+        //     } else {
+        //         $this->messageManager->addError($error);
+        //     }
+        //     return $resultRedirect->setPath('*/*/form', ['code' => $params['code']]);
+        // }
 
         $model->up();
 

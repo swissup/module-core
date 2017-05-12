@@ -34,9 +34,9 @@ class FetchNotifications implements \Magento\Framework\Event\ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if ($this->backendAuthSession->isLoggedIn()) {
-            $feedModel = $this->feedFactory->create();
-            $feedModel->checkUpdate();
-        }
+        // if ($this->backendAuthSession->isLoggedIn()) {
+        //     $feedModel = $this->feedFactory->create();
+        //     $feedModel->checkUpdate();
+        // }
     }
 }
