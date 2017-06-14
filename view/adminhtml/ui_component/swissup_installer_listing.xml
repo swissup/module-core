@@ -6,6 +6,7 @@
             <item name="deps" xsi:type="string">swissup_installer_listing.swissup_installer_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">swissup_installer_columns</item>
+        <item name="acl" xsi:type="string">Swissup_Core::installer_index</item>
     </argument>
     <dataSource name="swissup_installer_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
