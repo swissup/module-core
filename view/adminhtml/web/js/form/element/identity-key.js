@@ -10,11 +10,21 @@ define([
             this._super();
 
             if (this.source.data.general.identity_key_link) {
-                this.notice = this.notice
-                    .replace(
-                        '{{identity_key_link}}',
-                        this.source.data.general.identity_key_link
-                    );
+                var oldNotice = this.notice;
+                if (typeof this.notice === 'function') {
+                    oldNotice = this.notice();
+                }
+
+                var notice = oldNotice.replace(
+                    '{{identity_key_link}}',
+                    this.source.data.general.identity_key_link
+                );
+
+                if (typeof this.notice === 'function') {
+                    this.notice(notice);
+                } else {
+                    this.notice = notice;
+                }
             }
 
             this.updateStatus();
