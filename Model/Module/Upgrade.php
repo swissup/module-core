@@ -16,6 +16,8 @@ abstract class Upgrade implements ModuleUpgradeInterface
      */
     protected $storeIds = array();
 
+    protected $allStoresList = array();
+
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
@@ -97,5 +99,63 @@ abstract class Upgrade implements ModuleUpgradeInterface
     public function getMessageLogger()
     {
         return $this->messageLogger;
+    }
+
+    public function getAllStores()
+    {
+        if (empty($this->allStoresList)) {
+            $storeManager = $this->objectManager->create('Magento\Store\Model\StoreManager');
+            foreach ($storeManager->getStores() as $store) {
+                $storeId = $store["store_id"];
+                $storeName = $store["name"];
+                $this->allStoresList[] = $storeId;
+            }
+        }
+        return $this->allStoresList;
+    }
+
+    public function unsetEasytab($type, $storeIdsToRemove = [], $alias = null)
+    {
+        $storeManager = $this->objectManager->create('Magento\Store\Model\StoreManager');
+
+        $storeIdsToRemove[] = 0;
+        $storesToKeep = $this->getAllStores();
+        $storesToKeep = array_diff($storesToKeep, $storeIdsToRemove);
+
+        $collection = $this->objectManager
+            ->create('Swissup\Easytabs\Model\Entity')
+            ->getCollection();
+
+        if (isset($type)) {
+            $collection->addFieldToFilter('block', $type);
+        }
+        if (isset($alias)) {
+            $collection->addFieldToFilter('alias', $alias);
+        }
+        $collection->walk('afterLoad');
+
+        foreach ($collection as $tab) {
+            if ($storeManager->isSingleStoreMode()) {
+                $tab->setStatus(0);
+            } else {
+                $stores = $tab->getStores();
+                $stores = array_diff($stores, array(0));
+                if (!$stores) { // tab was assigned to all stores
+                    $tab->setStores($storesToKeep);
+                } else {
+                    if (!array_diff($stores, $storesToKeep)) {
+                        // tab is not assigned to storesToRemove
+                        continue;
+                    }
+                    $keep = array_intersect($stores, $storesToKeep);
+                    if ($keep) {
+                        $tab->setStores($keep);
+                    } else {
+                        $tab->setStatus(0);
+                    }
+                }
+            }
+            $tab->save();
+        }
     }
 }
