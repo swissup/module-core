@@ -7,6 +7,11 @@ use Swissup\Core\Api\Data\ModuleUpgradeInterface;
 abstract class Upgrade implements ModuleUpgradeInterface
 {
     /**
+     * @var array
+     */
+    protected $themeIds = [];
+
+    /**
      * @var \Swissup\Core\Model\Module\MessageLogger
      */
     protected $messageLogger;
@@ -61,6 +66,17 @@ abstract class Upgrade implements ModuleUpgradeInterface
                 ->execute($data);
         }
         $this->up();
+    }
+
+    public function getThemeId($themePath)
+    {
+        if (!isset($this->themeIds[$themePath])) {
+            $this->themeIds[$themePath] = $this->objectManager
+                ->create('Magento\Theme\Model\ResourceModel\Theme\Collection')
+                ->getThemeByFullPath($themePath)
+                ->getThemeId();
+        }
+        return $this->themeIds[$themePath];
     }
 
     /**
