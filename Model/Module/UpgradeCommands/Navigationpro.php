@@ -5,7 +5,7 @@ namespace Swissup\Core\Model\Module\UpgradeCommands;
 class Navigationpro extends AbstractCommand
 {
     /**
-     * Create new menu
+     * Create new menu and enable it in the config, if needed
      *
      * If duplicate is found - do nothing.
      *
@@ -33,15 +33,6 @@ class Navigationpro extends AbstractCommand
                 continue;
             }
 
-            $menu = $this->objectManager->create('Swissup\Navigationpro\Model\MenuFactory')
-                ->create()
-                ->load($menuData['settings']['identifier'], 'identifier');
-
-            // don't do anything if menu with the same id is already exists
-            if ($menu->getId()) {
-                continue;
-            }
-
             foreach ($rootCategoryIds as $categoryId => $storeIds) {
                 $builder = $this->objectManager
                     ->create('Swissup\Navigationpro\Model\Menu\BuilderFactory')
@@ -56,6 +47,24 @@ class Navigationpro extends AbstractCommand
                     $builder->updateSettings($menuData['settings']);
                 }
 
+                // use unique menu name if multiple root category ids are found
+                $name = $builder->getSettings('identifier');
+                if (count($rootCategoryIds) > 1) {
+                    $name .= '_cat' . $categoryId;
+                    $builder->updateSettings([
+                        'identifier' => $name
+                    ]);
+                }
+
+                $menu = $this->objectManager->create('Swissup\Navigationpro\Model\MenuFactory')
+                    ->create()
+                    ->load($name, 'identifier');
+
+                // don't do anything if menu with the same identifier is already exists
+                if ($menu->getId()) {
+                    continue;
+                }
+
                 if (isset($menuData['items'])) {
                     $builder->updateItems($menuData['items']);
                 }
@@ -63,7 +72,15 @@ class Navigationpro extends AbstractCommand
                 $builder->setRootCategoryId($categoryId);
 
                 try {
-                    $builder->save();
+                    $menu = $builder->save();
+
+                    if (!empty($menuData['activate'])) {
+                        $this->saveConfig(
+                            'navigationpro/top/identifier',
+                            $menu->getIdentifier(),
+                            $storeIds
+                        );
+                    }
                 } catch (\Exception $e) {
                     $this->fault('navigationpro_menu_save', $e);
                     continue;
