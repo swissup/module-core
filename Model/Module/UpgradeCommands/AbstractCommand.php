@@ -31,14 +31,28 @@ abstract class AbstractCommand
      */
     protected $storeManager;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var \Magento\Framework\App\Config\Storage\WriterInterface
+     */
+    protected $configWriter;
+
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
     ) {
         $this->objectManager = $objectManager;
         $this->localeDate = $localeDate;
         $this->storeManager = $storeManager;
+        $this->scopeConfig = $scopeConfig;
+        $this->configWriter = $configWriter;
     }
 
     /**
@@ -111,5 +125,28 @@ abstract class AbstractCommand
             . rand(10, 99)
             . '_'
             . $this->localeDate->date()->format('Y-m-d-H-i-s');
+    }
+
+    /**
+     * Save single config section
+     *
+     * @param  string $path
+     * @param  mixed  $value
+     * @param  array  $storeIds
+     */
+    protected function saveConfig($path, $value, $storeIds = array())
+    {
+        if (!$storeIds) {
+            $storeIds = $this->getStoreIds();
+        }
+
+        foreach ($storeIds as $storeId) {
+            if (!$storeId) { // all stores selected
+                $writeScope = \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
+            } else {
+                $writeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORES;
+            }
+            $this->configWriter->save($path, $value, $writeScope, $storeId);
+        }
     }
 }

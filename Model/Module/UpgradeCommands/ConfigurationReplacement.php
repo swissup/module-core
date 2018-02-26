@@ -5,28 +5,6 @@ namespace Swissup\Core\Model\Module\UpgradeCommands;
 class ConfigurationReplacement extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractCommand
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\Framework\App\Config\Storage\WriterInterface
-     */
-    protected $configWriter;
-
-    public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
-    ) {
-        parent::__construct($objectManager, $localeDate, $storeManager);
-        $this->scopeConfig = $scopeConfig;
-        $this->configWriter = $configWriter;
-    }
-
-    /**
      * Replace suggested string with another one, keeping rest of config value
      *
      * Usefull to remove sample data config values and strings, keeping the rest

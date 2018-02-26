@@ -23,11 +23,19 @@ class Products extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractComman
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
     ) {
-        parent::__construct($objectManager, $localeDate, $storeManager);
+        parent::__construct(
+            $objectManager,
+            $localeDate,
+            $storeManager,
+            $scopeConfig,
+            $configWriter
+        );
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;

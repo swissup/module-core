@@ -15,9 +15,17 @@ class Configuration extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractC
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
         \Magento\Config\Model\Config\Factory $configFactory
     ) {
-        parent::__construct($objectManager, $localeDate, $storeManager);
+        parent::__construct(
+            $objectManager,
+            $localeDate,
+            $storeManager,
+            $scopeConfig,
+            $configWriter
+        );
         $this->configFactory = $configFactory;
     }
 

@@ -18,10 +18,18 @@ class ProductAttribute extends \Swissup\Core\Model\Module\UpgradeCommands\Abstra
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
         \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory,
         \Magento\Catalog\Helper\Product $productHelper
     ) {
-        parent::__construct($objectManager, $localeDate, $storeManager);
+        parent::__construct(
+            $objectManager,
+            $localeDate,
+            $storeManager,
+            $scopeConfig,
+            $configWriter
+        );
         $this->attributeFactory = $attributeFactory;
         $this->productHelper = $productHelper;
     }
