@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- add plugin to return empty string when block output is empty -->
+    <type name="Magento\Catalog\Block\Product\AbstractProduct">
+        <plugin name="returnEmptyStringWhenOutputEmpty"
+                type="Swissup\Core\Plugin\SetEmptyStringIfOutputEmpty"
+                sortOrder="10"
+                disabled="false"/>
+    </type>
+</config>
