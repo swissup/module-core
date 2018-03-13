@@ -15,7 +15,7 @@ class SetEmptyStringIfOutputEmpty
             \Magento\Framework\View\Element\AbstractBlock $subject,
             $resultHtml
         ) {
-            $html = trim(preg_replace('/\s+/', ' ', $resultHtml));
+            $html = trim($resultHtml, " \n");
             return empty($html) ? $html : $resultHtml;
         }
 }
