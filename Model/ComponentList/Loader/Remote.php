@@ -99,8 +99,8 @@ class Remote extends AbstractLoader
             $response = [];
         }
 
+        $modules = [];
         if (!empty($response['packages'])) {
-            $modules = [];
             foreach ($response['packages'] as $packageName => $info) {
                 $versions = array_keys($info);
                 $latestVersion = array_reduce($versions, function ($carry, $item) {
@@ -114,10 +114,16 @@ class Remote extends AbstractLoader
 
                     continue;
                 }
-                yield [$packageName, $info[$latestVersion]];
+                $modules[$packageName] = $info[$latestVersion];
+
+                if (isset($info['dev-master']['extra']['swissup'])) {
+                    $modules[$packageName]['extra']['swissup'] =
+                        $info['dev-master']['extra']['swissup'];
+                }
             }
         }
-        yield ['swissup/subscription', [
+
+        $modules['swissup/subscription'] = [
             'name'          => 'swissup/subscription',
             'type'          => 'subscription-plan',
             'description'   => 'SwissUpLabs Modules Subscription',
@@ -131,7 +137,9 @@ class Remote extends AbstractLoader
                     ]
                 ]
             ]
-        ]];
+        ];
+
+        return $modules;
     }
 
     /**

@@ -38,7 +38,7 @@ abstract class AbstractLoader implements LoaderInterface
             return [];
         }
 
-        foreach ($components as list($name, $config)) {
+        foreach ($components as $name => $config) {
             $code = $this->componentHelper->convertPackageNameToModuleName(
                 $config['name']
             );

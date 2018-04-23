@@ -65,6 +65,7 @@ class Local extends AbstractLoader
             \Magento\Framework\Component\ComponentRegistrar::MODULE
         ];
 
+        $modules = [];
         foreach ($components as $component) {
             $paths = $this->registrar->getPaths($component);
             foreach ($paths as $name => $path) {
@@ -81,11 +82,12 @@ class Local extends AbstractLoader
                     $config = $this->filesystemDriver->fileGetContents($filePath);
                     $config = $this->jsonDecoder->decode($config);
                     $config['path'] = $path;
-                    yield [$config['name'], $config];
+                    $modules[$config['name']] = $config;
                 } catch (\Exception $e) {
                     // skip module
                 }
             }
         }
+        return $modules;
     }
 }
