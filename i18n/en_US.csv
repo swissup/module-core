@@ -1,0 +1,21 @@
+Installer,Installer
+"Swissup Installer","Swissup Installer"
+"Module Manager","Module Manager"
+"Module installed, but some operations where failed","Module installed, but some operations where failed"
+"Module successfully installed","Module successfully installed"
+"Module upgrades successfully applied","Module upgrades successfully applied"
+"Show Info","Show Info"
+"Open Installer","Open Installer"
+"Run Upgrades","Run Upgrades"
+"Module is up to date","Module is up to date"
+"The latest version is %1","The latest version is %1"
+Notifications,Notifications
+"Installation Information","Installation Information"
+Install,Install
+"Identity key","Identity key"
+"Get your identity key at {{identity_key_link}}","Get your identity key at {{identity_key_link}}"
+"Select stores to install or reinstall module","Select stores to install or reinstall module"
+"Module is currently installed on","Module is currently installed on"
+Module,Module
+Version,Version
+"Latest Release Date","Latest Release Date"
