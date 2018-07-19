@@ -85,8 +85,14 @@ class Products extends \Swissup\Core\Model\Module\UpgradeCommands\AbstractComman
             }
 
             foreach ($this->getStoreIds() as $storeId) {
+                $collectionStoreId = $storeId;
+                if ($storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+                    // compatibility with M2.2.5 when install on 'All Store Views'
+                    $collectionStoreId = $this->storeManager->getDefaultStoreView()->getId();
+                }
+
                 $visibleProducts = $this->productCollectionFactory->create()
-                    ->setStoreId($storeId)
+                    ->setStoreId($collectionStoreId)
                     ->setVisibility($visibility)
                     ->addStoreFilter($storeId)
                     ->setPageSize($data[$attribute->getAttributeCode()])
