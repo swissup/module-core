@@ -16,6 +16,8 @@ use Swissup\Core\Model\ComponentList\Loader;
  */
 class ModuleCommand extends Command
 {
+    const INPUT_ARGUMENT_NAME = 'name';
+
     /**
      *
      * @var \Swissup\Core\Model\ComponentList\Loader
@@ -23,16 +25,23 @@ class ModuleCommand extends Command
     private $loader;
 
     /**
+     *
+     * @var \Swissup\Core\Model\ModuleFactory
+     */
+    private $moduleFactory;
+
+    /**
      * Inject dependencies
      *
      * @param \Swissup\Core\Model\ComponentList\Loader $loader
+     * @param \Swissup\Core\Model\ModuleFactory $moduleFactory
      */
-    public function __construct(Loader $loader)
+    public function __construct(Loader $loader, \Swissup\Core\Model\ModuleFactory $moduleFactory)
     {
         $this->loader = $loader;
+        $this->moduleFactory = $moduleFactory;
         parent::__construct();
     }
-
 
     /**
      * {@inheritdoc}
@@ -40,7 +49,7 @@ class ModuleCommand extends Command
     protected function configure()
     {
         $this->addArgument(
-            'name',
+            self::INPUT_ARGUMENT_NAME,
             InputArgument::REQUIRED,
             'Package name or Module name (swissup/core or Swissup_Core)'
         );
@@ -75,27 +84,28 @@ class ModuleCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getArgument('name');
+        $moduleCode = $input->getArgument(self::INPUT_ARGUMENT_NAME);
 
         $items = $this->loader->getItems();
         $codes = array_column($items, 'code', 'name');
         $packages = array_keys($codes);
-        if (in_array('Swissup_' . $name, $codes)) {
-            $name = 'Swissup_' . $name;
-        } elseif (in_array('swissup/' . $name, $packages)) {
-            $name = 'swissup/' . $name;
+        if (in_array('Swissup_' . $moduleCode, $codes)) {
+            $moduleCode = 'Swissup_' . $moduleCode;
+        } elseif (in_array('swissup/' . $moduleCode, $packages)) {
+            $moduleCode = 'swissup/' . $moduleCode;
         }
 
-        if (in_array($name, $packages)) {
-            $name = $codes[$name];
+        if (in_array($moduleCode, $packages)) {
+            $moduleCode = $codes[$moduleCode];
         }
-        // $output->writeln($name);
-        if (!isset($items[$name])) {
-            $output->writeln('<error>Package[Module] ' . $name .' doesn\'t exist</error>');
+        // $output->writeln($moduleName);
+        if (!isset($items[$moduleCode])) {
+            $output->writeln('<error>Package[Module] ' . $moduleCode .' doesn\'t exist</error>');
             $output->writeln('Run : <fg=yellow>php bin/magento swissup:module:list</>');
             return Cli::RETURN_FAILURE;
         }
-        $item = $items[$name];
+        $item = $items[$moduleCode];
+
         $color = version_compare($item['version'], $item['latest_version'], '>=') ? 'green' : 'red';
         $item['version'] = "<fg={$color}>{$item['version']}</>";
         $item['release_date'] = date("Y-m-d H:i", strtotime($item['release_date']));
@@ -108,10 +118,19 @@ class ModuleCommand extends Command
             }
         }
 
+        $moduleModel = $this->moduleFactory->create();
+        $moduleModel->load($moduleCode);
+        // \Zend_Debug::dump($moduleModel->getData());
+
+        $identityKey = $moduleModel->getData('identity_key');
+        if (!empty($identityKey)) {
+            $rows[] = ["<info>Identity Key</info>", $identityKey];
+        }
+
         $table = new Table($output);
         // $table->setHeaders(['Param', 'Value']);
         $table->setRows($rows);
-        // \Zend_Debug::dump($items[$name]);
+        // \Zend_Debug::dump($items[$moduleCode]);
         $table->render();
     }
 }
