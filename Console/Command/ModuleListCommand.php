@@ -9,9 +9,6 @@ use Symfony\Component\Console\Helper\TableSeparator;
 
 use Swissup\Core\Model\ComponentList\Loader;
 
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Component\ComponentRegistrarInterface;
-
 /**
  * Command for displaying status of swissup modules
  */
@@ -24,22 +21,13 @@ class ModuleListCommand extends Command
     private $loader;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader
-     */
-    private $componentRegistrar;
-
-    /**
      * Inject dependencies
      *
      * @param \Swissup\Core\Model\ComponentList\Loader $loader
-     * @param ComponentRegistrarInterface $componentRegistrar
      */
-    public function __construct(
-        Loader $loader,
-        ComponentRegistrarInterface $componentRegistrar
-    ) {
+    public function __construct(Loader $loader)
+    {
         $this->loader = $loader;
-        $this->componentRegistrar = $componentRegistrar;
         parent::__construct();
     }
 
@@ -67,25 +55,14 @@ class ModuleListCommand extends Command
         $separator = new TableSeparator();
         foreach ($items as $item) {
             $row = [];
-            foreach (explode(',', 'name,code,version,latest_version,type,release_date') as $key) {
+            foreach (explode(',', 'name,code,version,latest_version,type,release_date,path') as $key) {
                 $row[$key] = isset($item[$key]) ? $item[$key]: '';
             }
 
-            $row['version'] = '<fg=' . (version_compare($row['version'], $row['latest_version'], '>=') ? 'green' : 'red') . '>'
-                . $row['version']
-            . '</>';
+            $color = version_compare($row['version'], $row['latest_version'], '>=') ? 'green' : 'red';
+            $row['version'] = "<fg={$color}>{$row['version']}</>";
 
             $row['release_date'] = date("Y-m-d", strtotime($row['release_date']));
-
-            $type = ComponentRegistrar::MODULE;
-            $code = $row['code'];
-            if ($row['type'] == 'magento2-theme') {
-                $type = ComponentRegistrar::THEME;
-                $code = substr($code, strlen('Swissup_ThemeFrontend'));
-                $code = strtolower(trim(preg_replace('/([A-Z]+)/', "-$1", $code), '-'));
-                $code = 'frontend/Swissup/' . $code;
-            }
-            $row['location'] = $this->componentRegistrar->getPath($type, $code);
 
             $rows[] = $row;
 
@@ -97,7 +74,7 @@ class ModuleListCommand extends Command
         }
 
         $table = new Table($output);
-        $table->setHeaders(['Package', 'Module', 'Version', 'Latest', 'Type', 'Date', 'Location']);
+        $table->setHeaders(['Package', 'Module', 'Version', 'Latest', 'Type', 'Date', 'Path']);
         $table->setRows($rows);
 
         $table->render();

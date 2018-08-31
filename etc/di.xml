@@ -18,6 +18,7 @@
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
+                <item name="moduleCommand" xsi:type="object">Swissup\Core\Console\Command\ModuleCommand</item>
                 <item name="moduleListCommand" xsi:type="object">Swissup\Core\Console\Command\ModuleListCommand</item>
             </argument>
         </arguments>
