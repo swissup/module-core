@@ -87,6 +87,7 @@ class ModuleCommand extends Command
         $moduleCode = $input->getArgument(self::INPUT_ARGUMENT_NAME);
 
         $items = $this->loader->getItems();
+
         $codes = array_column($items, 'code', 'name');
         $packages = array_keys($codes);
         if (in_array('Swissup_' . $moduleCode, $codes)) {
@@ -125,6 +126,11 @@ class ModuleCommand extends Command
         $identityKey = $moduleModel->getData('identity_key');
         if (!empty($identityKey)) {
             $rows[] = ["<info>Identity Key</info>", $identityKey];
+        }
+
+        $depends = $moduleModel->getData('depends');
+        if (!empty($depends)) {
+            $rows[] = ["<info>Depends</info>", implode(' ', $depends)];
         }
 
         $table = new Table($output);

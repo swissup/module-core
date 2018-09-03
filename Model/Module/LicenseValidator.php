@@ -106,7 +106,12 @@ class LicenseValidator
             if ($this->module->getConfigSection()) {
                 $client->setParameterGet('config_section', $this->module->getConfigSection());
             }
-            $client->setParameterGet('domain', $this->request->getHttpHost());
+
+            $domain = $this->module->getDomain();
+            if (empty($domain)) {
+                $domain = $this->request->getHttpHost();
+            }
+            $client->setParameterGet('domain', $domain);
             $response = $client->request();
             $responseBody = $response->getBody();
         } catch (\Exception $e) {
