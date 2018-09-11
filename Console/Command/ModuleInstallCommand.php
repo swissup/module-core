@@ -1,7 +1,6 @@
 <?php
 namespace Swissup\Core\Console\Command;
 
-use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,6 +12,7 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 
 use Swissup\Core\Model\ComponentList\Loader;
+use Swissup\Core\Console\Command\EmulatedAreaProcessor;
 
 /**
  * Command for displaying info of swissup module
@@ -35,7 +35,7 @@ class ModuleInstallCommand extends Command
      */
     private $moduleFactory;
 
-    /** @var EmulatedAdminhtmlAreaProcessor */
+    /** @var EmulatedAreaProcessor */
     private $emulatedAreaProcessor;
 
     /**
@@ -49,13 +49,13 @@ class ModuleInstallCommand extends Command
      *
      * @param \Swissup\Core\Model\ComponentList\Loader $loader
      * @param \Swissup\Core\Model\ModuleFactory $moduleFactory
-     * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
+     * @param EmulatedAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         Loader $loader,
         \Swissup\Core\Model\ModuleFactory $moduleFactory,
-        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
+        EmulatedAreaProcessor $emulatedAreaProcessor,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->loader = $loader;
