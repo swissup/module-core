@@ -11,15 +11,15 @@
 
 ```bash
 cd <magento_root>
-composer config repositories.swissup/core vcs git@github.com:swissup/core.git
-composer require swissup/core --prefer-source
+composer config repositories.swissup composer https://docs.swissuplabs.com/packages/
+composer require swissup/module-core --prefer-source
 bin/magento module:enable Swissup_Core
 bin/magento setup:upgrade
 ```
 
 ### Swissup Installer Usage
 
-Swissup installer is a class that collects [Swissup Upgrades](#swissup-upgrade-class) 
+Swissup installer is a class that collects [Swissup Upgrades](#swissup-upgrade-class)
 from all module dependencies and run them, if needed.
 
 Lets see the example of how the Argento theme installer is working:
@@ -34,11 +34,11 @@ $module->load('Swissup_ArgentoDefault')
 What does this code do?
 
  1. Create `Swissup\Core\Model\Module` object.
- 2. Load module info for `Swissup_ArgentoDefault` module from `composer.json` 
+ 2. Load module info for `Swissup_ArgentoDefault` module from `composer.json`
     file.
  3. Set the store to use (All Stores).
  4. Run installer:
-    1. Search for [Swissup\Upgrade](#swissup-upgrade-class) classes for all 
+    1. Search for [Swissup\Upgrade](#swissup-upgrade-class) classes for all
         depends of `Swissup_ArgentoDefault` module.
     2. Run `getOperations` and `up` command for each of the found upgrade class.
     3. Run `getOperations` and `up` command of `Swissup_ArgentoDefault` upgrade class.
@@ -46,7 +46,7 @@ What does this code do?
 ### Swissup Upgrade Class
 
 When module or theme needs to run some extra logic for specified store views,
-it's very handy to use `Swissup\Upgrade` class, which allows to create and 
+it's very handy to use `Swissup\Upgrade` class, which allows to create and
 automatically backup various content types and configuration.
 
 > Why not to use Magento DataUpgrade?
@@ -82,7 +82,7 @@ namespace Swissup\ArgentoDefault\Upgrades;
 class InitialInstallation extends \Swissup\Core\Model\Module\Upgrade
 {
     public function up()
-    {   
+    {
         // This method is optional.
         // Additional logic may be placed here.
     }
@@ -145,7 +145,7 @@ information in popup window.
 
 **Usage example**
 
-Inject `\Swissup\Helper\PopupMessageManager` component into your controller 
+Inject `\Swissup\Helper\PopupMessageManager` component into your controller
 action and use it instead of built-in `\Magento\Framework\Message\Manager`:
 
 ```php
