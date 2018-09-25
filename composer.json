@@ -1,5 +1,5 @@
 {
-    "name": "swissup/core",
+    "name": "swissup/module-core",
     "description": "Swissup core module. It's purpose is to add menu and config placeholders",
     "keywords": [
         "core",
@@ -10,7 +10,7 @@
         "popup messenger"
     ],
     "type": "magento2-module",
-    "version": "1.6.2",
+    "version": "1.7.0",
     "license": "OSL-3.0",
     "autoload": {
         "files": [ "registration.php" ],
