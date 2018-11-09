@@ -28,9 +28,9 @@ class LicenseValidator
     protected $jsonHelper;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @var \Magento\Framework\HTTP\Adapter\CurlFactory
      */
-    protected $httpClientFactory;
+    protected $curlFactory;
 
     /**
      * Constructor
@@ -39,20 +39,20 @@ class LicenseValidator
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      */
     public function __construct(
         \Swissup\Core\Model\Module $module,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+        \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
     ) {
         $this->request = $request;
         $this->module = $module;
         $this->scopeConfig = $scopeConfig;
         $this->jsonHelper = $jsonHelper;
-        $this->httpClientFactory = $httpClientFactory;
+        $this->curlFactory = $curlFactory;
     }
 
     /**
@@ -90,30 +90,12 @@ class LicenseValidator
         list($site, $secret, $suffix) = explode(':', $key);
 
         try {
-            $client = $this->httpClientFactory->create();
-            $client->setUri($this->getUrl($site));
+            $client = $this->curlFactory->create();
             $client->setConfig(['maxredirects'=>5, 'timeout'=>30]);
-            $client->setParameterGet('key', $secret);
-            $client->setParameterGet('suffix', $suffix);
-
-            $purchaseCode = $this->module->getRemote()->getPurchaseCode();
-            if (!$purchaseCode) {
-                $purchaseCode = $this->module->getCode();
-            }
-
-            $client->setParameterGet('module', $purchaseCode);
-            $client->setParameterGet('module_code', $this->module->getCode());
-            if ($this->module->getConfigSection()) {
-                $client->setParameterGet('config_section', $this->module->getConfigSection());
-            }
-
-            $domain = $this->module->getDomain();
-            if (empty($domain)) {
-                $domain = $this->request->getHttpHost();
-            }
-            $client->setParameterGet('domain', $domain);
-            $response = $client->request();
-            $responseBody = $response->getBody();
+            $client->write(\Zend_Http_Client::GET, $this->getUrl($site));
+            $responseBody = $client->read();
+            $responseBody = \Zend_Http_Response::extractBody($responseBody);
+            $client->close();
         } catch (\Exception $e) {
             return [
                 'error' => [
@@ -178,7 +160,7 @@ class LicenseValidator
     /**
      * Retrieve validation url according to the encoded $site
      *
-     * @param string $site Base64 encoded site url [example.com]
+     * @param string $site Base64 encoded site url
      */
     protected function getUrl($site)
     {
@@ -192,6 +174,39 @@ class LicenseValidator
         );
 
         $site = base64_decode($site);
-        return ($useHttps ? 'https://' : 'http://') . rtrim($site, '/ ') . $url;
+        $url = ($useHttps ? 'https://' : 'http://') . rtrim($site, '/ ') . $url;
+        $url .= '?' . http_build_query($this->getQueryParams());
+
+        return $url;
+    }
+
+    /**
+     * Prepare query parameters for the request
+     *
+     * @return array
+     */
+    protected function getQueryParams()
+    {
+        $purchaseCode = $this->module->getRemote()->getPurchaseCode();
+        if (!$purchaseCode) {
+            $purchaseCode = $this->module->getCode();
+        }
+
+        $domain = $this->module->getDomain();
+        if (empty($domain)) {
+            $domain = $this->request->getHttpHost();
+        }
+
+        $params = [
+            'module' => $purchaseCode,
+            'module_code' => $this->module->getCode(),
+            'domain' => $domain,
+        ];
+
+        if ($this->module->getConfigSection()) {
+            $params['config_section'] = $this->module->getConfigSection();
+        }
+
+        return $params;
     }
 }
