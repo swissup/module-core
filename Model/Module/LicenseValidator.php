@@ -92,7 +92,13 @@ class LicenseValidator
         try {
             $client = $this->curlFactory->create();
             $client->setConfig(['maxredirects'=>5, 'timeout'=>30]);
-            $client->write(\Zend_Http_Client::GET, $this->getUrl($site));
+            $client->write(
+                \Zend_Http_Client::GET,
+                $this->getUrl($site, [
+                    'key' => $secret,
+                    'suffix' => $suffix,
+                ])
+            );
             $responseBody = $client->read();
             $responseBody = \Zend_Http_Response::extractBody($responseBody);
             $client->close();
@@ -161,8 +167,9 @@ class LicenseValidator
      * Retrieve validation url according to the encoded $site
      *
      * @param string $site Base64 encoded site url
+     * @param array $queryParams
      */
-    protected function getUrl($site)
+    protected function getUrl($site, array $queryParams = [])
     {
         $useHttps = $this->scopeConfig->getValue(
             self::XML_USE_HTTPS_PATH,
@@ -175,7 +182,7 @@ class LicenseValidator
 
         $site = base64_decode($site);
         $url = ($useHttps ? 'https://' : 'http://') . rtrim($site, '/ ') . $url;
-        $url .= '?' . http_build_query($this->getQueryParams());
+        $url .= '?' . http_build_query(array_merge($this->getQueryParams(), $queryParams));
 
         return $url;
     }
