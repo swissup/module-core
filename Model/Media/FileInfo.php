@@ -104,6 +104,16 @@ class FileInfo implements \Swissup\Core\Api\Media\FileInfoInterface
     }
 
     /**
+     * get base image dir
+     *
+     * @return string
+     */
+    public function getBaseDir()
+    {
+        return $this->getMediaDirectory()->getAbsolutePath($this->mediaPath);
+    }
+
+    /**
      * Get base url fro media directory including path
      *
      * @return string
