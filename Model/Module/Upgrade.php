@@ -155,6 +155,9 @@ abstract class Upgrade implements ModuleUpgradeInterface
                 $tab->setStatus(0);
             } else {
                 $stores = $tab->getStores();
+                if (!is_array($stores)) {
+                    $stores = (array) $stores;
+                }
                 $stores = array_diff($stores, array(0));
                 if (!$stores) { // tab was assigned to all stores
                     $tab->setStores($storesToKeep);
