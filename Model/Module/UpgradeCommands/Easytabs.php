@@ -16,8 +16,10 @@ class Easytabs extends AbstractCommand
     {
         foreach ($data as $itemData) {
             $tab = $this->objectManager
-                ->create('Swissup\Easytabs\Model\Entity')
-                ->load($itemData['alias'], 'alias');
+                ->create('Swissup\Easytabs\Model\ResourceModel\Entity\Collection')
+                ->addFieldToFilter('alias', $itemData['alias'])
+                ->addFieldToFilter('block', $itemData['block'])
+                ->getFirstItem();
 
             if ($tab->getId()) {
                 $storeIds = array_unique(
