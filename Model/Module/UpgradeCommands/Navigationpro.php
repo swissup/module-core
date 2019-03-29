@@ -60,8 +60,8 @@ class Navigationpro extends AbstractCommand
                     ->create()
                     ->load($name, 'identifier');
 
-                // don't do anything if menu with the same identifier is already exists
                 if ($menu->getId()) {
+                    $this->activate($menu, $storeIds);
                     continue;
                 }
 
@@ -75,11 +75,7 @@ class Navigationpro extends AbstractCommand
                     $menu = $builder->save();
 
                     if (!empty($menuData['activate'])) {
-                        $this->saveConfig(
-                            'navigationpro/top/identifier',
-                            $menu->getIdentifier(),
-                            $storeIds
-                        );
+                        $this->activate($menu, $storeIds);
                     }
                 } catch (\Exception $e) {
                     $this->fault('navigationpro_menu_save', $e);
@@ -87,5 +83,20 @@ class Navigationpro extends AbstractCommand
                 }
             }
         }
+    }
+
+    /**
+     * Activate menu per store ids
+     *
+     * @param  \Swissup\Navigationpro\Model\Menu $menu
+     * @param  array $storeIds
+     */
+    private function activate(\Swissup\Navigationpro\Model\Menu $menu, $storeIds)
+    {
+        $this->saveConfig(
+            'navigationpro/top/identifier',
+            $menu->getIdentifier(),
+            $storeIds
+        );
     }
 }
