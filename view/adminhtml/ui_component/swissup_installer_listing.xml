@@ -145,10 +145,6 @@
                         <item name="label" xsi:type="string">Open Marketplace</item>
                         <item name="key" xsi:type="string">marketplace_link</item>
                     </item>
-                    <item name="download" xsi:type="array">
-                        <item name="label" xsi:type="string">Download Latest Version</item>
-                        <item name="key" xsi:type="string">download_link</item>
-                    </item>
                     <item name="docs" xsi:type="array">
                         <item name="label" xsi:type="string">Read Documentation</item>
                         <item name="key" xsi:type="string">docs_link</item>
