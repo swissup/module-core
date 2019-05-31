@@ -201,6 +201,7 @@ class Installer
      */
     public function resolve($filename)
     {
+        $filename = basename($filename);
         require_once $this->getUpgradesDir() . "/{$filename}.php"; // phpcs:ignore
 
         $className = implode(' ', array_slice(explode('_', $filename), 1));
