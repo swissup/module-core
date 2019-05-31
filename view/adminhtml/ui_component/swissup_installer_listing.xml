@@ -137,10 +137,12 @@
         <actionsColumn name="actions" class="Swissup\Core\Ui\Component\Listing\Columns\ModuleActions">
             <argument name="data" xsi:type="array">
                 <item name="links" xsi:type="array">
+                    <!--
                     <item name="homepage" xsi:type="array">
                         <item name="label" xsi:type="string">Open Module Homepage</item>
                         <item name="key" xsi:type="string">link</item>
                     </item>
+                    -->
                     <item name="marketplace" xsi:type="array">
                         <item name="label" xsi:type="string">Open Marketplace</item>
                         <item name="key" xsi:type="string">marketplace_link</item>
