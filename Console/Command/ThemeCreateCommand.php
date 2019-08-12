@@ -66,6 +66,12 @@ class ThemeCreateCommand extends Command
             $themeName = 'Local/' . $themeName;
         }
         $parent = $input->getArgument('parent');
+
+        if (strpos($parent, 'Swissup_ThemeFrontendArgento') === 0) {
+            $parent = str_replace('Swissup_ThemeFrontendArgento', '', $parent);
+            $parent = strtolower($parent);
+        }
+
         $parentThemeName = 'Swissup/argento-' . $parent;
         $parentThemePackageName = 'swissup/theme-frontend-argento-' . $parent;
 
