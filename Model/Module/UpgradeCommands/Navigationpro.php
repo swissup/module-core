@@ -18,7 +18,8 @@ class Navigationpro extends AbstractCommand
         $collection = $this->objectManager
             ->create('Magento\Store\Model\ResourceModel\Store\Collection')
             ->addFieldToFilter('store_id', ['in' => $this->getStoreIds()])
-            ->addRootCategoryIdAttribute();
+            ->addRootCategoryIdAttribute()
+            ->setLoadDefault(true);
 
         $rootCategoryIds = [];
         foreach ($collection as $store) {
