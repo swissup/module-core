@@ -23,7 +23,7 @@ class PageConfigRenderer
             return $result;
         }
 
-        preg_match_all('/<link.*rel="preload".*\/>/', $result, $links);
+        preg_match_all('/<link.*rel="preload".*\/>/U', $result, $links);
 
         foreach ($links[0] as $link) {
             if (strpos($link, '.woff') === false ||
