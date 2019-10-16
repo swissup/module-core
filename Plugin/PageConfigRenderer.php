@@ -5,6 +5,17 @@ namespace Swissup\Core\Plugin;
 class PageConfigRenderer
 {
     /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
+    private $assetRepo;
+
+    public function __construct(
+        \Magento\Framework\View\Asset\Repository $assetRepo
+    ) {
+        $this->assetRepo = $assetRepo;
+    }
+
+    /**
      * Add font preload support in Magento < 2.3.3.
      *
      * Usage in `default_head_blocks.xml`:
@@ -37,6 +48,20 @@ class PageConfigRenderer
                 'rel="preload" as="font" crossorigin="anonymous"',
                 $link
             );
+
+            // fix for magento < 2.3.3||2.2.10
+            if (strpos($newLink, 'href="//') === false &&
+                strpos($newLink, 'href="http') === false
+            ) {
+                preg_match('/href="(.*)"/U', $newLink, $href);
+
+                if (count($href) > 1) {
+                    $href = $href[1];
+                    $newHref = $this->assetRepo->getUrlWithParams($href, []);
+                    $newLink = str_replace($href, $newHref, $newLink);
+                }
+            }
+
             $result = str_replace($link, $newLink, $result);
         }
 
