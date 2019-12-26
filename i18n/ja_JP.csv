@@ -1,1 +1,21 @@
-
+Installer,インストーラ
+"Swissup Installer",Swissupインストーラー
+"Module Manager",モジュールマネージャー
+"Module installed, but some operations where failed",モジュールはインストールされたが、一部の操作が失敗した
+"Module successfully installed",モジュールが正常にインストールされました
+"Module upgrades successfully applied",モジュールのアップグレードが正常に適用されました
+"Show Info",情報を表示
+"Open Installer",インストーラーを開く
+"Run Upgrades",アップグレードを実行する
+"Module is up to date",モジュールは最新です
+"The latest version is %1","最新バージョンはです ％1"
+Notifications,通知
+"Installation Information",インストール情報
+Install,インストール
+"Identity key",アイデンティティキー
+"Get your identity key at {{identity_key_link}}",{{identity_key_link}}でIDキーを取得します
+"Select stores to install or reinstall module",モジュールをインストールまたは再インストールするストアを選択します
+"Module is currently installed on",モジュールは現在インストールされています
+Module,モジュール
+Version,バージョン
+"Latest Release Date",最新のリリース日
