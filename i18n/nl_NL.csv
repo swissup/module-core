@@ -1,1 +1,21 @@
-
+Installer,Installer
+"Swissup Installer",Swissup-installatieprogramma
+"Module Manager",Modulebeheer
+"Module installed, but some operations where failed","Module geïnstalleerd, maar sommige bewerkingen zijn mislukt"
+"Module successfully installed","Module succesvol geïnstalleerd"
+"Module upgrades successfully applied","Module-upgrades met succes toegepast"
+"Show Info","Info tonen"
+"Open Installer","Open het installatieprogramma"
+"Run Upgrades","Voer upgrades uit"
+"Module is up to date","Module is bijgewerkt"
+"The latest version is %1","De nieuwste versie is %1"
+Notifications,meldingen
+"Installation Information","Installatie informatie"
+Install,Installeren
+"Identity key",Identiteitssleutel
+"Get your identity key at {{identity_key_link}}","Haal uw identiteitssleutel op {{identity_key_link}}"
+"Select stores to install or reinstall module","Selecteer winkels om de module te installeren of opnieuw te installeren"
+"Module is currently installed on","Module is momenteel geïnstalleerd op"
+Module,module
+Version,Versie
+"Latest Release Date","Laatste releasedatum"
