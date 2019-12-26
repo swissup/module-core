@@ -1,1 +1,21 @@
-
+Installer,Installer
+"Swissup Installer","Swissup Installer"
+"Module Manager",Modulchef
+"Module installed, but some operations where failed","Modulen installerad, men vissa operationer misslyckades"
+"Module successfully installed","Modulen har installerats"
+"Module upgrades successfully applied","Moduluppgraderingar tillämpas"
+"Show Info","Visa Info"
+"Open Installer","Öppna installationsprogrammet"
+"Run Upgrades","Kör uppgraderingar"
+"Module is up to date","Modulen är aktuell"
+"The latest version is %1","Den senaste versionen är %1"
+Notifications,anmälningar
+"Installation Information",Installationsinformation
+Install,Installera
+"Identity key",Identitetsnyckel
+"Get your identity key at {{identity_key_link}}","Skaffa din identitetsnyckel på {{identitet_key_länk}}"
+"Select stores to install or reinstall module","Välj butiker för att installera eller installera om modulen"
+"Module is currently installed on","Modulen är för närvarande installerad på"
+Module,Modul
+Version,Version
+"Latest Release Date","Senaste utgivningsdatum"
