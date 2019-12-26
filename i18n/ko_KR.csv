@@ -1,1 +1,21 @@
-
+Installer,인스톨러
+"Swissup Installer","Swissup 설치 프로그램"
+"Module Manager","모듈 관리자"
+"Module installed, but some operations where failed","모듈이 설치되었지만 실패한 일부 작업"
+"Module successfully installed","모듈이 성공적으로 설치되었습니다"
+"Module upgrades successfully applied","모듈 업그레이드가 성공적으로 적용되었습니다"
+"Show Info","정보 표시"
+"Open Installer","인스톨러 열기"
+"Run Upgrades","업그레이드 실행"
+"Module is up to date","모듈이 최신입니다"
+"The latest version is %1","최신 버전은 입니다.%1"
+Notifications,알림
+"Installation Information","설치 정보"
+Install,설치
+"Identity key","신원 키"
+"Get your identity key at {{identity_key_link}}","{{identity_key_link}}에서 신원 키를 받으십시오."
+"Select stores to install or reinstall module","모듈을 설치하거나 다시 설치할 상점을 선택하십시오."
+"Module is currently installed on","모듈이 현재 설치되어 있습니다"
+Module,"구성 단위"
+Version,버전
+"Latest Release Date","최신 출시일"
