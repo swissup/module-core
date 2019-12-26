@@ -1,1 +1,21 @@
-
+Installer,安装程序
+"Swissup Installer",Swissup安装程序
+"Module Manager",模块经理
+"Module installed, but some operations where failed",已安装模块，但某些操作失败
+"Module successfully installed",模块安装成功
+"Module upgrades successfully applied",模块升级成功应用
+"Show Info",显示信息
+"Open Installer",打开安装程序
+"Run Upgrades",运行升级
+"Module is up to date",模块是最新的
+"The latest version is %1","最新版本是 ％1"
+Notifications,通知事项
+"Installation Information",安装信息
+Install,安装
+"Identity key",身份密钥
+"Get your identity key at {{identity_key_link}}",在{{identity_key_link}}上获取您的身份密钥
+"Select stores to install or reinstall module",选择商店以安装或重新安装模块
+"Module is currently installed on",模块当前安装在
+Module,模组
+Version,版
+"Latest Release Date",最新发行日期
