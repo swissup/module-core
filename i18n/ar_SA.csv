@@ -1,1 +1,21 @@
-
+Installer,المثبت
+"Swissup Installer","تثبيت Swissup"
+"Module Manager","مدير الوحدة"
+"Module installed, but some operations where failed","الوحدة النمطية المثبتة ، ولكن بعض العمليات حيث فشلت"
+"Module successfully installed","تم تثبيت الوحدة بنجاح"
+"Module upgrades successfully applied","تم تطبيق ترقيات الوحدة بنجاح"
+"Show Info","تظهر المعلومات"
+"Open Installer","فتح المثبت"
+"Run Upgrades","تشغيل ترقيات"
+"Module is up to date","الوحدة النمطية محدثة"
+"The latest version is %1","أحدث إصدار هو %1"
+Notifications,إشعارات
+"Installation Information","معلومات التثبيت"
+Install,تثبيت
+"Identity key","مفتاح الهوية"
+"Get your identity key at {{identity_key_link}}","احصل على مفتاح هويتك على {{identity_key_link}}"
+"Select stores to install or reinstall module","حدد مخازن لتثبيت أو إعادة تثبيت الوحدة النمطية"
+"Module is currently installed on","الوحدة النمطية مثبتة حاليًا على"
+Module,وحدة
+Version,الإصدار
+"Latest Release Date","تاريخ الإصدار الأخير"
