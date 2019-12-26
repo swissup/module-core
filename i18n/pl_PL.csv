@@ -1,1 +1,21 @@
-
+Installer,Instalator
+"Swissup Installer","Instalator Swissup"
+"Module Manager","Menedżer modułów"
+"Module installed, but some operations where failed","Moduł zainstalowany, ale niektóre operacje zakończyły się niepowodzeniem"
+"Module successfully installed","Moduł został pomyślnie zainstalowany"
+"Module upgrades successfully applied","Pomyślnie zastosowano aktualizacje modułu"
+"Show Info","Pokaż informacje"
+"Open Installer","Otwórz instalator"
+"Run Upgrades","Uruchom aktualizacje"
+"Module is up to date","Moduł jest aktualny"
+"The latest version is %1","Najnowsza wersja to %1"
+Notifications,Powiadomienia
+"Installation Information","Informacje o instalacji"
+Install,zainstalować
+"Identity key","Klucz tożsamości"
+"Get your identity key at {{identity_key_link}}","Uzyskaj swój klucz tożsamości na {{identity_key_link}}"
+"Select stores to install or reinstall module","Wybierz sklepy, aby zainstalować lub ponownie zainstalować moduł"
+"Module is currently installed on","Moduł jest obecnie zainstalowany"
+Module,Moduł
+Version,Wersja
+"Latest Release Date","Ostatnia data wydania"
