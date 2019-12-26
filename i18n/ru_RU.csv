@@ -1,1 +1,21 @@
-
+Installer,монтажник
+"Swissup Installer","Swissup Installer"
+"Module Manager","Диспетчер модулей"
+"Module installed, but some operations where failed","Модуль установлен, но некоторые операции потерпели неудачу"
+"Module successfully installed","Модуль успешно установлен"
+"Module upgrades successfully applied","Обновления модуля успешно применены"
+"Show Info","Показать информацию"
+"Open Installer","Открыть установщик"
+"Run Upgrades","Запустить обновления"
+"Module is up to date","Модуль обновлен"
+"The latest version is %1","Последняя версия %1"
+Notifications,Уведомления
+"Installation Information","Информация об установке"
+Install,устанавливать
+"Identity key","Идентификационный ключ"
+"Get your identity key at {{identity_key_link}}","Получите свой идентификационный ключ на {{identity_key_link}}"
+"Select stores to install or reinstall module","Выберите магазины для установки или переустановки модуля"
+"Module is currently installed on","Модуль в настоящее время установлен на"
+Module,модуль
+Version,Версия
+"Latest Release Date","Дата последнего выпуска"
