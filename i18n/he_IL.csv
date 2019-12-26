@@ -1,1 +1,21 @@
-
+Installer,מתקין
+"Swissup Installer","מתקין Swissup"
+"Module Manager","מנהל מודולים"
+"Module installed, but some operations where failed","המודול מותקן, אך חלק מהפעולות בו נכשלה"
+"Module successfully installed","המודול הותקן בהצלחה"
+"Module upgrades successfully applied","שדרוגי המודול יושמו בהצלחה"
+"Show Info","הצג מידע"
+"Open Installer","פתח את המתקין"
+"Run Upgrades","הפעל שדרוגים"
+"Module is up to date","המודול מעודכן"
+"The latest version is %1","הגרסה האחרונה היא 1%"
+Notifications,התראות
+"Installation Information","מידע על התקנה"
+Install,להתקין
+"Identity key","מפתח זהות"
+"Get your identity key at {{identity_key_link}}","השג את מפתח הזהות שלך ב {{identity_key_link}}"
+"Select stores to install or reinstall module","בחר חנויות להתקנה או להתקנה מחדש של מודול"
+"Module is currently installed on","המודול מותקן כרגע ב"
+Module,מודול
+Version,גרסה
+"Latest Release Date","תאריך השחרור האחרון"
