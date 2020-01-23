@@ -16,6 +16,8 @@ use Swissup\Core\Model\ComponentList\Loader;
 class ModuleListCommand extends Command
 {
     const INPUT_OPTION_TYPE = 'type';
+    const INPUT_OPTION_ALL = 'all';
+    const INPUT_OPTION_ALL_SHORTCUT = 'a';
 
     /**
      *
@@ -48,6 +50,13 @@ class ModuleListCommand extends Command
             ''
         );
 
+        $this->addOption(
+            self::INPUT_OPTION_ALL,
+            self::INPUT_OPTION_ALL_SHORTCUT,
+            InputOption::VALUE_NONE,
+            'Show all information'
+        );
+
         $this->setName('swissup:module:list')
             ->setDescription('Displays status of swissup modules');
         parent::configure();
@@ -59,6 +68,7 @@ class ModuleListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $type = $input->getOption(self::INPUT_OPTION_TYPE);
+        $all = (bool) $input->getOption(self::INPUT_OPTION_ALL);
 
         if (!in_array($type, ['magento2-module', 'magento2-theme'])) {
             $type = 'magento2-' . $type;
@@ -73,19 +83,30 @@ class ModuleListCommand extends Command
         $rows = [];
         $i = 0;
         $separator = new TableSeparator();
+        $columns = explode(',', 'name,code,version,latest_version,type');
+        if ($all) {
+            $columns[] = 'release_date';
+            $columns[] = 'path';
+        }
         foreach ($items as $item) {
             if ($type !== false && $item['type'] != $type) {
                 continue;
             }
             $row = [];
-            foreach (explode(',', 'name,code,version,latest_version,type,release_date,path') as $key) {
+            foreach ($columns as $key) {
                 $row[$key] = isset($item[$key]) ? $item[$key]: '';
             }
 
             $color = version_compare($row['version'], $row['latest_version'], '>=') ? 'green' : 'red';
             $row['version'] = "<fg={$color}>{$row['version']}</>";
 
-            $row['release_date'] = date("Y-m-d", strtotime($row['release_date']));
+            if (isset($row['release_date'])) {
+                $row['release_date'] = date("Y-m-d", strtotime($row['release_date']));
+            }
+            if (!empty($row['path']) && strstr($row['path'], '/vendor/')) {
+                list(, $row['path']) = explode('/vendor/', $row['path']);
+                $row['path'] = './vendor/' . $row['path'];
+            }
 
             $rows[] = $row;
 
@@ -97,7 +118,12 @@ class ModuleListCommand extends Command
         }
 
         $table = new Table($output);
-        $table->setHeaders(['Package', 'Module', 'Version', 'Latest', 'Type', 'Date', 'Path']);
+        $headers = ['Package', 'Module', 'Version', 'Latest', 'Type'];
+        if ($all) {
+            $headers[] = 'Date';
+            $headers[] = 'Path';
+        }
+        $table->setHeaders($headers);
         $table->setRows($rows);
 
         $table->render();
