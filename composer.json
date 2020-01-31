@@ -10,7 +10,7 @@
         "popup messenger"
     ],
     "type": "magento2-module",
-    "version": "1.10.0",
+    "version": "1.10.1",
     "license": "OSL-3.0",
     "autoload": {
         "files": [ "registration.php" ],
