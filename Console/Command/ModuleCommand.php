@@ -104,8 +104,12 @@ class ModuleCommand extends Command
         $packages = array_keys($codes);
         if (in_array('Swissup_' . $moduleCode, $codes)) {
             $moduleCode = 'Swissup_' . $moduleCode;
+        } elseif (in_array('Swissup_' . ucfirst($moduleCode), $codes)) {
+            $moduleCode = 'Swissup_' . ucfirst($moduleCode);
         } elseif (in_array('swissup/' . $moduleCode, $packages)) {
             $moduleCode = 'swissup/' . $moduleCode;
+        } elseif (in_array('swissup/module-' . $moduleCode, $packages)) {
+            $moduleCode = 'swissup/module-' . $moduleCode;
         }
 
         if (in_array($moduleCode, $packages)) {
