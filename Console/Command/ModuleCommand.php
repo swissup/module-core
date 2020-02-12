@@ -119,6 +119,10 @@ class ModuleCommand extends Command
         }
         $item = $items[$moduleCode];
 
+        if (!isset($item['version'])) {
+            $item['version'] = '';
+        }
+
         $color = version_compare($item['version'], $item['latest_version'], '>=') ? 'green' : 'red';
         $item['version'] = "<fg={$color}>{$item['version']}</>";
         $item['release_date'] = date("Y-m-d H:i", strtotime($item['release_date']));
