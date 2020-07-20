@@ -74,7 +74,7 @@ EOT;
         $content = self::THEME_REGISTRATION_TEMPLATE;
         $content = str_replace(
             '{{THEME_NAME}}',
-            ThemeCreateCommand::SECTION . DIRECTORY_SEPARATOR . $themeName,
+            ThemeCreateCommand::SECTION . \Magento\Framework\Config\Theme::THEME_PATH_SEPARATOR . $themeName,
             $content
         );
 
