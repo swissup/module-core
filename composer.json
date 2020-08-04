@@ -10,10 +10,10 @@
         "popup messenger"
     ],
     "type": "magento2-module",
-    "version": "1.10.3",
+    "version": "1.10.4",
     "license": "OSL-3.0",
     "require": {
-        "swissup/module-marketplace": "^1.7"
+        "swissup/module-marketplace": "^1.7.2"
     },
     "autoload": {
         "files": [ "registration.php" ],
