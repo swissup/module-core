@@ -15,7 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * Command for listing the configured stores
  */
-class StoreViewCreateCommand extends Command
+class StoreCreateCommand extends Command
 {
     const INPUT_ARGUMENT_NAME = 'name';
     const INPUT_ARGUMENT_CODE = 'code';
@@ -65,10 +65,10 @@ class StoreViewCreateCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('store-view:create')
+        $this->setName('store:create')
             ->setDescription('Create new store view (see list: bin/magento store:list)')
-            ->addArgument(self::INPUT_ARGUMENT_NAME, InputArgument::REQUIRED, 'Put the store view name you want to create ("Argento Stripes")')
-            ->addArgument(self::INPUT_ARGUMENT_CODE, InputArgument::REQUIRED, 'Put the code (stripes)')
+            ->addArgument(self::INPUT_ARGUMENT_NAME, InputArgument::REQUIRED, 'Put the store view name you want to create')
+            ->addArgument(self::INPUT_ARGUMENT_CODE, InputArgument::REQUIRED, 'Put the code')
             ->addArgument(
                 self::INPUT_ARGUMENT_IS_ACTIVE,
                 InputArgument::OPTIONAL,
@@ -119,7 +119,12 @@ class StoreViewCreateCommand extends Command
             ];
             /** @var \Magento\Store\Model\Store $storeModel */
             $storeModel = $this->storeFactory->create();
-            $data['name'] = $this->filterManager->removeTags($data['name']);
+            $data[self::INPUT_ARGUMENT_NAME] = $this->filterManager->removeTags(
+                $data[self::INPUT_ARGUMENT_NAME]
+            );
+            $data[self::INPUT_ARGUMENT_CODE] = $this->filterManager->removeTags(
+                $data[self::INPUT_ARGUMENT_CODE]
+            );
 
             $storeModel->setData($data);
             $groupModel = $this->groupFactory->create()->load(
