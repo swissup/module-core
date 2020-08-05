@@ -25,7 +25,8 @@ class ThemeCreateCommand extends Command
     /**
      * Inject dependencies
      *
-     * @param \Swissup\Core\Model\ComponentList\Loader $create
+     * @param \Swissup\Core\Console\Command\ThemeCreate $create
+     * @param null $name
      */
     public function __construct(ThemeCreate $create, $name = null)
     {
