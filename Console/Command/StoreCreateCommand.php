@@ -11,9 +11,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Class StoreListCommand
+ * Class StoreCreateCommand
  *
- * Command for listing the configured stores
+ * Command for store view creating
  */
 class StoreCreateCommand extends Command
 {
@@ -45,6 +45,12 @@ class StoreCreateCommand extends Command
     private $filterManager;
 
     /**
+     * StoreCreateCommand constructor.
+     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
+     * @param \Magento\Store\Model\GroupFactory $groupFactory
+     * @param \Magento\Store\Model\StoreFactory $storeFactory
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @param null $name
      */
     public function __construct(
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
