@@ -57,35 +57,6 @@ class ModuleActions extends \Magento\Ui\Component\Listing\Columns\Column
         }
 
         foreach ($dataSource['data']['items'] as & $item) {
-
-            // add installer links
-            $module = $this->moduleFactory->create()->load($item['code']);
-            if ($module->getInstaller()->hasUpgradesDir()) {
-                $item[$this->getData('name')]['installer'] = [
-                    'href' => $this->urlBuilder->getUrl(
-                        static::URL_PATH_INSTALL,
-                        [
-                            'code' => $item['code']
-                        ]
-                    ),
-                    'label' => __('Open Installer')
-                ];
-
-                if ($module->isInstalled() &&
-                    $module->getInstaller()->getUpgradesToRun()) {
-
-                    $item[$this->getData('name')]['upgrade'] = [
-                        'href' => $this->urlBuilder->getUrl(
-                            static::URL_PATH_UPGRADE,
-                            [
-                                'code' => $item['code']
-                            ]
-                        ),
-                        'label' => __('Run Upgrades')
-                    ];
-                }
-            }
-
             // add external links
             foreach ($this->getData('links') as $link) {
                 if (empty($item[$link['key']])) {

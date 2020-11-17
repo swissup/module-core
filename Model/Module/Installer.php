@@ -2,16 +2,8 @@
 
 namespace Swissup\Core\Model\Module;
 
-/**
- * Collect all SwissupUpgrades of requested module and run them one by one
- */
 class Installer
 {
-    /**
-     * @var array
-     */
-    protected $upgrades = [];
-
     /**
      * @var \Swissup\Core\Model\Module
      */
@@ -73,32 +65,7 @@ class Installer
             $this->getModuleObject($moduleCode)->up();
         }
 
-        $saved = false;
-        // upgrade currently installed version to the latest data_version
-        if (count($oldStores)) {
-            foreach ($this->getUpgradesToRun() as $version => $filename) {
-                $this->resolve($filename)
-                    ->setStoreIds($oldStores)
-                    ->upgrade();
-                $this->module->setDataVersion($version)->save();
-                $saved = true;
-            }
-        }
-
-        // install module to the new stores
-        if (count($newStores)) {
-            foreach ($this->getUpgradesToRun(0) as $version => $filename) {
-                $this->resolve($filename)
-                    ->setStoreIds($newStores)
-                    ->upgrade();
-                $this->module->setDataVersion($version)->save();
-                $saved = true;
-            }
-        }
-
-        if (!$saved) {
-            $this->module->save();
-        }
+        $this->module->save();
     }
 
     /**
@@ -116,116 +83,39 @@ class Installer
      * Checks is the upgrades directory is exists in the module
      *
      * @return boolean
+     * @deprecated
      */
     public function hasUpgradesDir()
     {
-        $dir = $this->getUpgradesDir();
-        return $dir && is_readable($dir);
+        return false;
     }
 
     /**
-     * Retrieve the list of not installed upgrade filenames sorted by version_compare.
-     * The list could be filtered by optional 'from' parameter.
-     * This parameter is usefull, when the module is installed previously
-     *
      * @param string $from
      * @return array
+     * @deprecated
      */
     public function getUpgradesToRun($from = null)
     {
-        if (null === $from) {
-            $from = $this->module->getDataVersion();
-        }
-        $upgrades = array();
-        foreach ($this->getUpgradeFiles() as $version => $filename) {
-            if (version_compare($from, $version) >= 0) {
-                continue;
-            }
-            $upgrades[$version] = $filename;
-        }
-        return $upgrades;
+        return [];
     }
 
     /**
-     * Retrive the list of all module upgrades
-     * sorted by version_compare
-     *
-     * [
-     *     1.0.0 => 1.0.0_filename,
-     *     1.1.0 => 1.1.0_filename2
-     * ]
-     *
      * @return array
+     * @deprecated
      */
     public function getUpgradeFiles()
     {
-        if ($this->upgrades) {
-            return $this->upgrades;
-        }
-
-        if (!$this->hasUpgradesDir()) {
-            return [];
-        }
-
-        try {
-            $dir = new \DirectoryIterator($this->getUpgradesDir());
-        } catch (\Exception $e) {
-            return [];
-        }
-
-        $upgrades = [];
-        foreach ($dir as $file) {
-            $file = $file->getFilename();
-            if (false === strstr($file, '.php')) {
-                continue;
-            }
-            list($version, $part) = explode('_', $file, 2);
-            $upgrades[$version] = substr($file, 0, -4);
-        }
-
-        uksort($upgrades, 'version_compare');
-        $this->upgrades = $upgrades;
-
-        return $upgrades;
+        return [];
     }
 
     /**
-     * Returns upgrade class instance by given file basename
-     *
-     * Resolving examples:
-     * 1.0.0_initial_installation   [Vendor\Module]\Upgrades\InitialInstallation
-     * 1.1.0_add_used_id_column     [Vendor\Module]\Upgrades\AddUserIdColumn
-     *
-     * @param string $filename
-     * @return \Swissup\Core\Model\Module\Upgrade
-     */
-    public function resolve($filename)
-    {
-        $filename = basename($filename);
-        require_once $this->getUpgradesDir() . "/{$filename}.php"; // phpcs:ignore
-
-        $className = implode(' ', array_slice(explode('_', $filename), 1));
-        $className = str_replace(' ', '', ucwords($className));
-        $namespace = str_replace('_', '\\', $this->module->getCode()) . '\\Upgrades';
-        $className = $namespace . '\\' . $className;
-
-        $upgrade = $this->objectManager->create($className);
-        $upgrade->setMessageLogger($this->getMessageLogger());
-
-        return $upgrade;
-    }
-
-    /**
-     * Retrieve module upgrade directory
-     *
-     * @return string
+     * @return null
+     * @deprecated
      */
     public function getUpgradesDir()
     {
-        if (!$this->module->getLocal() || !$this->module->getLocal()->getPath()) {
-            return null;
-        }
-        return $this->module->getLocal()->getPath() . '/Upgrades';
+        return null;
     }
 
     /**
