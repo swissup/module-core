@@ -33,10 +33,6 @@ class Index extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $this->messageManager->addNotice(__(
-            'Module manager is deprecated. Please use System > Tools > Marketplace instead.'
-        ));
-
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Swissup_Core::module_manager');
