@@ -1,5 +1,8 @@
 # Core
 
+Swissup_Core module adds menu and config entries to Magento backend. It also
+utilize some common tasks used by other modules.
+
 ## Installation
 
 ```bash
