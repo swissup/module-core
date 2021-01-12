@@ -4,7 +4,7 @@ define([
     'use strict';
 
     return function (options, element) {
-        var $destination;
+        var $toggler;
 
         options = $.extend({
             content: '',
@@ -13,27 +13,25 @@ define([
             togglerClass: 'appended-items-toggler'
         }, options);
 
-        /**
-         * Toggler click handler
-         *
-         * @param  {jQuery.event} event
-         */
-        function togglerClick(event) {
-            event.stopPropagation();
-            $(event.target)
-                .siblings('.' + options.appendedClass)
-                .toggleClass(options.hiddenClass);
-        }
-
-        $destination = $(element);
         $('<div></div>')
-            .appendTo($destination)
+            .appendTo(element)
             .addClass(options.appendedClass)
             .addClass(options.hiddenClass)
             .append($(options.content).clone());
-        $('<div></div>')
+        $toggler = $('<div></div>')
             .addClass(options.togglerClass)
-            .appendTo($destination)
-            .click(togglerClick);
+            .appendTo(element);
+
+        $(document).click(function (event) {
+            var $appendedContent = $toggler.siblings('.' + options.appendedClass);
+
+            if ($toggler.get(0) === event.target) {
+                // clicked on toggler
+                $appendedContent.toggleClass(options.hiddenClass);
+            } else {
+                // clicked somewhere else
+                $appendedContent.addClass(options.hiddenClass);
+            }
+        });
     };
 });
