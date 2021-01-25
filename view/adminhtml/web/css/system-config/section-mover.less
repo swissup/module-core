@@ -9,7 +9,7 @@
         .admin__page-nav-title {
             text-transform: none;
             border: solid #ccc;
-            border-width: 1px 0 0;
+            border-width: 1px 0 1px;
             background: #f8f8f8;
 
             &::after {
@@ -20,7 +20,6 @@
         &._show {
             .admin__page-nav-title {
                 background: #f8f8f8;
-                border-width: 1px 0 1px;
 
                 &::after {
                     content: none;
@@ -56,10 +55,19 @@
         &.admin__page-nav._collapsed._show ._collapsible + .admin__page-nav-items {
             display: flex !important;
         }
+
+        &.admin__page-nav ._collapsible + .admin__page-nav-items,
+        &.admin__page-nav._collapsed._show ._collapsible + .admin__page-nav-items {
+            &:not([style]) {
+                display: none !important;
+            }
+        }
     }
 }
 
 .swissup-mover-container {
+    border: 0;
+
     .entry-edit-head {
         display: none;
     }
