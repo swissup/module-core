@@ -60,8 +60,6 @@ class ThemeCreateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->prepareOutput($output);
-
         $themeName = $input->getArgument('name');
         if (strpos($themeName, '/') === false) {
             $themeName = 'Local/' . $themeName;
@@ -97,23 +95,5 @@ class ThemeCreateCommand extends Command
 
         $output->writeln('<success>New Local Swissup theme create done!</success>');
         $output->writeln('<warn>Please run setup:upgrade from Magento CLI</warn>');
-    }
-
-    /**
-     * @param OutputInterface $output
-     * @return OutputInterface
-     */
-    protected function prepareOutput(OutputInterface $output)
-    {
-        $error = new OutputFormatterStyle('red', 'black', ['bold', 'blink']);
-        $warn = new OutputFormatterStyle('yellow', 'black', ['bold', 'blink']);
-        $success = new OutputFormatterStyle('green', 'black', ['bold', 'blink']);
-        $special = new OutputFormatterStyle('blue', 'black', ['bold', 'blink']);
-        $output->getFormatter()->setStyle('error', $error);
-        $output->getFormatter()->setStyle('warn', $warn);
-        $output->getFormatter()->setStyle('success', $success);
-        $output->getFormatter()->setStyle('special', $special);
-
-        return $output;
     }
 }
