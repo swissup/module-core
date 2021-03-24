@@ -1,6 +1,6 @@
 <?php
+
 namespace Swissup\Core\Console\Command;
-//namespace Magento\Store\Console\Command;
 
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,11 +25,6 @@ class StoreCreateCommand extends Command
     const INPUT_OPTION_GROUP = 'group_id';
 
     /**
-     * @var \Magento\Store\Model\WebsiteFactory
-     */
-    private $websiteFactory;
-
-    /**
      * @var \Magento\Store\Model\GroupFactory
      */
     private $groupFactory;
@@ -45,21 +40,17 @@ class StoreCreateCommand extends Command
     private $filterManager;
 
     /**
-     * StoreCreateCommand constructor.
-     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Store\Model\GroupFactory $groupFactory
      * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param null $name
      */
     public function __construct(
-        \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Store\Model\GroupFactory $groupFactory,
         \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
         $name = null
     ) {
-        $this->websiteFactory = $websiteFactory;
         $this->groupFactory = $groupFactory;
         $this->storeFactory = $storeFactory;
         $this->filterManager = $filterManager;
@@ -88,15 +79,12 @@ class StoreCreateCommand extends Command
                 0
             )
         ;
-        $groups = $this->getStoreGroups();
-        $defaultGroup = current($groups);
 
         $this->addOption(
             self::INPUT_OPTION_GROUP,
             'g',
             InputOption::VALUE_OPTIONAL,
-            'Group ID (php bin/magento store:list).',
-            $defaultGroup
+            'Group ID (php bin/magento store:list).'
         );
 
         parent::configure();
@@ -110,14 +98,18 @@ class StoreCreateCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $groupId = (int) $input->getOption(self::INPUT_OPTION_GROUP);
+            $groupId = $input->getOption(self::INPUT_OPTION_GROUP);
             $storeViewName = $input->getArgument(self::INPUT_ARGUMENT_NAME);
             $storeViewCode = $input->getArgument(self::INPUT_ARGUMENT_CODE);
             $isActive = (bool) $input->getArgument(self::INPUT_ARGUMENT_IS_ACTIVE);
             $sortOrder = (int) $input->getArgument(self::INPUT_ARGUMENT_SORT_ORDER);
 
+            if ($groupId === null) {
+                $groupId = $this->getDefaultStoreGroupId();
+            }
+
             $data = [
-                self::INPUT_OPTION_GROUP        => $groupId,
+                self::INPUT_OPTION_GROUP        => (int) $groupId,
                 self::INPUT_ARGUMENT_NAME       => $storeViewName,
                 self::INPUT_ARGUMENT_CODE       => $storeViewCode,
                 self::INPUT_ARGUMENT_IS_ACTIVE  => $isActive,
@@ -152,23 +144,13 @@ class StoreCreateCommand extends Command
     }
 
     /**
-     * Retrieve list of store groups
-     *
-     * @return array
+     * @return int|null
      */
-    private function getStoreGroups()
+    private function getDefaultStoreGroupId()
     {
-        $websites = $this->websiteFactory->create()->getCollection();
-        $allgroups = $this->groupFactory->create()->getCollection();
-        $groups = [];
-        foreach ($websites as $website) {
-            foreach ($allgroups as $group) {
-                if ($group->getWebsiteId() == $website->getId()) {
-                    $groups[$group->getWebsiteId() . '-' . $group->getId()] = $group->getId();
-                }
-            }
-        }
-
-        return $groups;
+        return $this->groupFactory->create()->getCollection()
+            ->setPageSize(1)
+            ->getFirstItem()
+            ->getId();
     }
 }
