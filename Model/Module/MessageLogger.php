@@ -46,7 +46,7 @@ class MessageLogger
      * @param string $group
      * @param string $notice
      */
-    public function addSuccess($group, $success)
+    public function addSuccess($group, $notice)
     {
         $this->messages['success'][$group][] = $notice;
     }
