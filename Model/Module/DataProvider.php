@@ -15,6 +15,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $systemStore;
 
     /**
+     * @var array|null
+     */
+    private $loadedData;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName

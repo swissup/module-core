@@ -11,6 +11,11 @@ use Magento\Framework\UrlInterface;
 class FileInfo implements \Swissup\Core\Api\Media\FileInfoInterface
 {
     /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
      * Path in /pub/media directory
      *
      * @var string
