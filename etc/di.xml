@@ -25,4 +25,9 @@
             </argument>
         </arguments>
     </type>
+
+    <!-- Set view model to use store switcher as widget -->
+    <type name="Magento\Store\Block\Switcher">
+        <plugin name="addViewModelBeforeToHtml" type="Swissup\Core\Plugin\StoreSwitcherBlock" />
+    </type>
 </config>
