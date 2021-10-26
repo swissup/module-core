@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_PageBuilder:etc/content_type.xsd">
+    <type name="div"
+          label="Division"
+          component="Magento_PageBuilder/js/content-type-collection"
+          preview_component="Swissup_Core/js/content-type/div/preview"
+          master_component="Magento_PageBuilder/js/content-type/master-collection"
+          form="pagebuilder_div_form"
+          menu_section="layout"
+          icon="icon-pagebuilder-row"
+          sortOrder="99"
+          translate="label">
+        <parents default_policy="deny">
+            <parent name="root-container" policy="allow"/>
+            <parent name="div" policy="allow"/>
+        </parents>
+        <children default_policy="allow">
+            <child name="row" policy="deny"/>
+            <child name="html" policy="allow"/>
+            <child name="easyslider" policy="allow"/>
+            <child name="products" policy="allow"/>
+            <child name="block" policy="allow"/>
+        </children>
+        <appearances>
+            <appearance name="default"
+                        default="true"
+                        preview_template="Swissup_Core/content-type/div/default/preview"
+                        master_template="Swissup_Core/content-type/div/default/master"
+                        reader="Magento_PageBuilder/js/master-format/read/configurable">
+                    <elements>
+                        <element name="main">
+                            <style name="display" source="display" converter="Magento_PageBuilder/js/converter/style/display" preview_converter="Magento_PageBuilder/js/converter/style/preview/display"/>
+                            <attribute name="name" source="data-content-type"/>
+                            <attribute name="appearance" source="data-appearance"/>
+                            <css name="css_classes"/>
+                        </element>
+                        <element name="inner">
+                        </element>
+                    </elements>
+            </appearance>
+        </appearances>
+    </type>
+</config>
