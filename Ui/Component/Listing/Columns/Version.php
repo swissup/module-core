@@ -29,8 +29,8 @@ class Version extends \Magento\Ui\Component\Listing\Columns\Column
             return __('N/A');
         }
 
-        $currentVersion = $item[$this->getData('name')];
-        $latestVersion = $item[$this->getData('config/compareWith')];
+        $currentVersion = $item[$this->getData('name')] ?: '';
+        $latestVersion = $item[$this->getData('config/compareWith')] ?: '';
         $result = version_compare($currentVersion, $latestVersion, '>=');
         if ($result) {
             $severity = 'grid-severity-notice';
