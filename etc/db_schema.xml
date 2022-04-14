@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="swissup_core_module" resource="default" engine="innodb" comment="swissup_core_module">
+    <column xsi:type="varchar" name="code" nullable="false" length="50" comment="Code"/>
+    <column xsi:type="varchar" name="data_version" nullable="true" length="50" comment="Data_version"/>
+    <column xsi:type="varchar" name="identity_key" nullable="true" length="255" comment="Identity_key"/>
+    <column xsi:type="varchar" name="store_ids" nullable="true" length="64" comment="Store_ids"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="50" comment="Package Name"/>
+    <column xsi:type="varchar" name="description" nullable="true" length="255" comment="Package Description"/>
+    <column xsi:type="varchar" name="keywords" nullable="true" length="255" comment="Keywords"/>
+    <column xsi:type="varchar" name="type" nullable="true" length="32" comment="Package Type"/>
+    <column xsi:type="varchar" name="version" nullable="true" length="50" comment="Version"/>
+    <column xsi:type="datetime" name="release_date" on_update="false" nullable="true" comment="Release Date"/>
+    <column xsi:type="varchar" name="link" nullable="true" length="255" comment="Module Homepage"/>
+    <column xsi:type="varchar" name="download_link" nullable="true" length="255" comment="Module Download Link"/>
+    <column xsi:type="varchar" name="identity_key_link" nullable="true" length="255" comment="Identity Key Link"/>
+    <column xsi:type="varchar" name="latest_version" nullable="true" length="50" comment="Latest Version"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="code"/>
+    </constraint>
+    <index referenceId="SWISSUP_CORE_MODULE_CODE_NAME_DESCRIPTION_KEYWORDS" indexType="fulltext">
+      <column name="code"/>
+      <column name="name"/>
+      <column name="description"/>
+      <column name="keywords"/>
+    </index>
+  </table>
+</schema>

@@ -1,0 +1,26 @@
+{
+    "swissup_core_module": {
+        "column": {
+            "code": true,
+            "data_version": true,
+            "identity_key": true,
+            "store_ids": true,
+            "name": true,
+            "description": true,
+            "keywords": true,
+            "type": true,
+            "version": true,
+            "release_date": true,
+            "link": true,
+            "download_link": true,
+            "identity_key_link": true,
+            "latest_version": true
+        },
+        "index": {
+            "SWISSUP_CORE_MODULE_CODE_NAME_DESCRIPTION_KEYWORDS": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}
