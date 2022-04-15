@@ -14,7 +14,7 @@ require([
     'jquery',
     'Magento_Ui/js/modal/alert'
 ], function ($, alert) {
-    $('.swissup__action-info-message').click(function(e) {
+    $('.swissup__action-info-message').on('click', function(e) {
         e.preventDefault();
         var context = '#swissup-popup-' + $(this).attr('data-target');
         alert({

@@ -22,7 +22,7 @@ define([
             .addClass(options.togglerClass)
             .appendTo(element);
 
-        $(document).click(function (event) {
+        $(document).on('click', function (event) {
             var $appendedContent = $toggler.siblings('.' + options.appendedClass);
 
             if ($toggler.get(0) === event.target) {
