@@ -27,7 +27,7 @@ class StoreSwitcherBlock
      */
     public function beforeToHtml(\Magento\Store\Block\Switcher $block)
     {
-        if ($this->viewModel) {
+        if (!$block->getViewModel() && $this->viewModel) {
             $block->setViewModel($this->viewModel);
             $block->assign('viewModel', $this->viewModel);
         }
