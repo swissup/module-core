@@ -133,7 +133,10 @@ class ModuleCommand extends Command
 
         $color = version_compare($item['version'], $item['latest_version'], '>=') ? 'green' : 'red';
         $item['version'] = "<fg={$color}>{$item['version']}</>";
-        $item['release_date'] = date("Y-m-d H:i", strtotime($item['release_date']));
+        $item['release_date'] = date(
+            "Y-m-d H:i",
+            isset($item['release_date']) ? strtotime($item['release_date']) : time()
+        );
 
         $rows = [];
         foreach ($this->getLabelMapping() as $key => $label) {
