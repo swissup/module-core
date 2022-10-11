@@ -9,14 +9,31 @@ abstract class AbstractLoader implements LoaderInterface
      */
     protected $componentHelper;
 
+    /**
+     * @var \Psr\Log\LoggerInterface $logger
+     */
+    protected $logger;
+
+    /**
+     * @var array
+     */
     protected $items = [];
 
+    /**
+     * @var bool
+     */
     protected $isLoaded = false;
 
+    /**
+     * @param \Swissup\Core\Helper\Component $componentHelper
+     * @param \Psr\Log\LoggerInterface $logger
+     */
     public function __construct(
-        \Swissup\Core\Helper\Component $componentHelper
+        \Swissup\Core\Helper\Component $componentHelper,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->componentHelper = $componentHelper;
+        $this->logger = $logger;
     }
 
     /**
@@ -35,6 +52,7 @@ abstract class AbstractLoader implements LoaderInterface
         try {
             $components = $this->getComponentsInfo();
         } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
             return [];
         }
 

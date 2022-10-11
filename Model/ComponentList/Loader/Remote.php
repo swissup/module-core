@@ -36,6 +36,7 @@ class Remote extends AbstractLoader
 
     /**
      * @param \Swissup\Core\Helper\Component                     $componentHelper
+     * @param \Psr\Log\LoggerInterface                           $logger
      * @param \Magento\Framework\App\RequestInterface            $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Json\Helper\Data                $jsonHelper
@@ -43,13 +44,14 @@ class Remote extends AbstractLoader
      */
     public function __construct(
         \Swissup\Core\Helper\Component $componentHelper,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         \Magento\Framework\App\CacheInterface $cache
     ) {
-        parent::__construct($componentHelper);
+        parent::__construct($componentHelper, $logger);
         $this->request = $request;
         $this->scopeConfig = $scopeConfig;
         $this->jsonHelper = $jsonHelper;
@@ -90,6 +92,7 @@ class Remote extends AbstractLoader
             }
             $response = $this->jsonHelper->jsonDecode($responseBody);
         } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
             $response = [];
             // Swissup_Subscription will be added below - used by
             // subscription activation module
@@ -104,7 +107,7 @@ class Remote extends AbstractLoader
             foreach ($response['packages'] as $packageName => $info) {
                 $versions = array_keys($info);
                 $latestVersion = array_reduce($versions, function ($carry, $item) {
-                    if (version_compare($carry, $item) === -1) {
+                    if ((!$carry && $item) || version_compare($carry, $item) === -1) {
                         $carry = $item;
                     }
                     return $carry;

@@ -27,17 +27,19 @@ class Local extends AbstractLoader
 
     /**
      * @param \Swissup\Core\Helper\Component                           $componentHelper
+     * @param \Psr\Log\LoggerInterface                                 $logger
      * @param \Magento\Framework\Component\ComponentRegistrarInterface $registrar
      * @param \Magento\Framework\Json\DecoderInterface                 $jsonDecoder
      * @param \Magento\Framework\Filesystem\Driver\File                $filesystemDriver
      */
     public function __construct(
         \Swissup\Core\Helper\Component $componentHelper,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Component\ComponentRegistrarInterface $registrar,
         \Magento\Framework\Json\DecoderInterface $jsonDecoder,
         \Magento\Framework\Filesystem\Driver\File $filesystemDriver
     ) {
-        parent::__construct($componentHelper);
+        parent::__construct($componentHelper, $logger);
         $this->registrar = $registrar;
         $this->jsonDecoder = $jsonDecoder;
         $this->filesystemDriver = $filesystemDriver;
