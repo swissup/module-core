@@ -107,11 +107,11 @@ class Remote extends AbstractLoader
             foreach ($response['packages'] as $packageName => $info) {
                 $versions = array_keys($info);
                 $latestVersion = array_reduce($versions, function ($carry, $item) {
-                    if ((!$carry && $item) || version_compare($carry, $item) === -1) {
+                    if (version_compare($carry, $item) === -1) {
                         $carry = $item;
                     }
                     return $carry;
-                });
+                }, 0);
                 if (!empty($info[$latestVersion]['type']) &&
                     $info[$latestVersion]['type'] === 'metapackage') {
 
