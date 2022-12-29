@@ -1,10 +1,11 @@
 <style>
-    #row_swissup_core_troubleshooting_virtualcheck .themes-table h4 {padding-left: 0}
-    #row_swissup_core_troubleshooting_virtualcheck .themes-table table {max-width: 500px}
-	#row_swissup_core_troubleshooting_virtualcheck .themes-table td	{ text-align-last: left; }
-	#row_swissup_core_troubleshooting_virtualcheck .themes-table th { text-align-last: left; }
+    #swissup_core_troubleshooting .button-container { margin-top: 20px; }
 
-    #row_swissup_core_troubleshooting_virtualcheck .themes-table td.virtual::before { 
+    #swissup_core_troubleshooting .themes-table h4 {padding-left: 0}
+    #swissup_core_troubleshooting .themes-table table {max-width: 500px}
+	#swissup_core_troubleshooting .themes-table td	{ text-align-last: left; }
+	#swissup_core_troubleshooting .themes-table th { text-align-last: left; }
+    #swissup_core_troubleshooting .themes-table td.virtual::before { 
         display:inline-block; 
         content: '';
         width: 15px;
@@ -35,4 +36,5 @@ if (!$block->getVirtualThemes()->getSize()): ?>
             <?php endforeach; ?>
     	</tbody>
     </table>
+
 <?php endif; ?>
