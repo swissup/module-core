@@ -22,7 +22,7 @@
 <h4>Virtual Theme Check</h4>
 
 <?php 
-if ($block->getVirtualThemes()->getSize() < 1): ?>
+if (!$block->getVirtualThemes()->getSize()): ?>
     <p style="color: green;">No virtual themes found. Check: passed!</p>
 <?php else: ?>
     <table>
