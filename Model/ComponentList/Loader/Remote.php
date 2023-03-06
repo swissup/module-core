@@ -25,7 +25,7 @@ class Remote extends AbstractLoader
     protected $jsonHelper;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @var \Magento\Framework\HTTP\ClientFactory
      */
     protected $httpClientFactory;
 
@@ -40,7 +40,7 @@ class Remote extends AbstractLoader
      * @param \Magento\Framework\App\RequestInterface            $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Json\Helper\Data                $jsonHelper
-     * @param \Magento\Framework\HTTP\ZendClientFactory          $httpClientFactory
+     * @param \Magento\Framework\HTTP\ClientFactory              $httpClientFactory
      */
     public function __construct(
         \Swissup\Core\Helper\Component $componentHelper,
@@ -48,7 +48,7 @@ class Remote extends AbstractLoader
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
+        \Magento\Framework\HTTP\ClientFactory $httpClientFactory,
         \Magento\Framework\App\CacheInterface $cache
     ) {
         parent::__construct($componentHelper, $logger);
@@ -154,13 +154,11 @@ class Remote extends AbstractLoader
     protected function fetch($url)
     {
         $client = $this->httpClientFactory->create();
-        $client->setUri($url);
-        $client->setConfig([
-            'maxredirects' => 5,
-            'timeout' => 30
-        ]);
-        $client->setParameterGet('domain', $this->request->getHttpHost());
-        return $client->request()->getBody();
+        $client->setOption(CURLOPT_FOLLOWLOCATION, true);
+        $client->setOption(CURLOPT_MAXREDIRS, 5);
+        $client->setTimeout(30);
+        $client->get($url);
+        return $client->getBody();
     }
 
     /**
