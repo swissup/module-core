@@ -91,16 +91,18 @@ class LicenseValidator
 
         try {
             $client = $this->curlFactory->create();
-            $client->setConfig(['maxredirects'=>5, 'timeout'=>30]);
+            $client->setConfig(['maxredirects' => 5, 'timeout' =>30]);
             $client->write(
-                \Zend_Http_Client::GET,
+                \Laminas\Http\Request::METHOD_GET,
                 $this->getUrl($site, [
                     'key' => $secret,
                     'suffix' => $suffix,
                 ])
             );
-            $responseBody = $client->read();
-            $responseBody = \Zend_Http_Response::extractBody($responseBody);
+            $responseString = $client->read();
+            $responseParts = preg_split('|(?:\r\n){2}|m', $responseString, 2);
+            $responseBody = trim($responseParts[1] ?? '');
+
             $client->close();
         } catch (\Exception $e) {
             return [
