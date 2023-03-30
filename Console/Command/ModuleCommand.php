@@ -148,7 +148,6 @@ class ModuleCommand extends Command
 
         $moduleModel = $this->moduleFactory->create();
         $moduleModel->load($moduleCode);
-        // \Zend_Debug::dump($moduleModel->getData());
 
         $identityKey = $moduleModel->getData('identity_key');
         if (!empty($identityKey)) {
@@ -163,7 +162,6 @@ class ModuleCommand extends Command
         $table = new Table($output);
         // $table->setHeaders(['Param', 'Value']);
         $table->setRows($rows);
-        // \Zend_Debug::dump($items[$moduleCode]);
         $table->render();
     }
 }
