@@ -5,7 +5,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 
 class FixAll extends \Magento\Config\Block\System\Config\Form\Field
 {
-
     public function render(AbstractElement $element)
     {
         $url = $this->getUrl('swissup/theme/fixAll');
