@@ -17,6 +17,17 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
+            <group id="troubleshooting" translate="label" type="text" sortOrder="260" showInDefault="1">
+                <label>Troubleshooting</label>
+                <field id="virtualcheck" translate="label" type="textarea" sortOrder="260" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Preview</label>
+                    <frontend_model>Swissup\Core\Block\Adminhtml\Config\Form\Field\VirtualCheck</frontend_model>
+                </field>
+                <field id="fix_all" translate="label" type="text" sortOrder="265" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Fix Virtual Themes</label>
+                    <frontend_model>Swissup\Core\Block\Adminhtml\Config\Form\Field\FixVirtualThemes</frontend_model>
+                </field>
+            </group>
         </section>
     </system>
 </config>
