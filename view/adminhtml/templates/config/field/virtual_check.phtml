@@ -1,24 +1,20 @@
 <style>
-    #swissup_core_troubleshooting .button-container { margin-top: 20px; }
-
-    #swissup_core_troubleshooting .themes-table h4 {padding-left: 0}
-    #swissup_core_troubleshooting .themes-table table {max-width: 500px}
-	#swissup_core_troubleshooting .themes-table td	{ text-align-last: left; }
-	#swissup_core_troubleshooting .themes-table th { text-align-last: left; }
-    #swissup_core_troubleshooting .themes-table td.virtual::before { 
-        display:inline-block; 
-        content: '';
-        width: 15px;
-        height: 15px;
-        background-color: red;
-        border-radius: 50%;
-        margin-right: 10px;
-        vertical-align: middle;
-    }
-	
+#swissup_core_troubleshooting .button-container { margin-top: 20px; }
+#swissup_core_troubleshooting .themes-table h4 {padding-left: 0}
+#swissup_core_troubleshooting .themes-table table {max-width: 500px}
+#swissup_core_troubleshooting .themes-table td	{ text-align-last: left; }
+#swissup_core_troubleshooting .themes-table th { text-align-last: left; }
+#swissup_core_troubleshooting .themes-table td.virtual::before { 
+    display:inline-block; 
+    content: '';
+    width: 15px;
+    height: 15px;
+    background-color: red;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+}
 </style>
-
-
 
 <h4>Virtual Theme Check</h4>
 
@@ -30,8 +26,8 @@ if (!$block->getVirtualThemes()->getSize()): ?>
     	<tbody>
             <?php foreach ($block->getVirtualThemes() as $theme): ?>
     		<tr>
-                <td scope="row"><?php echo $theme->getThemeTitle(); ?></th>
-                <td class="virtual">Virtual</th>
+                <td scope="row"><?php echo $theme->getThemeTitle(); ?></td>
+                <td class="virtual">Virtual</td>
             </tr>
             <?php endforeach; ?>
     	</tbody>
