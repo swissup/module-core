@@ -3,11 +3,11 @@ namespace Swissup\Core\Block\Adminhtml\Config\Form\Field;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
-class FixAll extends \Magento\Config\Block\System\Config\Form\Field
+class FixVirtualThemes extends \Magento\Config\Block\System\Config\Form\Field
 {
     public function render(AbstractElement $element)
     {
-        $url = $this->getUrl('swissup/theme/fixAll');
+        $url = $this->getUrl('swissup/theme/fixVirtualThemes');
         $cacheUrl = $this->getUrl('adminhtml/cache/index');
         $buttonText = __("Fix All");
         return <<<HTML

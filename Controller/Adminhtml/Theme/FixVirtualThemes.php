@@ -6,7 +6,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
 
-class FixAll extends \Magento\Backend\App\Action
+class FixVirtualThemes extends \Magento\Backend\App\Action
 {
     private CollectionFactory $collectionFactory;
 
