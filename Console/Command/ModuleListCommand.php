@@ -18,6 +18,8 @@ class ModuleListCommand extends Command
     const INPUT_OPTION_TYPE = 'type';
     const INPUT_OPTION_ALL = 'all';
     const INPUT_OPTION_ALL_SHORTCUT = 'a';
+    const INPUT_OPTION_INSTALLED = 'installed';
+    const INPUT_OPTION_OUTDATED = 'outdated';
 
     /**
      *
@@ -57,6 +59,20 @@ class ModuleListCommand extends Command
             'Show all information'
         );
 
+        $this->addOption(
+            self::INPUT_OPTION_INSTALLED,
+            'i',
+            InputOption::VALUE_NONE,
+            'Show only installed'
+        );
+
+        $this->addOption(
+            self::INPUT_OPTION_OUTDATED,
+            'o',
+            InputOption::VALUE_NONE,
+            'Show only outdated'
+        );
+
         $this->setName('swissup:module:list')
             ->setDescription('Displays status of swissup modules');
         parent::configure();
@@ -69,6 +85,8 @@ class ModuleListCommand extends Command
     {
         $type = $input->getOption(self::INPUT_OPTION_TYPE);
         $all = (bool) $input->getOption(self::INPUT_OPTION_ALL);
+        $showInstalled = (bool) $input->getOption(self::INPUT_OPTION_INSTALLED);
+        $showOutdated = (bool) $input->getOption(self::INPUT_OPTION_OUTDATED);
 
         if (!in_array($type, ['magento2-module', 'magento2-theme'])) {
             $type = 'magento2-' . $type;
@@ -97,7 +115,16 @@ class ModuleListCommand extends Command
                 $row[$key] = isset($item[$key]) ? $item[$key]: '';
             }
 
-            $color = version_compare($row['version'], $row['latest_version'], '>=') ? 'green' : 'red';
+            if ($showInstalled && empty($row['version'])) {
+                continue;
+            }
+
+            $isOutdated = version_compare($row['version'], $row['latest_version'], '<');
+            if ($showOutdated && !$isOutdated) {
+                continue;
+            }
+
+            $color = !$isOutdated ? 'green' : 'red';
             $row['version'] = "<fg={$color}>{$row['version']}</>";
 
             if (isset($row['release_date'])) {
