@@ -154,5 +154,7 @@ class ModuleListCommand extends Command
         $table->setRows($rows);
 
         $table->render();
+
+        return Command::SUCCESS;
     }
 }

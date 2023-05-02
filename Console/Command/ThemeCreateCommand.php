@@ -95,5 +95,7 @@ class ThemeCreateCommand extends Command
 
         $output->writeln('<success>New Local Swissup theme create done!</success>');
         $output->writeln('<warn>Please run setup:upgrade from Magento CLI</warn>');
+
+        return Command::SUCCESS;
     }
 }

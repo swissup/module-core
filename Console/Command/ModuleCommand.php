@@ -163,5 +163,7 @@ class ModuleCommand extends Command
         // $table->setHeaders(['Param', 'Value']);
         $table->setRows($rows);
         $table->render();
+
+        return Cli::RETURN_SUCCESS;
     }
 }
