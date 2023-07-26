@@ -1,6 +1,7 @@
 <?php
 namespace Swissup\Core\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -155,6 +156,6 @@ class ModuleListCommand extends Command
 
         $table->render();
 
-        return Command::SUCCESS;
+        return Cli::RETURN_SUCCESS;
     }
 }

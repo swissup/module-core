@@ -1,6 +1,7 @@
 <?php
 namespace Swissup\Core\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -96,6 +97,6 @@ class ThemeCreateCommand extends Command
         $output->writeln('<success>New Local Swissup theme create done!</success>');
         $output->writeln('<warn>Please run setup:upgrade from Magento CLI</warn>');
 
-        return Command::SUCCESS;
+        return Cli::RETURN_SUCCESS;
     }
 }
