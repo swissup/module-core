@@ -15,4 +15,12 @@
                 sortOrder="10"
                 disabled="false"/>
     </type>
+
+    <!-- Magento 2.4.7 compatibility -->
+    <type name="Magento\Newsletter\Block\Subscribe">
+        <plugin name="setButtonLockManager"
+                type="Swissup\Core\Plugin\SetButtonLockManager"
+                sortOrder="10"
+                disabled="false"/>
+    </type>
 </config>
