@@ -2,7 +2,7 @@
     "name": "swissup/module-core",
     "description": "Swissup core module. It's purpose is to add Swissup menu and config entries",
     "type": "magento2-module",
-    "version": "1.12.18",
+    "version": "1.12.19",
     "license": "OSL-3.0",
     "autoload": {
         "files": [ "registration.php" ],
