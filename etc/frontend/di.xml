@@ -23,4 +23,10 @@
                 sortOrder="10"
                 disabled="false"/>
     </type>
+    <type name="Magento\Review\Block\Form">
+        <plugin name="setButtonLockManager"
+                type="Swissup\Core\Plugin\SetButtonLockManager"
+                sortOrder="10"
+                disabled="false"/>
+    </type>
 </config>
