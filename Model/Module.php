@@ -52,8 +52,8 @@ class Module extends \Magento\Framework\Model\AbstractModel implements ModuleInt
         \Magento\Framework\Module\PackageInfo $packageInfo,
         \Swissup\Core\Model\ComponentList\Loader\Remote $remoteComponents,
         \Swissup\Core\Model\ComponentList\Loader\Local $localComponents,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->licenseValidatorFactory = $licenseValidatorFactory;
