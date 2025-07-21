@@ -31,7 +31,12 @@ class LoadComponents implements \Magento\Framework\Event\ObserverInterface
         foreach ($this->loader->getItems() as $component) {
             $module = $this->moduleFactory->create()->load($component['code']);
             $module->addData($component);
-            $module->save();
+
+            try {
+                $module->save();
+            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                continue;
+            }
         }
     }
 }
