@@ -29,4 +29,11 @@
                 sortOrder="10"
                 disabled="false"/>
     </type>
+
+    <!-- Fixed Magento bug with libxml 2.15.1 -->
+    <type name="Magento\Framework\View\Result\Page">
+        <plugin name="swissupCoreFixMarkup"
+            type="Swissup\Core\Plugin\FixHtmlMarkup"
+            sortOrder="-1"/>
+    </type>
 </config>
