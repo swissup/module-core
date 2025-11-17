@@ -24,7 +24,7 @@ class FixHtmlMarkup
         }
 
         $search = 'data-mage-init="{"';
-        $replace = "data-mage-init='{\"";
+        $replace = 'data-mage-init=\'{"';
         $offset = 0;
 
         while (($pos = strpos($html, $search, $offset)) !== false) {
