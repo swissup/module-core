@@ -19,23 +19,27 @@ class FixHtmlMarkup
     ) {
         $html = $httpResponse->getBody();
 
-        if (strpos($html, 'data-mage-init="{"') === false) {
-            return $result;
-        }
+        $mapping = [
+            'data-mage-init="{"' => 'data-mage-init=\'{"',
+            'data-post="{"' => 'data-post=\'{"',
+            'data-config="{"' => 'data-config=\'{"',
+        ];
 
-        $search = 'data-mage-init="{"';
-        $replace = 'data-mage-init=\'{"';
-        $offset = 0;
+        foreach ($mapping as $search => $replace) {
+            $offset = 0;
+            while (($pos = strpos($html, $search, $offset)) !== false) {
+                $closePos = strpos($html, '}"', $pos + strlen($search));
+                $quotePos = strpos($html, '="', $pos + strlen($search));
+                $isMarkupBroken = $quotePos !== false && $quotePos < $closePos;
 
-        while (($pos = strpos($html, $search, $offset)) !== false) {
-            $closePos = strpos($html, '}"', $pos + strlen($search));
-            if ($closePos === false) {
-                break;
+                if ($closePos === false || $isMarkupBroken) {
+                    break;
+                }
+
+                $html = substr_replace($html, "}'", $closePos, 2);
+                $html = substr_replace($html, $replace, $pos, strlen($search));
+                $offset = $closePos + 2;
             }
-
-            $html = substr_replace($html, "}'", $closePos, 2);
-            $html = substr_replace($html, $replace, $pos, strlen($search));
-            $offset = $closePos + 2;
         }
 
         $httpResponse->setBody($html);
