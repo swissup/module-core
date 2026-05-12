@@ -2,6 +2,10 @@
 
 namespace Swissup\Core\Model\Notification;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\Io\File as FileIo;
+
 class Feed extends \Magento\AdminNotification\Model\Feed
 {
     const CONFIG_PATH_ENABLED = 'swissup_core/notification/enabled';
@@ -9,6 +13,9 @@ class Feed extends \Magento\AdminNotification\Model\Feed
     const XML_USE_HTTPS_PATH = 'swissup_core/notification/use_https';
 
     const XML_FEED_URL_PATH = 'swissup_core/notification/feed_url';
+
+    private ?FileIo $fileIo = null;
+    private ?DirectoryList $directoryList = null;
 
     /**
      * Copied from parent class becasue of `self` usage
@@ -44,7 +51,24 @@ class Feed extends \Magento\AdminNotification\Model\Feed
      */
     public function getLastUpdate()
     {
-        return $this->_cacheManager->load('swissup_core_notifications_lastcheck');
+        $path = $this->getFilePath();
+
+        if (!$this->getFileIo()->fileExists($path)) {
+            return null;
+        }
+
+        try {
+            $lastUpdate = $this->getFileIo()->read($path);
+        } catch (\Exception $e) {
+            $this->getFileIo()->rm($path);
+            return null;
+        }
+
+        if ($lastUpdate > time()) {
+            return null;
+        }
+
+        return $lastUpdate;
     }
 
     /**
@@ -54,7 +78,32 @@ class Feed extends \Magento\AdminNotification\Model\Feed
      */
     public function setLastUpdate()
     {
-        $this->_cacheManager->save(time(), 'swissup_core_notifications_lastcheck');
+        $this->getFileIo()->write($this->getFilePath(), (string) time());
         return $this;
+    }
+
+    private function getFilePath()
+    {
+        $path = $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR) . '/swissup/core';
+
+        $this->getFileIo()->checkAndCreateFolder($path);
+
+        return $path . '/notifications_lastcheck';
+    }
+
+    private function getFileIo()
+    {
+        if (!$this->fileIo) {
+            $this->fileIo = ObjectManager::getInstance()->get(FileIo::class);
+        }
+        return $this->fileIo;
+    }
+
+    private function getDirectoryList()
+    {
+        if (!$this->directoryList) {
+            $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
+        }
+        return $this->directoryList;
     }
 }
