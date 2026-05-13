@@ -84,7 +84,7 @@ class ModuleCommand extends Command
      /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $moduleCode = $input->getArgument(self::INPUT_ARGUMENT_NAME);
         if (empty($moduleCode)) {

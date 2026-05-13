@@ -59,7 +59,7 @@ class ThemeCreateCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $themeName = $input->getArgument('name');
         if (strpos($themeName, '/') === false) {

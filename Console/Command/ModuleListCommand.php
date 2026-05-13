@@ -82,7 +82,7 @@ class ModuleListCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $type = $input->getOption(self::INPUT_OPTION_TYPE);
         $all = (bool) $input->getOption(self::INPUT_OPTION_ALL);
