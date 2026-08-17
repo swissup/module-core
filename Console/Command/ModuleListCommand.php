@@ -120,7 +120,7 @@ class ModuleListCommand extends Command
                 continue;
             }
 
-            $isOutdated = version_compare($row['version'], $row['latest_version'], '<');
+            $isOutdated = version_compare($row['version'] ?: 999, $row['latest_version'], '<');
             if ($showOutdated && !$isOutdated) {
                 continue;
             }
