@@ -102,24 +102,31 @@ class ModuleListCommand extends Command
         $rows = [];
         $i = 0;
         $separator = new TableSeparator();
-        $columns = explode(',', 'name,code,version,latest_version,type');
+        $columns =[
+            'name' => 'Package',
+            'code' => 'Module',
+            'version' => 'Version',
+            'latest_version' => 'Latest',
+        ];
         if ($all) {
-            $columns[] = 'release_date';
-            $columns[] = 'path';
+            $columns['release_date'] = 'Date';
+            $columns['path'] = 'Path';
+            $columns['type'] = 'Type';
         }
         foreach ($items as $item) {
             if ($type !== false && $item['type'] != $type) {
                 continue;
-            }
-            $row = [];
-            foreach ($columns as $key) {
-                $row[$key] = isset($item[$key]) ? $item[$key]: '';
             }
             if ($showInstalled && !$item['is_installed']) {
                 continue;
             }
             if ($showOutdated && !$item['is_outdated']) {
                 continue;
+            }
+
+            $row = [];
+            foreach (array_keys($columns) as $key) {
+                $row[$key] = isset($item[$key]) ? $item[$key]: '';
             }
 
             $color = $item['is_outdated'] ? 'red' : 'green';
@@ -143,14 +150,8 @@ class ModuleListCommand extends Command
         }
 
         $table = new Table($output);
-        $headers = ['Package', 'Module', 'Version', 'Latest', 'Type'];
-        if ($all) {
-            $headers[] = 'Date';
-            $headers[] = 'Path';
-        }
-        $table->setHeaders($headers);
+        $table->setHeaders(array_values($columns));
         $table->setRows($rows);
-
         $table->render();
 
         return Cli::RETURN_SUCCESS;
