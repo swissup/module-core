@@ -52,6 +52,7 @@ class Local extends AbstractLoader
             'name' => 'name',
             'path' => 'path',
             'version' => 'version',
+            'type' => 'type',
         ];
     }
 
