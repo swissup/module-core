@@ -115,17 +115,14 @@ class ModuleListCommand extends Command
             foreach ($columns as $key) {
                 $row[$key] = isset($item[$key]) ? $item[$key]: '';
             }
-
-            if ($showInstalled && empty($row['version'])) {
+            if ($showInstalled && !$item['is_installed']) {
+                continue;
+            }
+            if ($showOutdated && !$item['is_outdated']) {
                 continue;
             }
 
-            $isOutdated = version_compare($row['version'] ?: 999, $row['latest_version'], '<');
-            if ($showOutdated && !$isOutdated) {
-                continue;
-            }
-
-            $color = !$isOutdated ? 'green' : 'red';
+            $color = $item['is_outdated'] ? 'red' : 'green';
             $row['version'] = "<fg={$color}>{$row['version']}</>";
 
             if (isset($row['release_date'])) {

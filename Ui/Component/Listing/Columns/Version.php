@@ -29,10 +29,8 @@ class Version extends \Magento\Ui\Component\Listing\Columns\Column
             return __('N/A');
         }
 
-        $currentVersion = $item[$this->getData('name')] ?: '';
         $latestVersion = $item[$this->getData('config/compareWith')] ?: '';
-        $result = version_compare($currentVersion, $latestVersion, '>=');
-        if ($result) {
+        if (empty($item['is_outdated'])) {
             $severity = 'grid-severity-notice';
             $title = __('Module is up to date');
         } else {

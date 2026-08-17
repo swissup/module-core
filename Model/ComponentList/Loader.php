@@ -46,6 +46,15 @@ class Loader
             $this->localLoader->load(),
             $this->remoteLoader->load()
         );
+
+        foreach ($this->items as &$item) {
+            $item['is_installed'] = !empty($item['version']);
+            $item['is_outdated'] = $item['is_installed']
+                && !empty($item['latest_version'])
+                && version_compare($item['version'], $item['latest_version'], '<');
+        }
+        unset($item);
+
         return $this->items;
     }
 
