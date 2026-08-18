@@ -178,6 +178,11 @@ class FileStorage
             return false;
         }
 
+        $expiresAt = substr($contents, $prefixLength, $expiresEnd - $prefixLength);
+        if (!ctype_digit($expiresAt)) {
+            return false;
+        }
+
         $lengthEnd = strpos($contents, "\n", $expiresEnd + 1);
         if ($lengthEnd === false) {
             return false;
@@ -194,7 +199,7 @@ class FileStorage
         }
 
         return [
-            (int) substr($contents, $prefixLength, $expiresEnd - $prefixLength),
+            (int) $expiresAt,
             $data,
         ];
     }
