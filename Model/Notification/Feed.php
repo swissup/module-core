@@ -2,9 +2,8 @@
 
 namespace Swissup\Core\Model\Notification;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Filesystem\Io\File as FileIo;
+use Swissup\Core\Model\FileStorage;
 
 class Feed extends \Magento\AdminNotification\Model\Feed
 {
@@ -14,8 +13,9 @@ class Feed extends \Magento\AdminNotification\Model\Feed
 
     const XML_FEED_URL_PATH = 'swissup_core/notification/feed_url';
 
-    private ?FileIo $fileIo = null;
-    private ?DirectoryList $directoryList = null;
+    const LAST_UPDATE_STORAGE_KEY = 'notifications_lastcheck';
+
+    private ?FileStorage $storage = null;
 
     /**
      * Copied from parent class becasue of `self` usage
@@ -51,21 +51,10 @@ class Feed extends \Magento\AdminNotification\Model\Feed
      */
     public function getLastUpdate()
     {
-        $path = $this->getFilePath();
-
-        if (!$this->getFileIo()->fileExists($path)) {
-            return null;
-        }
-
-        try {
-            $lastUpdate = $this->getFileIo()->read($path);
-        } catch (\Exception $e) {
-            $this->getFileIo()->rm($path);
-            return null;
-        }
+        $lastUpdate = (int) $this->getStorage()->load(self::LAST_UPDATE_STORAGE_KEY);
 
         if ($lastUpdate > time()) {
-            return null;
+            return 0;
         }
 
         return $lastUpdate;
@@ -78,32 +67,15 @@ class Feed extends \Magento\AdminNotification\Model\Feed
      */
     public function setLastUpdate()
     {
-        $this->getFileIo()->write($this->getFilePath(), (string) time());
+        $this->getStorage()->save((string) time(), self::LAST_UPDATE_STORAGE_KEY);
         return $this;
     }
 
-    private function getFilePath()
+    private function getStorage(): FileStorage
     {
-        $path = $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR) . '/swissup/core';
-
-        $this->getFileIo()->checkAndCreateFolder($path);
-
-        return $path . '/notifications_lastcheck';
-    }
-
-    private function getFileIo()
-    {
-        if (!$this->fileIo) {
-            $this->fileIo = ObjectManager::getInstance()->get(FileIo::class);
+        if (!$this->storage) {
+            $this->storage = ObjectManager::getInstance()->get(FileStorage::class);
         }
-        return $this->fileIo;
-    }
-
-    private function getDirectoryList()
-    {
-        if (!$this->directoryList) {
-            $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
-        }
-        return $this->directoryList;
+        return $this->storage;
     }
 }
