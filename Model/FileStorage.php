@@ -84,18 +84,19 @@ class FileStorage
     {
         $expiresAt = $lifetime ? time() + $lifetime : 0;
 
+        // Taken before the entry is opened, because openFile() truncates
+        // whatever it opens - the truncation has to happen with the lock
+        // already in hand, or a second save wipes the file this one is
+        // halfway through writing. A file of its own, and not the one lock()
+        // uses: the caller is likely holding that one, and flock conflicts
+        // with itself across two opens of the same file. Waits, rather than
+        // giving up - the hold is a local write, and a dropped save would
+        // cost a download.
+        $lock = $this->flock($id . '.write.lock', LOCK_EX);
+
         $file = $this->filesystem
             ->getDirectoryWrite(DirectoryList::VAR_DIR)
             ->openFile($this->getPath($id));
-
-        // The lock throws when it cannot be acquired, hence no return value to
-        // check. It serializes the writes, but not the truncations - openFile()
-        // has truncated the file by now, and a save that starts while this one
-        // is running truncates it again, under our feet. So an entry can still
-        // be read, or even left behind, half-written. Detecting that is what
-        // the length line in the contents is for: an incomplete entry reads as
-        // missing, and the caller stores it anew.
-        $file->lock();
 
         try {
             $file->write(
@@ -104,7 +105,6 @@ class FileStorage
                 . $data
             );
         } finally {
-            $file->unlock();
             $file->close();
         }
 
@@ -123,17 +123,42 @@ class FileStorage
      * the scope, including the ones taken by an exception.
      *
      * @param  string $id
-     * @return \Magento\Framework\Filesystem\File\WriteInterface|false
+     * @return \Magento\Framework\Filesystem\File\WriteInterface|bool
      */
     public function lock($id)
+    {
+        return $this->flock($id . '.lock', LOCK_EX | LOCK_NB);
+    }
+
+    /**
+     * Lock a file standing next to the entry, and hand it to the caller.
+     *
+     * The lock lives as long as the returned file does - keep it in a variable
+     * for as long as the lock is needed, and it is released on every way out of
+     * the scope, including the ones taken by an exception.
+     *
+     * Failing to open that file is not the same as failing to lock it. A lock
+     * left behind by another user is unopenable for good, and reporting it as
+     * held would keep the caller away from the entry forever - so it is
+     * reported as no lock at all, and the caller carries on unguarded.
+     *
+     * @param  string $path
+     * @param  int $mode
+     * @return \Magento\Framework\Filesystem\File\WriteInterface|bool
+     */
+    private function flock($path, $mode)
     {
         try {
             $file = $this->filesystem
                 ->getDirectoryWrite(DirectoryList::VAR_DIR)
-                ->openFile($this->getPath($id) . '.lock');
+                ->openFile($this->getPath($path));
+        } catch (\Exception $e) {
+            return true;
+        }
 
+        try {
             // Throws when the lock is held by somebody else
-            $file->lock(LOCK_EX | LOCK_NB);
+            $file->lock($mode);
         } catch (\Exception $e) {
             return false;
         }
