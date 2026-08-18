@@ -163,6 +163,15 @@ class Remote extends AbstractLoader
             return $this->loadStoredPackages();
         }
 
+        // The version was fetched before the lock was taken, so another process
+        // could have stored the very list we are about to download - in which
+        // case there is nothing left to do
+        if ($version === $this->storage->load(self::VERSION_STORAGE_KEY)
+            && $packages = $this->loadStoredPackages()
+        ) {
+            return $packages;
+        }
+
         $responseBody = $this->fetch($this->getPackagesUrl());
         $response = $this->decodeResponse($responseBody);
 

@@ -89,9 +89,12 @@ class FileStorage
             ->openFile($this->getPath($id));
 
         // The lock throws when it cannot be acquired, hence no return value to
-        // check. It only keeps the writers apart: openFile() has truncated the
-        // file by now, so a reader can still catch the entry half-written -
-        // that is what the length line in the contents is for.
+        // check. It serializes the writes, but not the truncations - openFile()
+        // has truncated the file by now, and a save that starts while this one
+        // is running truncates it again, under our feet. So an entry can still
+        // be read, or even left behind, half-written. Detecting that is what
+        // the length line in the contents is for: an incomplete entry reads as
+        // missing, and the caller stores it anew.
         $file->lock();
 
         try {
