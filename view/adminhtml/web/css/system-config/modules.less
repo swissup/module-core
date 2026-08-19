@@ -1,0 +1,81 @@
+#swissup_core_modules-link {
+    scroll-margin-top: 75px;
+    height: 100%;
+    align-self: stretch;
+}
+
+.section-config.swissup-modules-container > .entry-edit-head {
+    display: flex;
+    align-items: center;
+
+    > a {
+        flex-shrink: 0;
+        min-width: 100px;
+    }
+
+    .swissup-modules-summary {
+        color: #858585;
+        font-size: 1.3rem;
+        font-weight: 400;
+        margin-left: 1.5rem;
+    }
+
+    .swissup-modules-meta {
+        align-items: center;
+        display: flex;
+        margin-left: auto;
+    }
+
+    .swissup-modules-lastcheck {
+        color: #858585;
+        font-size: 1.3rem;
+        font-weight: 400;
+        margin-right: 1.5rem;
+    }
+}
+
+.swissup-modules-table {
+    thead {
+        position: sticky;
+        top: 75px;
+        background: #fff;
+    }
+    tr:hover {
+        background: #f6f6f6;
+    }
+    th,
+    td {
+        text-align: left;
+        border-bottom: 1px solid #e8e8e8 !important;
+        padding: 1rem 1.5rem 1rem 0 !important;
+        vertical-align: middle !important;
+    }
+
+    th {
+        color: #303030;
+        font-weight: 600;
+    }
+
+    .package {
+        font-family: 'Menlo', 'Consolas', monospace;
+    }
+
+    .latest .version {
+        color: #a6a6a6;
+
+        &.outdated {
+            font-weight: 600;
+        }
+    }
+
+    .links a + a {
+        margin-left: 1.5rem;
+    }
+}
+
+.swissup-modules-table .outdated,
+.swissup-modules-summary .outdated {
+    background: #cb111c;
+    color: #fff !important;
+    padding: 0.13em 0.3em;
+}

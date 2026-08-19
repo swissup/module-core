@@ -18,6 +18,8 @@ class Loader
 
     protected $isLoaded = false;
 
+    private bool $offlineMode = false;
+
     /**
      * @param \Swissup\Core\Model\ComponentList\Loader\Local  $localLoader
      * @param \Swissup\Core\Model\ComponentList\Loader\Remote $remoteLoader
@@ -72,9 +74,40 @@ class Loader
         return $this;
     }
 
+    public function setOfflineMode($flag = true)
+    {
+        if ((bool) $flag !== $this->offlineMode) {
+            $this->offlineMode = (bool) $flag;
+            $this->remoteLoader->setOfflineMode($flag);
+            $this->items = [];
+            $this->setIsLoaded(false);
+        }
+
+        return $this;
+    }
+
+    public function getLastCheckTime()
+    {
+        return $this->remoteLoader->getLastCheckTime();
+    }
+
     public function getItems()
     {
         return $this->load();
+    }
+
+    public function getInstalledItems()
+    {
+        return array_filter($this->getItems(), function ($item) {
+            return $item['is_installed'];
+        });
+    }
+
+    public function getOutdatedItems()
+    {
+        return array_filter($this->getItems(), function ($item) {
+            return $item['is_outdated'];
+        });
     }
 
     /**

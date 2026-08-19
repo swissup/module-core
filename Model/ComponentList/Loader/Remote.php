@@ -36,6 +36,8 @@ class Remote extends AbstractLoader
 
     private ?string $packagesVersion = null;
 
+    private bool $offlineMode = false;
+
     public function __construct(
         \Swissup\Core\Helper\Component $componentHelper,
         \Psr\Log\LoggerInterface $logger,
@@ -140,8 +142,38 @@ class Remote extends AbstractLoader
         return $this;
     }
 
+    /**
+     * Use the previously stored packages only, without querying the remote source
+     */
+    public function setOfflineMode($flag = true)
+    {
+        if ((bool) $flag !== $this->offlineMode) {
+            $this->offlineMode = (bool) $flag;
+            $this->items = [];
+            $this->setIsLoaded(false);
+        }
+
+        return $this;
+    }
+
+    /**
+     * When the remote source was checked last time, if it was checked recently
+     *
+     * @return int|null
+     */
+    public function getLastCheckTime()
+    {
+        $time = $this->storage->load(self::LASTCHECK_STORAGE_KEY);
+
+        return $time ? (int) $time : null;
+    }
+
     protected function loadPackagesData()
     {
+        if ($this->offlineMode) {
+            return $this->loadStoredPackages();
+        }
+
         $storedVersion = $this->storage->load(self::VERSION_STORAGE_KEY);
         if ($storedVersion && !$this->isVersionCheckRequired()) {
             if ($packages = $this->loadStoredPackages()) {
