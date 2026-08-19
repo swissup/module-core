@@ -5,7 +5,7 @@
         <tab id="swissup" sortOrder="297">
             <label>Swissup</label>
         </tab>
-        <section id="swissup_core" type="text" sortOrder="358" showInDefault="1" showInWebsite="0" showInStore="0">
+        <section id="swissup_core" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
             <class>separator-top</class>
             <tab>swissup</tab>
             <label>Core</label>
