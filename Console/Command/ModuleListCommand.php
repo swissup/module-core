@@ -21,6 +21,7 @@ class ModuleListCommand extends Command
     const INPUT_OPTION_ALL_SHORTCUT = 'a';
     const INPUT_OPTION_INSTALLED = 'installed';
     const INPUT_OPTION_OUTDATED = 'outdated';
+    const INPUT_OPTION_REFRESH = 'refresh';
 
     /**
      *
@@ -74,6 +75,13 @@ class ModuleListCommand extends Command
             'Show only outdated'
         );
 
+        $this->addOption(
+            self::INPUT_OPTION_REFRESH,
+            'r',
+            InputOption::VALUE_NONE,
+            'Re-check the remote feed for the latest versions'
+        );
+
         $this->setName('swissup:module:list')
             ->setDescription('Displays status of swissup modules');
         parent::configure();
@@ -94,6 +102,10 @@ class ModuleListCommand extends Command
         }
         if (!in_array($type, ['magento2-module', 'magento2-theme'])) {
             $type = false;
+        }
+
+        if ($input->getOption(self::INPUT_OPTION_REFRESH)) {
+            $this->loader->refresh();
         }
 
         $items = $this->loader->getItems();

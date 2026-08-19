@@ -126,6 +126,20 @@ class Remote extends AbstractLoader
         return $modules;
     }
 
+    /**
+     * Forget when the remote version was checked last time, so that the next
+     * load re-checks the feed instead of waiting for the throttle to expire.
+     *
+     * @return $this
+     */
+    public function refresh()
+    {
+        $this->storage->remove(self::LASTCHECK_STORAGE_KEY);
+        $this->setIsLoaded(false);
+
+        return $this;
+    }
+
     protected function loadPackagesData()
     {
         $storedVersion = $this->storage->load(self::VERSION_STORAGE_KEY);

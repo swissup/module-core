@@ -58,6 +58,20 @@ class Loader
         return $this->items;
     }
 
+    /**
+     * Discard the remote data staleness check, so that the next load re-fetches it
+     *
+     * @return $this
+     */
+    public function refresh()
+    {
+        $this->remoteLoader->refresh();
+        $this->items = [];
+        $this->setIsLoaded(false);
+
+        return $this;
+    }
+
     public function getItems()
     {
         return $this->load();
