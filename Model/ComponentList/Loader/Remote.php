@@ -2,12 +2,15 @@
 
 namespace Swissup\Core\Model\ComponentList\Loader;
 
+use Swissup\Core\Model\FileStorage;
+
 class Remote extends AbstractLoader
 {
     const XML_USE_HTTPS_PATH = 'swissup_core/modules/use_https';
     const XML_FEED_URL_PATH  = 'swissup_core/modules/url';
-
-    const RESPONSE_CACHE_KEY = 'swissup_components_remote_response';
+    const RESPONSE_STORAGE_KEY = 'packages';
+    const VERSION_STORAGE_KEY = 'packages_version';
+    const LASTCHECK_STORAGE_KEY = 'packages_lastcheck';
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -29,19 +32,10 @@ class Remote extends AbstractLoader
      */
     protected $httpClientFactory;
 
-    /**
-     * @var \Magento\Framework\App\CacheInterface
-     */
-    protected $cache;
+    private FileStorage $storage;
 
-    /**
-     * @param \Swissup\Core\Helper\Component                     $componentHelper
-     * @param \Psr\Log\LoggerInterface                           $logger
-     * @param \Magento\Framework\App\RequestInterface            $request
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Json\Helper\Data                $jsonHelper
-     * @param \Magento\Framework\HTTP\ClientFactory              $httpClientFactory
-     */
+    private ?string $packagesVersion = null;
+
     public function __construct(
         \Swissup\Core\Helper\Component $componentHelper,
         \Psr\Log\LoggerInterface $logger,
@@ -49,14 +43,14 @@ class Remote extends AbstractLoader
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\HTTP\ClientFactory $httpClientFactory,
-        \Magento\Framework\App\CacheInterface $cache
+        FileStorage $storage
     ) {
         parent::__construct($componentHelper, $logger);
         $this->request = $request;
         $this->scopeConfig = $scopeConfig;
         $this->jsonHelper = $jsonHelper;
         $this->httpClientFactory = $httpClientFactory;
-        $this->cache = $cache;
+        $this->storage = $storage;
     }
 
     public function getMapping()
@@ -85,24 +79,9 @@ class Remote extends AbstractLoader
      */
     public function getComponentsInfo()
     {
-        try {
-            if (!$responseBody = $this->cache->load(self::RESPONSE_CACHE_KEY)) {
-                $responseBody = $this->fetch($this->getFeedUrl());
-                $this->cache->save($responseBody, self::RESPONSE_CACHE_KEY, [], 86400);
-            }
-            $response = $this->jsonHelper->jsonDecode($responseBody);
-        } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
-            $response = [];
-            // Swissup_Subscription will be added below - used by
-            // subscription activation module
-        }
-
-        if (!is_array($response)) {
-            $response = [];
-        }
-
         $modules = [];
+        $response = $this->loadPackagesData();
+
         if (!empty($response['packages'])) {
             foreach ($response['packages'] as $packageName => $info) {
                 $versions = array_keys($info);
@@ -112,11 +91,13 @@ class Remote extends AbstractLoader
                     }
                     return $carry;
                 }, $versions[0] ?? 0);
-                if (!empty($info[$latestVersion]['type']) &&
-                    $info[$latestVersion]['type'] === 'metapackage') {
 
+                if (!empty($info[$latestVersion]['type']) &&
+                    $info[$latestVersion]['type'] === 'metapackage'
+                ) {
                     continue;
                 }
+
                 $modules[$packageName] = $info[$latestVersion];
 
                 if (isset($info['dev-master']['extra']['swissup'])) {
@@ -145,6 +126,106 @@ class Remote extends AbstractLoader
         return $modules;
     }
 
+    protected function loadPackagesData()
+    {
+        $storedVersion = $this->storage->load(self::VERSION_STORAGE_KEY);
+        if ($storedVersion && !$this->isVersionCheckRequired()) {
+            if ($packages = $this->loadStoredPackages()) {
+                return $packages;
+            }
+        }
+
+        if (!$version = $this->fetchPackagesVersion()) {
+            return $this->loadStoredPackages();
+        }
+
+        $this->updateVersionCheckTime();
+        if ($version === $storedVersion && $packages = $this->loadStoredPackages()) {
+            return $packages;
+        }
+
+        // Prevent parallel downloads caused by multiple admin accounts. The
+        // lock is held by $lock variable, and released once this method returns.
+        $lock = $this->storage->lock(self::RESPONSE_STORAGE_KEY);
+
+        if (!$lock) {
+            if ($packages = $this->loadStoredPackages()) {
+                return $packages;
+            }
+
+            for ($i = 0; $i < 5; $i++) {
+                sleep(1);
+                if ($this->storage->lock(self::RESPONSE_STORAGE_KEY)) {
+                    break;
+                }
+            }
+
+            return $this->loadStoredPackages();
+        }
+
+        // The version was fetched before the lock was taken, so another process
+        // could have stored the very list we are about to download
+        if ($version === $this->storage->load(self::VERSION_STORAGE_KEY)
+            && $packages = $this->loadStoredPackages()
+        ) {
+            return $packages;
+        }
+
+        $responseBody = $this->fetch($this->getPackagesUrl());
+        $response = $this->decodeResponse($responseBody);
+
+        if (empty($response['packages'])) {
+            return $this->loadStoredPackages();
+        }
+
+        try {
+            $this->storage->save($responseBody, self::RESPONSE_STORAGE_KEY);
+            $this->storage->save($version, self::VERSION_STORAGE_KEY);
+        } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
+        }
+
+        return $response;
+    }
+
+    protected function loadStoredPackages(): array
+    {
+        $response = $this->decodeResponse($this->storage->load(self::RESPONSE_STORAGE_KEY));
+        return empty($response['packages']) ? [] : $response;
+    }
+
+    protected function decodeResponse($responseBody): array
+    {
+        if (!$responseBody) {
+            return [];
+        }
+
+        try {
+            $response = $this->jsonHelper->jsonDecode($responseBody);
+        } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
+            return [];
+        }
+
+        return is_array($response) ? $response : [];
+    }
+
+    private function isVersionCheckRequired()
+    {
+        return !$this->storage->load(self::LASTCHECK_STORAGE_KEY);
+    }
+
+    private function updateVersionCheckTime()
+    {
+        try {
+            $this->storage->save((string) time(), self::LASTCHECK_STORAGE_KEY, 3600 * 1);
+        } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
+        }
+
+        return $this;
+    }
+
     /**
      * Make a http request and return response body
      *
@@ -157,19 +238,62 @@ class Remote extends AbstractLoader
         $client->setOption(CURLOPT_FOLLOWLOCATION, true);
         $client->setOption(CURLOPT_MAXREDIRS, 5);
         $client->setTimeout(30);
-        $client->get($url);
+
+        try {
+            $client->get($url);
+        } catch (\Exception $e) {
+            // Connection errors are thrown by the client. Swallow them, so
+            // that the caller can fall back to the previously stored data.
+            $this->logger->critical($e->getMessage());
+            return '';
+        }
+
+        // Only the very first status line is recorded by the client, so a
+        // followed redirect keeps reporting 3xx here. Hence 4xx and 5xx only -
+        // the response contents is validated by the caller anyway.
+        $status = $client->getStatus();
+        if ($status >= 400) {
+            $this->logger->critical(
+                sprintf('Request to %s failed with status %s', $url, $status)
+            );
+            return '';
+        }
+
         return $client->getBody();
     }
 
     /**
-     * Get feed url from satis repository.
+     * Get packages url from satis repository.
      *
      * To do that we send a request to http://docs.swissuplabs.com/packages/packages.json,
      * which returns actual packages list url: http://docs.swissuplabs.com/packages/include/all${sha1}.json
      *
-     * @return string
+     * @return mixed
      */
-    protected function getFeedUrl()
+    protected function getPackagesUrl()
+    {
+        if (!$version = $this->fetchPackagesVersion()) {
+            return false;
+        }
+        return $this->getPackagesUrlPrefix() . '/' . $version;
+    }
+
+    protected function fetchPackagesVersion()
+    {
+        if ($this->packagesVersion === null) {
+            $response = $this->decodeResponse(
+                $this->fetch($this->getPackagesUrlPrefix() . '/packages.json')
+            );
+            if (empty($response['includes'])) {
+                return false;
+            }
+            // include/all${sha1}.json
+            $this->packagesVersion = key($response['includes']);
+        }
+        return $this->packagesVersion;
+    }
+
+    protected function getPackagesUrlPrefix()
     {
         $useHttps = $this->scopeConfig->getValue(
             self::XML_USE_HTTPS_PATH,
@@ -180,16 +304,7 @@ class Remote extends AbstractLoader
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        // http://docs.swissuplabs.com/packages/packages.json
-        $url = ($useHttps ? 'https://' : 'http://') . $url;
-
-        $response = $this->fetch($url . '/packages.json');
-        $response = $this->jsonHelper->jsonDecode($response);
-        if (!is_array($response) || !isset($response['includes'])) {
-            return false;
-        }
-
-        // http://docs.swissuplabs.com/packages/include/all${sha1}.json
-        return $url . '/' . key($response['includes']);
+        // docs.swissuplabs.com/packages
+        return ($useHttps ? 'https://' : 'http://') . $url;
     }
 }
