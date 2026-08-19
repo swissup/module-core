@@ -84,14 +84,9 @@ class FileStorage
     {
         $expiresAt = $lifetime ? time() + $lifetime : 0;
 
-        // Taken before the entry is opened, because openFile() truncates
-        // whatever it opens - the truncation has to happen with the lock
-        // already in hand, or a second save wipes the file this one is
-        // halfway through writing. A file of its own, and not the one lock()
-        // uses: the caller is likely holding that one, and flock conflicts
-        // with itself across two opens of the same file. Waits, rather than
-        // giving up - the hold is a local write, and a dropped save would
-        // cost a download.
+        // Locked before the entry is opened - openFile() truncates, and a
+        // truncation outside the lock lets two saves interleave. A file of its
+        // own, since the caller likely holds the one lock() uses.
         $lock = $this->flock($id . '.write.lock', LOCK_EX);
 
         $file = $this->filesystem
@@ -114,13 +109,8 @@ class FileStorage
     /**
      * Take an exclusive lock over the entry, without waiting for it.
      *
-     * A separate file is locked, and not the entry itself: openFile() truncates
-     * whatever it opens, so touching the entry before knowing that the lock is
-     * ours would destroy the very data the other process is writing.
-     *
      * The lock lives as long as the returned file does - keep it in a variable
-     * for as long as the lock is needed, and it is released on every way out of
-     * the scope, including the ones taken by an exception.
+     * for as long as the lock is needed.
      *
      * @param  string $id
      * @return \Magento\Framework\Filesystem\File\WriteInterface|bool
@@ -131,16 +121,11 @@ class FileStorage
     }
 
     /**
-     * Lock a file standing next to the entry, and hand it to the caller.
+     * Lock a file standing next to the entry.
      *
-     * The lock lives as long as the returned file does - keep it in a variable
-     * for as long as the lock is needed, and it is released on every way out of
-     * the scope, including the ones taken by an exception.
-     *
-     * Failing to open that file is not the same as failing to lock it. A lock
-     * left behind by another user is unopenable for good, and reporting it as
-     * held would keep the caller away from the entry forever - so it is
-     * reported as no lock at all, and the caller carries on unguarded.
+     * A file that cannot be opened at all - one left behind by another user,
+     * say - is reported as no lock rather than as one held by somebody else,
+     * which would keep the caller away from the entry for good.
      *
      * @param  string $path
      * @param  int $mode

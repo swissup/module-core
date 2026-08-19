@@ -144,8 +144,8 @@ class Remote extends AbstractLoader
             return $packages;
         }
 
-        // Prevent parallel downloads caused by multiple admin accounts.
-        // The lock is held by $lock variable, and released once this method returns.
+        // Prevent parallel downloads caused by multiple admin accounts. The
+        // lock is held by $lock variable, and released once this method returns.
         $lock = $this->storage->lock(self::RESPONSE_STORAGE_KEY);
 
         if (!$lock) {
@@ -164,8 +164,7 @@ class Remote extends AbstractLoader
         }
 
         // The version was fetched before the lock was taken, so another process
-        // could have stored the very list we are about to download - in which
-        // case there is nothing left to do
+        // could have stored the very list we are about to download
         if ($version === $this->storage->load(self::VERSION_STORAGE_KEY)
             && $packages = $this->loadStoredPackages()
         ) {
