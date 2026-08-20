@@ -24,13 +24,46 @@
         align-items: center;
         display: flex;
         margin-left: auto;
+        gap: 1rem;
     }
 
     .swissup-modules-lastcheck {
         color: #858585;
         font-size: 1.3rem;
         font-weight: 400;
-        margin-right: 1.5rem;
+    }
+
+    .swissup-modules-howto {
+        position: relative;
+    }
+
+    .swissup-modules-howto-dropdown {
+        background: #fff;
+        border: 1px solid #adadad;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        display: none;
+        margin-top: 0.5rem;
+        min-width: 34rem;
+        padding: 1.5rem;
+        position: absolute;
+        right: 0;
+        text-align: left;
+        top: 100%;
+        z-index: 10;
+
+        &.active {
+            display: block;
+        }
+
+        pre {
+            color: #303030;
+            font-family: 'Menlo', 'Consolas', monospace;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin: 0 0 1.5rem;
+            overflow-x: auto;
+            white-space: pre;
+        }
     }
 }
 

@@ -32,6 +32,7 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
             . '<span class="swissup-modules-meta">'
             . $this->getLastCheckHtml()
             . $this->getButtonHtml()
+            . $this->getHowToUpdateHtml()
             . '</span>';
     }
 
@@ -81,6 +82,42 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
         }
 
         return $this->escapeHtml(__('Last checked %1', $ago));
+    }
+
+    public function getUpdateCommands()
+    {
+        return implode("\n", [
+            'composer update "swissup/*" -w &&\\',
+            'bin/magento setup:upgrade --safe-mode=1 &&\\',
+            'bin/magento setup:di:compile &&\\',
+            'bin/magento setup:static-content:deploy',
+        ]);
+    }
+
+    public function getHowToUpdateHtml()
+    {
+        $button = $this->getLayout()
+            ->createBlock(Button::class)
+            ->setLabel(__('How to Update'))
+            ->setId('swissup-modules-howto')
+            ->setDataAttribute([
+                'mage-init' => [
+                    'Swissup_Core/js/system-config/modules-howto' => [],
+                ],
+            ])
+            ->toHtml();
+
+        // the dropdown is toggled by Swissup_Core/js/system-config/modules-howto
+        return '<div class="swissup-modules-howto">'
+            . $button
+            . '<div class="swissup-modules-howto-dropdown">'
+                . '<p>' . $this->escapeHtml(__('Run the following commands in terminal:')) . '</p>'
+                . '<pre>' . $this->escapeHtml($this->getUpdateCommands()) . '</pre>'
+                . '<button type="button" class="action-default" data-role="copy">'
+                    . '<span>' . $this->escapeHtml(__('Copy')) . '</span>'
+                . '</button>'
+            . '</div>'
+            . '</div>';
     }
 
     public function getButtonHtml()
