@@ -12,7 +12,7 @@ define([
         }
 
         // the clipboard api is https only - fall back to a hidden textarea
-        $area = $('<textarea/>')
+        $area = $('<textarea>')
             .val(text)
             .css({ position: 'fixed', top: 0, left: '-9999px' })
             .appendTo('body');
