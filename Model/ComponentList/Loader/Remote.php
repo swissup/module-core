@@ -11,6 +11,7 @@ class Remote extends AbstractLoader
     const RESPONSE_STORAGE_KEY = 'packages';
     const VERSION_STORAGE_KEY = 'packages_version';
     const LASTCHECK_STORAGE_KEY = 'packages_lastcheck';
+    const VERSION_CHECK_INTERVAL = 3600;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -157,7 +158,7 @@ class Remote extends AbstractLoader
     }
 
     /**
-     * When the remote source was checked last time, if it was checked recently
+     * When the remote source was checked last time
      *
      * @return int|null
      */
@@ -263,13 +264,17 @@ class Remote extends AbstractLoader
      */
     public function isVersionCheckRequired()
     {
-        return !$this->storage->load(self::LASTCHECK_STORAGE_KEY);
+        $time = $this->getLastCheckTime();
+
+        return !$time || time() - $time >= self::VERSION_CHECK_INTERVAL;
     }
 
     private function updateVersionCheckTime()
     {
         try {
-            $this->storage->save((string) time(), self::LASTCHECK_STORAGE_KEY, 3600 * 1);
+            // stored without a lifetime, so that the age is still known once
+            // the check is due - it is what the config page displays
+            $this->storage->save((string) time(), self::LASTCHECK_STORAGE_KEY);
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
         }
