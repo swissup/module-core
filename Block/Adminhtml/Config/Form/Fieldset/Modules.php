@@ -92,7 +92,7 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Fieldset
             ->setDataAttribute([
                 'mage-init' => [
                     'Swissup_Core/js/system-config/modules-refresh' => [
-                        'url' => $this->getUrl('swissup/module/installed'),
+                        'url' => $this->getUrl('swissup/module/refresh'),
                     ],
                 ],
             ])

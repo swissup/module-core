@@ -33,7 +33,7 @@ define([
         });
 
         if (config.checkRequired) {
-            modules.getModules(config.url);
+            modules.getModules({ url: config.url });
         } else {
             // the stored data is still fresh - the server counter is the answer
             render(config.count);

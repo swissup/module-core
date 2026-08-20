@@ -5,17 +5,19 @@ define(['jquery', 'mage/loader'], function ($) {
         callbacks = $.Callbacks('memory');
 
     return {
-        getModules: function (url, refresh) {
-            if (refresh || !promise) {
-                promise = $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    showLoader: !!refresh,
-                    data: {
-                        form_key: window.FORM_KEY,
-                        refresh: refresh ? 1 : 0
-                    }
-                }).done(function (response) {
+        /**
+         * @param {Object} config - $.ajax settings of the action to load from
+         */
+        getModules: function (config) {
+            var settings = $.extend({
+                type: 'GET',
+                dataType: 'json'
+            }, config);
+
+            // the read is shared by every consumer, while a writing action
+            // is meant to bring a new list every time it is asked for
+            if (settings.type !== 'GET' || !promise) {
+                promise = $.ajax(settings).done(function (response) {
                     callbacks.fire(response);
                 });
             }

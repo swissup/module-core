@@ -33,8 +33,6 @@ define([
 
     setInterval(showLastCheck, 10000);
 
-    // every load carries the time the server actually checked at - a failed
-    // check keeps the old one, so the label never claims more than happened
     modules.onLoad(function (response) {
         $('.swissup-modules-lastcheck').attr('data-time', response.last_check || 0);
         showLastCheck();
@@ -46,7 +44,14 @@ define([
 
             $button.prop('disabled', true);
 
-            modules.getModules(config.url, true).always(function () {
+            modules.getModules({
+                url: config.url,
+                type: 'POST',
+                data: {
+                    form_key: window.FORM_KEY
+                },
+                showLoader: true
+            }).always(function () {
                 $button.prop('disabled', false);
             });
         });
