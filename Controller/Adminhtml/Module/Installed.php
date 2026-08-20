@@ -21,9 +21,6 @@ class Installed extends Action
         'latest_version',
         'release_date',
         'is_outdated',
-        'link',
-        'docs_link',
-        'changelog_link',
     ];
 
     private Loader $loader;
