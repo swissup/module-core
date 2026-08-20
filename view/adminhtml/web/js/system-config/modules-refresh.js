@@ -30,7 +30,15 @@ define([
 
         $lastCheck.text(time ? label(time) : '');
     }
+
     setInterval(showLastCheck, 10000);
+
+    // every load carries the time the server actually checked at - a failed
+    // check keeps the old one, so the label never claims more than happened
+    modules.onLoad(function (response) {
+        $('.swissup-modules-lastcheck').attr('data-time', response.last_check || 0);
+        showLastCheck();
+    });
 
     return function (config, element) {
         $(element).on('click', function () {
@@ -38,14 +46,9 @@ define([
 
             $button.prop('disabled', true);
 
-            modules.getModules(config.url, true)
-                .done(function () {
-                    $('.swissup-modules-lastcheck').attr('data-time', Math.floor(Date.now() / 1000));
-                    showLastCheck();
-                })
-                .always(function () {
-                    $button.prop('disabled', false);
-                });
+            modules.getModules(config.url, true).always(function () {
+                $button.prop('disabled', false);
+            });
         });
     };
 });

@@ -17,7 +17,7 @@ $items = $block->getItems();
     </thead>
     <tbody>
         <?php foreach ($items as $item): ?>
-        <tr data-code="<?= $escaper->escapeHtmlAttr($item['code']) ?>">
+        <tr data-code="<?= $escaper->escapeHtmlAttr($item['code']) ?>"<?= $item['is_outdated'] ? ' class="_outdated"' : '' ?>>
             <td class="package"><?= $escaper->escapeHtml($item['name']) ?></td>
             <td class="version"><?= $escaper->escapeHtml($item['version']) ?></td>
             <td class="latest"><span

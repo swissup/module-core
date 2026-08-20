@@ -26,8 +26,8 @@ define([
                 .appendTo($title);
         };
 
-        modules.onLoad(function (items) {
-            render(items.filter(function (item) {
+        modules.onLoad(function (response) {
+            render(response.items.filter(function (item) {
                 return item.is_outdated;
             }).length);
         });

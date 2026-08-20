@@ -15,8 +15,8 @@ define(['jquery', 'mage/loader'], function ($) {
                         form_key: window.FORM_KEY,
                         refresh: refresh ? 1 : 0
                     }
-                }).done(function (items) {
-                    callbacks.fire(items);
+                }).done(function (response) {
+                    callbacks.fire(response);
                 });
             }
 

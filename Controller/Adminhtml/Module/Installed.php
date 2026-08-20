@@ -30,8 +30,11 @@ class Installed extends Action
             $this->loader->refresh();
         }
 
-        return $resultJson->setData(
-            array_values($this->loader->getInstalledItems())
-        );
+        return $resultJson->setData([
+            'items' => array_values($this->loader->getInstalledItems()),
+            // the load above may have re-checked the remote source, or failed
+            // to - either way this is the time the clients should display
+            'last_check' => $this->loader->getLastCheckTime(),
+        ]);
     }
 }
