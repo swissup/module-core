@@ -10,6 +10,22 @@ class Installed extends Action
 {
     const ADMIN_RESOURCE = 'Swissup_Core::core_config';
 
+    /**
+     * The rest of the merged record - the filesystem path, the download and
+     * license urls, the purchase code - has no business in the browser.
+     */
+    const RESPONSE_FIELDS = [
+        'code',
+        'name',
+        'version',
+        'latest_version',
+        'release_date',
+        'is_outdated',
+        'link',
+        'docs_link',
+        'changelog_link',
+    ];
+
     private Loader $loader;
 
     public function __construct(
@@ -31,10 +47,18 @@ class Installed extends Action
         }
 
         return $resultJson->setData([
-            'items' => array_values($this->loader->getInstalledItems()),
+            'items' => array_map(
+                [$this, 'exportItem'],
+                array_values($this->loader->getInstalledItems())
+            ),
             // the load above may have re-checked the remote source, or failed
             // to - either way this is the time the clients should display
             'last_check' => $this->loader->getLastCheckTime(),
         ]);
+    }
+
+    private function exportItem(array $item)
+    {
+        return array_intersect_key($item, array_flip(self::RESPONSE_FIELDS));
     }
 }
