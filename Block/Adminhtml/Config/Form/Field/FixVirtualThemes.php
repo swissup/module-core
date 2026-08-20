@@ -13,7 +13,7 @@ class FixVirtualThemes extends \Magento\Config\Block\System\Config\Form\Field
         return <<<HTML
 <tr>
     <td colspan="100">
-        <div class="button-container">
+        <div class="fix-themes-container">
             <button id="fix-all-themes" 
                 class="button action-configure" 
                 type="button"

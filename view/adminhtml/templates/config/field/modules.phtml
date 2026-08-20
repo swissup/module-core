@@ -6,7 +6,7 @@ $items = $block->getItems();
 <?php if (!$items): ?>
     <p><?= $escaper->escapeHtml(__('No Swissup modules are installed.')) ?></p>
 <?php else: ?>
-<table class="swissup-modules-table" data-role="swissup-modules">
+<table class="swissup-config-table swissup-modules-table" data-role="swissup-modules">
     <thead>
         <tr>
             <th><?= $escaper->escapeHtml(__('Package')) ?></th>
@@ -18,7 +18,7 @@ $items = $block->getItems();
     <tbody>
         <?php foreach ($items as $item): ?>
         <tr data-code="<?= $escaper->escapeHtmlAttr($item['code']) ?>"<?= $item['is_outdated'] ? ' class="outdated"' : '' ?>>
-            <td class="package"><?= $escaper->escapeHtml($item['name']) ?></td>
+            <td class="package font-mono"><?= $escaper->escapeHtml($item['name']) ?></td>
             <td class="version"><?= $escaper->escapeHtml($item['version']) ?></td>
             <td class="latest"><span
                 class="version<?= $item['is_outdated'] ? ' outdated' : '' ?>"
