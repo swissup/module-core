@@ -67,6 +67,8 @@ class Remote extends AbstractLoader
             'version' => 'latest_version',
             'type' => 'type',
             'time' => 'release_date',
+            'extra.marketplace.links.docs' => 'docs_link',
+            'extra.marketplace.links.changelog' => 'changelog_link',
             'extra.swissup.links.store' => 'link',
             'extra.swissup.links.docs' => 'docs_link',
             'extra.swissup.links.download' => 'download_link',
