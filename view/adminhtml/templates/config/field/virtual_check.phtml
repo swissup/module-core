@@ -1,33 +1,39 @@
+<?php /** @var \Swissup\Core\Block\Adminhtml\Config\Form\Field\VirtualCheck $block */ ?>
 <?php /** @var \Magento\Framework\Escaper $escaper */ ?>
 <style>
-#swissup_core_troubleshooting .button-container { margin-top: 20px; }
-#swissup_core_troubleshooting .themes-table h4 {padding-left: 0}
-#swissup_core_troubleshooting .themes-table table {max-width: 500px}
-#swissup_core_troubleshooting .themes-table td	{ text-align-last: left; }
-#swissup_core_troubleshooting .themes-table th { text-align-last: left; }
-#swissup_core_troubleshooting .themes-table td.virtual::before {
+#swissup_core_troubleshooting:has(.swissup-virtualfix-success) .fix-themes-container { display: none }
+#swissup_core_troubleshooting .fix-themes-container { margin-top: 20px; }
+#swissup_core_troubleshooting .themes-table .swissup-badge::before {
     display:inline-block;
     content: '';
-    width: 15px;
-    height: 15px;
-    background-color: red;
+    width: 10px;
+    height: 10px;
+    background-color: #cc1017;
     border-radius: 50%;
-    margin-right: 10px;
+    margin-right: 6px;
     vertical-align: middle;
 }
 </style>
 
-<h4>Virtual Theme Check</h4>
+<?php $themes = $block->getVirtualThemes(); ?>
 
-<?php if (!$block->getVirtualThemes()->getSize()): ?>
-    <p style="color: green;">No virtual themes found. Check: passed!</p>
+<?php if (!$themes): ?>
+    <p class="swissup-virtualfix-success" style="color: green;">No virtual themes found. Check: passed!</p>
 <?php else: ?>
-    <table>
+    <table class="swissup-config-table">
+        <thead>
+            <tr>
+                <th scope="col"><?= $escaper->escapeHtml(__('Theme')) ?></th>
+                <th scope="col"><?= $escaper->escapeHtml(__('Path')) ?></th>
+                <th scope="col"><?= $escaper->escapeHtml(__('Status')) ?></th>
+            </tr>
+        </thead>
     	<tbody>
-            <?php foreach ($block->getVirtualThemes() as $theme): ?>
+            <?php foreach ($themes as $theme): ?>
     		<tr>
-                <td scope="row"><?= $escaper->escapeHtml($theme->getThemeTitle()) ?></td>
-                <td class="virtual">Virtual</td>
+                <td><?= $escaper->escapeHtml($theme['title']) ?></td>
+                <td class="font-mono"><?= $escaper->escapeHtml($theme['path'] ?: '—') ?></td>
+                <td><span class="swissup-badge"><?= $escaper->escapeHtml($theme['status']) ?></span></td>
             </tr>
             <?php endforeach; ?>
     	</tbody>
