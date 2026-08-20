@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="swissup" sortOrder="297">
+        <tab id="swissup" sortOrder="297" class="swissup-tab">
             <label>Swissup</label>
         </tab>
         <section id="swissup_core" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -10,6 +10,15 @@
             <tab>swissup</tab>
             <label>Core</label>
             <resource>Swissup_Core::core_config</resource>
+            <group id="modules" translate="label" type="text" sortOrder="10" showInDefault="1">
+                <label>Modules</label>
+                <fieldset_css>swissup-modules-container</fieldset_css>
+                <frontend_model>Swissup\Core\Block\Adminhtml\Config\Form\Fieldset\Modules</frontend_model>
+                <field id="list" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Installed Modules</label>
+                    <frontend_model>Swissup\Core\Block\Adminhtml\Config\Form\Field\Modules</frontend_model>
+                </field>
+            </group>
             <group id="notification" translate="label" type="text" sortOrder="250" showInDefault="1">
                 <label>Notifications</label>
                 <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1">

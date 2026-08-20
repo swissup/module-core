@@ -11,6 +11,7 @@ class Remote extends AbstractLoader
     const RESPONSE_STORAGE_KEY = 'packages';
     const VERSION_STORAGE_KEY = 'packages_version';
     const LASTCHECK_STORAGE_KEY = 'packages_lastcheck';
+    const VERSION_CHECK_INTERVAL = 3600;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -35,6 +36,10 @@ class Remote extends AbstractLoader
     private FileStorage $storage;
 
     private ?string $packagesVersion = null;
+
+    private bool $offlineMode = false;
+
+    private bool $forceVersionCheck = false;
 
     public function __construct(
         \Swissup\Core\Helper\Component $componentHelper,
@@ -62,6 +67,8 @@ class Remote extends AbstractLoader
             'version' => 'latest_version',
             'type' => 'type',
             'time' => 'release_date',
+            'extra.marketplace.links.docs' => 'docs_link',
+            'extra.marketplace.links.changelog' => 'changelog_link',
             'extra.swissup.links.store' => 'link',
             'extra.swissup.links.docs' => 'docs_link',
             'extra.swissup.links.download' => 'download_link',
@@ -127,21 +134,52 @@ class Remote extends AbstractLoader
     }
 
     /**
-     * Forget when the remote version was checked last time, so that the next
-     * load re-checks the feed instead of waiting for the throttle to expire.
+     * Re-check the remote version on the next load, without waiting for the
+     * throttle to expire. The stored check time is kept, so that a failed
+     * check keeps reporting when the feed was last really read.
      *
      * @return $this
      */
     public function refresh()
     {
-        $this->storage->remove(self::LASTCHECK_STORAGE_KEY);
+        $this->forceVersionCheck = true;
         $this->setIsLoaded(false);
 
         return $this;
     }
 
+    /**
+     * Use the previously stored packages only, without querying the remote source
+     */
+    public function setOfflineMode($flag = true)
+    {
+        if ((bool) $flag !== $this->offlineMode) {
+            $this->offlineMode = (bool) $flag;
+            $this->items = [];
+            $this->setIsLoaded(false);
+        }
+
+        return $this;
+    }
+
+    /**
+     * When the remote source was checked last time
+     *
+     * @return int|null
+     */
+    public function getLastCheckTime()
+    {
+        $time = $this->storage->load(self::LASTCHECK_STORAGE_KEY);
+
+        return $time ? (int) $time : null;
+    }
+
     protected function loadPackagesData()
     {
+        if ($this->offlineMode) {
+            return $this->loadStoredPackages();
+        }
+
         $storedVersion = $this->storage->load(self::VERSION_STORAGE_KEY);
         if ($storedVersion && !$this->isVersionCheckRequired()) {
             if ($packages = $this->loadStoredPackages()) {
@@ -224,15 +262,28 @@ class Remote extends AbstractLoader
         return is_array($response) ? $response : [];
     }
 
-    private function isVersionCheckRequired()
+    /**
+     * Whether the remote source was not checked within the last hour
+     *
+     * @return bool
+     */
+    public function isVersionCheckRequired()
     {
-        return !$this->storage->load(self::LASTCHECK_STORAGE_KEY);
+        $time = $this->getLastCheckTime();
+
+        return $this->forceVersionCheck
+            || !$time
+            || time() - $time >= self::VERSION_CHECK_INTERVAL;
     }
 
     private function updateVersionCheckTime()
     {
+        $this->forceVersionCheck = false;
+
         try {
-            $this->storage->save((string) time(), self::LASTCHECK_STORAGE_KEY, 3600 * 1);
+            // stored without a lifetime, so that the age is still known once
+            // the check is due - it is what the config page displays
+            $this->storage->save((string) time(), self::LASTCHECK_STORAGE_KEY);
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
         }

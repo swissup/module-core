@@ -1,0 +1,44 @@
+<?php
+/** @var \Swissup\Core\Block\Adminhtml\Config\Form\Field\Modules $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$items = $block->getItems();
+?>
+<?php if (!$items): ?>
+    <p><?= $escaper->escapeHtml(__('No Swissup modules are installed.')) ?></p>
+<?php else: ?>
+<table class="swissup-modules-table" data-role="swissup-modules">
+    <thead>
+        <tr>
+            <th><?= $escaper->escapeHtml(__('Package')) ?></th>
+            <th><?= $escaper->escapeHtml(__('Version')) ?></th>
+            <th><?= $escaper->escapeHtml(__('Latest')) ?></th>
+            <th><?= $escaper->escapeHtml(__('Links')) ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($items as $item): ?>
+        <tr data-code="<?= $escaper->escapeHtmlAttr($item['code']) ?>"<?= $item['is_outdated'] ? ' class="outdated"' : '' ?>>
+            <td class="package"><?= $escaper->escapeHtml($item['name']) ?></td>
+            <td class="version"><?= $escaper->escapeHtml($item['version']) ?></td>
+            <td class="latest"><span
+                class="version<?= $item['is_outdated'] ? ' outdated' : '' ?>"
+                title="<?= $escaper->escapeHtmlAttr($block->getReleaseTitle($item)) ?>"><?=
+                    $escaper->escapeHtml($item['latest_version'] ?? __('N/A'))
+                ?></span></td>
+            <td class="links">
+                <?php foreach ($block->getLinks($item) as $url => $label): ?>
+                    <a href="<?= $escaper->escapeUrl($url) ?>" target="_blank"><?= $escaper->escapeHtml($label) ?></a>
+                <?php endforeach; ?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<script type="text/x-magento-init">
+{
+    "[data-role=swissup-modules]": {
+        "Swissup_Core/js/system-config/modules-list": {}
+    }
+}
+</script>
+<?php endif; ?>

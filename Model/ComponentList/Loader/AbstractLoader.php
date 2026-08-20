@@ -63,6 +63,10 @@ abstract class AbstractLoader implements LoaderInterface
 
             $this->items[$code]['code'] = $code;
             foreach ($this->getMapping() as $source => $destination) {
+                if (!empty($this->items[$code][$destination])) {
+                    continue;
+                }
+
                 $value = $config;
                 foreach (explode('.', $source) as $key) {
                     if (!isset($value[$key])) {

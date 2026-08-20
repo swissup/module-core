@@ -1,0 +1,17 @@
+<?php
+/** @var \Swissup\Core\Block\Adminhtml\Config\OutdatedBadge $block */
+?>
+<?php if ($count = $block->getCount()): ?>
+<style id="swissup-outdated-badge-style">
+    .swissup-tab > .admin__page-nav-title::before {
+        content: '<?= (int) $count ?>';
+    }
+</style>
+<?php endif; ?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Swissup_Core/js/system-config/outdated-badge": <?= /* @noEscape */ $block->getJsonConfig() ?>
+    }
+}
+</script>
