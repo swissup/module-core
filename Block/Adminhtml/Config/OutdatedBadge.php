@@ -52,6 +52,10 @@ class OutdatedBadge extends \Magento\Backend\Block\Template
         return $this->json->serialize([
             'url' => $this->getModulesUrl(),
             'moduleListUrl' => $this->getModuleListUrl(),
+            'count' => $this->getCount(),
+            // the stored data is refreshed once an hour at most, so there is
+            // nothing to ask the server for until the check is due again
+            'checkRequired' => $this->loader->isVersionCheckRequired(),
         ]);
     }
 

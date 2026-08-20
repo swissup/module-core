@@ -6,29 +6,37 @@ define([
     'use strict';
 
     return function (config) {
-        modules.onLoad(function (items) {
-            var $title = $('.swissup-tab > .admin__page-nav-title'),
-                outdated = items.filter(function (item) {
-                    return item.is_outdated;
-                });
+        var render = function (count) {
+            var $title = $('.swissup-tab > .admin__page-nav-title');
 
             $title.find('.swissup-config-badge').remove();
 
-            if (!outdated.length) {
+            if (!count) {
                 // the stored counter is outdated itself - drop it with the styles
                 return $('#swissup-outdated-badge-style').remove();
             }
 
             $('<a class="swissup-config-badge"/>')
                 .attr('href', config.moduleListUrl)
-                .attr('title', $t('Outdated modules: %1').replace('%1', outdated.length))
+                .attr('title', $t('Outdated modules: %1').replace('%1', count))
                 .on('click', function (event) {
                     event.stopPropagation();
                 })
-                .text(outdated.length)
+                .text(count)
                 .appendTo($title);
+        };
+
+        modules.onLoad(function (items) {
+            render(items.filter(function (item) {
+                return item.is_outdated;
+            }).length);
         });
 
-        modules.getModules(config.url);
+        if (config.checkRequired) {
+            modules.getModules(config.url);
+        } else {
+            // the stored data is still fresh - the server counter is the answer
+            render(config.count);
+        }
     };
 });

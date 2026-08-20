@@ -256,7 +256,12 @@ class Remote extends AbstractLoader
         return is_array($response) ? $response : [];
     }
 
-    private function isVersionCheckRequired()
+    /**
+     * Whether the remote source was not checked within the last hour
+     *
+     * @return bool
+     */
+    public function isVersionCheckRequired()
     {
         return !$this->storage->load(self::LASTCHECK_STORAGE_KEY);
     }

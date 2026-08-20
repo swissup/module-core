@@ -6,6 +6,8 @@ define([
 ], function ($, moment, $t, modules) {
     'use strict';
 
+    // the list is loaded by the outdated badge - this only re-renders the rows
+    // of an already rendered table, be it the first load or a manual refresh
     return function (config, element) {
         var $table = $(element);
 
@@ -38,7 +40,5 @@ define([
                 ].filter(Boolean).join(' &middot; ')
             );
         });
-
-        modules.getModules(config.url);
     };
 });

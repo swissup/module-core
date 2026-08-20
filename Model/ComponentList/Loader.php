@@ -91,6 +91,11 @@ class Loader
         return $this->remoteLoader->getLastCheckTime();
     }
 
+    public function isVersionCheckRequired()
+    {
+        return $this->remoteLoader->isVersionCheckRequired();
+    }
+
     public function getItems()
     {
         return $this->load();

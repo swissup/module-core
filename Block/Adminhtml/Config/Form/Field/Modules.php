@@ -4,7 +4,6 @@ namespace Swissup\Core\Block\Adminhtml\Config\Form\Field;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\Serialize\Serializer\Json;
 use Swissup\Core\Model\ComponentList\Loader;
 
 class Modules extends \Magento\Config\Block\System\Config\Form\Field
@@ -13,17 +12,13 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Field
 
     private Loader $loader;
 
-    private Json $json;
-
     public function __construct(
         Context $context,
         Loader $loader,
-        Json $json,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->loader = $loader;
-        $this->json = $json;
     }
 
     public function render(AbstractElement $element)
@@ -69,17 +64,5 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Field
         }
 
         return $result;
-    }
-
-    public function getModulesUrl()
-    {
-        return $this->getUrl('swissup/module/installed');
-    }
-
-    public function getJsonConfig()
-    {
-        return $this->json->serialize([
-            'url' => $this->getModulesUrl(),
-        ]);
     }
 }
