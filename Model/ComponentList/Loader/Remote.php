@@ -39,6 +39,8 @@ class Remote extends AbstractLoader
 
     private bool $offlineMode = false;
 
+    private bool $forceVersionCheck = false;
+
     public function __construct(
         \Swissup\Core\Helper\Component $componentHelper,
         \Psr\Log\LoggerInterface $logger,
@@ -130,14 +132,15 @@ class Remote extends AbstractLoader
     }
 
     /**
-     * Forget when the remote version was checked last time, so that the next
-     * load re-checks the feed instead of waiting for the throttle to expire.
+     * Re-check the remote version on the next load, without waiting for the
+     * throttle to expire. The stored check time is kept, so that a failed
+     * check keeps reporting when the feed was last really read.
      *
      * @return $this
      */
     public function refresh()
     {
-        $this->storage->remove(self::LASTCHECK_STORAGE_KEY);
+        $this->forceVersionCheck = true;
         $this->setIsLoaded(false);
 
         return $this;
@@ -266,11 +269,15 @@ class Remote extends AbstractLoader
     {
         $time = $this->getLastCheckTime();
 
-        return !$time || time() - $time >= self::VERSION_CHECK_INTERVAL;
+        return $this->forceVersionCheck
+            || !$time
+            || time() - $time >= self::VERSION_CHECK_INTERVAL;
     }
 
     private function updateVersionCheckTime()
     {
+        $this->forceVersionCheck = false;
+
         try {
             // stored without a lifetime, so that the age is still known once
             // the check is due - it is what the config page displays
