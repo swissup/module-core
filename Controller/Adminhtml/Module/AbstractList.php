@@ -17,6 +17,8 @@ abstract class AbstractList extends Action
         'latest_version',
         'release_date',
         'is_outdated',
+        'docs_link',
+        'changelog_link',
     ];
 
     protected Loader $loader;

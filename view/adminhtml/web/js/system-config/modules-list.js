@@ -6,6 +6,19 @@ define([
 ], function ($, moment, $t, modules) {
     'use strict';
 
+    // keep the labels in sync with Field\Modules::getLinks()
+    function links(item) {
+        return [
+            { url: item.docs_link, label: $t('Docs') },
+            { url: item.changelog_link, label: $t('Changelog') }
+        ].filter(function (link) {
+            // the same schemes the php escapeUrl() lets through
+            return /^https?:\/\//.test(link.url);
+        }).map(function (link) {
+            return $('<a target="_blank"/>').attr('href', link.url).text(link.label);
+        });
+    }
+
     // the list is loaded by the outdated badge - this only re-renders the rows
     // of an already rendered table, be it the first load or a manual refresh
     return function (config, element) {
@@ -27,6 +40,10 @@ define([
                         ? $t('Released on %1').replace('%1', moment(item.release_date).format('ll'))
                         : '')
                     .text(item.latest_version || $t('N/A'));
+
+                // on a cold start the links are unknown until the list is
+                // loaded - the server had nothing to render them from
+                $row.find('.links').empty().append(links(item));
 
                 if (item.is_outdated) {
                     outdated++;
