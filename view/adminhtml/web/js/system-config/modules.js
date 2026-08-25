@@ -2,6 +2,7 @@ define(['jquery', 'mage/loader'], function ($) {
     'use strict';
 
     var promise,
+        startCallbacks = $.Callbacks('memory'),
         callbacks = $.Callbacks('memory');
 
     return {
@@ -20,9 +21,15 @@ define(['jquery', 'mage/loader'], function ($) {
                 promise = $.ajax(settings).done(function (response) {
                     callbacks.fire(response);
                 });
+                startCallbacks.fire(promise);
             }
 
             return promise;
+        },
+
+        onStart: function (callback) {
+            startCallbacks.add(callback);
+            return this;
         },
 
         onLoad: function (callback) {

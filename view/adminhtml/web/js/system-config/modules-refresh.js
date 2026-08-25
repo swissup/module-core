@@ -39,11 +39,23 @@ define([
     });
 
     return function (config, element) {
-        $(element).on('click', function () {
-            var $button = $(this);
+        var $button = $(element),
+            $label = $button.find('span'),
+            idleLabel = $label.text();
 
-            $button.prop('disabled', true);
+        function toggleBusy(busy) {
+            $button.prop('disabled', busy);
+            $label.text(busy ? $t('Checking') : idleLabel);
+        }
 
+        modules.onStart(function (request) {
+            toggleBusy(true);
+            request.always(function () {
+                toggleBusy(false);
+            });
+        });
+
+        $button.on('click', function () {
             modules.getModules({
                 url: config.url,
                 type: 'POST',
@@ -51,8 +63,6 @@ define([
                     form_key: window.FORM_KEY
                 },
                 showLoader: true
-            }).always(function () {
-                $button.prop('disabled', false);
             });
         });
     };
