@@ -4,6 +4,7 @@ namespace Swissup\Core\Model\ResourceModel\Module\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\AggregationInterface;
+use Swissup\Core\Model\ComponentList\Loader;
 
 /**
  * Collection for displaying grid of swissup modules
@@ -14,6 +15,8 @@ class Collection extends \Swissup\Core\Model\ResourceModel\Module\Collection imp
      * @var AggregationInterface
      */
     protected $aggregations;
+
+    private Loader $loader;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
@@ -27,6 +30,7 @@ class Collection extends \Swissup\Core\Model\ResourceModel\Module\Collection imp
      * @param string $model
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param Loader|null $loader
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -41,7 +45,8 @@ class Collection extends \Swissup\Core\Model\ResourceModel\Module\Collection imp
         $resourceModel,
         $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
         ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        ?Loader $loader = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -51,6 +56,8 @@ class Collection extends \Swissup\Core\Model\ResourceModel\Module\Collection imp
             $connection,
             $resource
         );
+        $this->loader = $loader
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Loader::class);
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
         $this->_init($model, $resourceModel);
@@ -68,6 +75,25 @@ class Collection extends \Swissup\Core\Model\ResourceModel\Module\Collection imp
         $this->getSelect()->order(
             new \Zend_Db_Expr('IF (ISNULL(main_table.version), 0, 1) DESC')
         );
+        return $this;
+    }
+
+    /**
+     * Sort by outdated modules.
+     *
+     * @return $this
+     */
+    protected function _beforeLoad()
+    {
+        parent::_beforeLoad();
+
+        $codes = array_keys($this->loader->getOutdatedItems());
+        if ($codes) {
+            $this->getSelect()->order(new \Zend_Db_Expr(
+                $this->getConnection()->quoteInto('main_table.code IN (?)', $codes) . ' DESC'
+            ));
+        }
+
         return $this;
     }
 
