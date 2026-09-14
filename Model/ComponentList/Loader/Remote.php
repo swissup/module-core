@@ -14,11 +14,6 @@ class Remote extends AbstractLoader
     const VERSION_CHECK_INTERVAL = 3600;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -44,14 +39,12 @@ class Remote extends AbstractLoader
     public function __construct(
         \Swissup\Core\Helper\Component $componentHelper,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\HTTP\ClientFactory $httpClientFactory,
         FileStorage $storage
     ) {
         parent::__construct($componentHelper, $logger);
-        $this->request = $request;
         $this->scopeConfig = $scopeConfig;
         $this->jsonHelper = $jsonHelper;
         $this->httpClientFactory = $httpClientFactory;

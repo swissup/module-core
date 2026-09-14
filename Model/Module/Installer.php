@@ -20,11 +20,6 @@ class Installer
     protected $messageLogger;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
      * Constructor
      *
      * @param \Swissup\Core\Model\Module $module
@@ -34,13 +29,11 @@ class Installer
     public function __construct(
         \Swissup\Core\Model\Module $module,
         \Swissup\Core\Model\ModuleFactory $moduleFactory,
-        \Swissup\Core\Model\Module\MessageLogger $messageLogger,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \Swissup\Core\Model\Module\MessageLogger $messageLogger
     ) {
         $this->module = $module;
         $this->moduleFactory = $moduleFactory;
         $this->messageLogger = $messageLogger;
-        $this->objectManager = $objectManager;
     }
 
     /**
@@ -77,45 +70,6 @@ class Installer
     public function getMessageLogger()
     {
         return $this->messageLogger;
-    }
-
-    /**
-     * Checks is the upgrades directory is exists in the module
-     *
-     * @return boolean
-     * @deprecated
-     */
-    public function hasUpgradesDir()
-    {
-        return false;
-    }
-
-    /**
-     * @param string $from
-     * @return array
-     * @deprecated
-     */
-    public function getUpgradesToRun($from = null)
-    {
-        return [];
-    }
-
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getUpgradeFiles()
-    {
-        return [];
-    }
-
-    /**
-     * @return null
-     * @deprecated
-     */
-    public function getUpgradesDir()
-    {
-        return null;
     }
 
     /**
