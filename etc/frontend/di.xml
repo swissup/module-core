@@ -8,14 +8,6 @@
                 disabled="false"/>
     </type>
 
-    <!-- font preload support in Magento < 2.3.3 -->
-    <type name="Magento\Framework\View\Page\Config\Renderer">
-        <plugin name="addMissingAssetAttributes"
-                type="Swissup\Core\Plugin\PageConfigRenderer"
-                sortOrder="10"
-                disabled="false"/>
-    </type>
-
     <!-- Magento 2.4.7 compatibility -->
     <type name="Magento\Newsletter\Block\Subscribe">
         <plugin name="setButtonLockManager"
