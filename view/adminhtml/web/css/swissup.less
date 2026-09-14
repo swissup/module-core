@@ -10,3 +10,95 @@
         right: 0;
     }
 }
+
+// Outdated badge
+.admin__menu {
+    .item-swissup.level-0 > a::after {
+        content: var(--swissup-outdated-count);
+        position: absolute;
+        top: .5rem;
+        right: 1rem;
+        border-radius: 3px;
+        background: #cc1017;
+        color: #fff;
+        padding: 1px 3px;
+        font-weight: 600;
+    }
+
+    .item-installer-index > a > span::after {
+        display: inline-block;
+        margin-left: .8rem;
+        background: #cc1017;
+        border-radius: 4px;
+        color: #fff;
+        content: var(--swissup-outdated-count);
+        font-size: 1.2rem;
+        font-weight: bold;
+        line-height: 1.8rem;
+        min-width: 2.2rem;
+        padding: 0 5px;
+        text-align: center;
+        vertical-align: top;
+    }
+}
+
+.swissup-tab > .admin__page-nav-title {
+    &._collapsible {
+        padding-right: 8rem;
+    }
+
+    // the counter is either shown with the --swissup-outdated-count variable,
+    // or added as a link by the Swissup_Core/js/outdated-badge
+    &::before {
+        content: var(--swissup-outdated-count);
+    }
+    &::before,
+    .swissup-config-badge {
+        position: absolute;
+        right: 5rem;
+        top: ~'calc(50% - 1.3rem)';
+        background: #cc1017;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 1.4rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+        min-width: 3.4rem;
+        padding: 2px 6px;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    // the fetched link supersedes the stored counter
+    &:has(.swissup-config-badge)::before {
+        display: none;
+    }
+
+    .swissup-config-badge {
+        &:hover,
+        &:visited {
+            color: #fff;
+            text-decoration: none;
+        }
+        &:hover {
+            background: #b5080f;
+        }
+    }
+}
+.swissup-tab {
+    &:has(.swissup-config-badge) {
+        .swissup-section .admin__page-nav-link {
+            position: relative;
+            &::before {
+                position: absolute;
+                right: 2rem;
+                top: ~'calc(50% - 5px)';
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: #cc1017;
+                content: '';
+            }
+        }
+    }
+}

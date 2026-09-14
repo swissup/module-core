@@ -3,4 +3,9 @@
     <head>
         <css src="Swissup_Core::css/swissup.css"/>
     </head>
+    <body>
+        <referenceContainer name="before.body.end">
+            <block class="Swissup\Core\Block\Adminhtml\OutdatedBadge" name="swissup.outdated_badge"/>
+        </referenceContainer>
+    </body>
 </page>

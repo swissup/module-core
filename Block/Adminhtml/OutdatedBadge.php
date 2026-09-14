@@ -1,6 +1,6 @@
 <?php
 
-namespace Swissup\Core\Block\Adminhtml\Config;
+namespace Swissup\Core\Block\Adminhtml;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -8,9 +8,9 @@ use Swissup\Core\Model\ComponentList\Loader;
 
 class OutdatedBadge extends \Magento\Backend\Block\Template
 {
-    const ADMIN_RESOURCE = 'Swissup_Core::core_config';
+    const ADMIN_RESOURCE = 'Swissup_Core::swissup';
 
-    protected $_template = 'Swissup_Core::config/outdated-badge.phtml';
+    protected $_template = 'Swissup_Core::outdated-badge.phtml';
 
     private Loader $loader;
 
@@ -29,8 +29,6 @@ class OutdatedBadge extends \Magento\Backend\Block\Template
 
     public function getCount()
     {
-        // The remote source is never queried here - it would slow down every
-        // config page. An outdated counter is refreshed by the js component.
         return count($this->loader->setOfflineMode()->getOutdatedItems());
     }
 

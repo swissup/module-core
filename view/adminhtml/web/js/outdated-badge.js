@@ -7,14 +7,20 @@ define([
 
     return function (config) {
         var render = function (count) {
-            var $title = $('.swissup-tab > .admin__page-nav-title');
+            var $title = $('.swissup-tab > .admin__page-nav-title'),
+                style = document.documentElement.style;
 
             $title.find('.swissup-config-badge').remove();
 
+            // the stored counter could be outdated itself - the rendered one
+            // drives the menu badges and the config tab fallback from now on
+            $('#swissup-outdated-badge-style').remove();
+
             if (!count) {
-                // the stored counter is outdated itself - drop it with the styles
-                return $('#swissup-outdated-badge-style').remove();
+                return style.removeProperty('--swissup-outdated-count');
             }
+
+            style.setProperty('--swissup-outdated-count', '\'' + count + '\'');
 
             $('<a class="swissup-config-badge"/>')
                 .attr('href', config.moduleListUrl)

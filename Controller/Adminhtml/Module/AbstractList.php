@@ -8,7 +8,7 @@ use Swissup\Core\Model\ComponentList\Loader;
 
 abstract class AbstractList extends Action
 {
-    const ADMIN_RESOURCE = 'Swissup_Core::core_config';
+    const ADMIN_RESOURCE = 'Swissup_Core::swissup';
 
     const RESPONSE_FIELDS = [
         'code',
