@@ -65,7 +65,9 @@ class ModuleActions extends \Magento\Ui\Component\Listing\Columns\Column
 
                 $item[$this->getData('name')][$link['key']] = [
                     'href'  => $item[$link['key']],
-                    'label' => __($link['label'])
+                    'label' => __($link['label']),
+                    'target' => '_blank',
+                    'rel' => 'noreferrer noopener',
                 ];
             }
         }
