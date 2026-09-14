@@ -1,0 +1,15 @@
+<?php
+/** @var \Swissup\Core\Block\Adminhtml\HowToUpdate $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<?php // the dropdown is toggled by Swissup_Core/js/modules-howto ?>
+<div class="swissup-modules-howto">
+    <?= $block->getButtonHtml() ?>
+    <div class="swissup-modules-howto-dropdown">
+        <p><?= $escaper->escapeHtml(__('Run the following commands in terminal:')) ?></p>
+        <pre><?= $escaper->escapeHtml($block->getUpdateCommands()) ?></pre>
+        <button type="button" class="action-default" data-role="copy">
+            <span><?= $escaper->escapeHtml(__('Copy')) ?></span>
+        </button>
+    </div>
+</div>

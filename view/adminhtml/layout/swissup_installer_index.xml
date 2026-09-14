@@ -2,6 +2,9 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <!-- <update handle="styles"/> -->
     <body>
+        <referenceBlock name="page.actions.toolbar">
+            <block class="Swissup\Core\Block\Adminhtml\HowToUpdate" name="swissup.installer.how_to_update"/>
+        </referenceBlock>
         <referenceContainer name="content">
             <uiComponent name="swissup_installer_listing"/>
         </referenceContainer>
