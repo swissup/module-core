@@ -112,14 +112,22 @@
                 </item>
             </argument>
         </column>
-        <column name="version" class="Swissup\Core\Ui\Component\Listing\Columns\Version">
+        <column name="version">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filterable" xsi:type="boolean">false</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">Version</item>
+                </item>
+            </argument>
+        </column>
+        <column name="latest_version" class="Swissup\Core\Ui\Component\Listing\Columns\Version">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="filterable" xsi:type="boolean">false</item>
                     <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Version</item>
-                    <item name="compareWith" xsi:type="string">latest_version</item>
+                    <item name="label" xsi:type="string" translate="true">Latest Version</item>
                 </item>
             </argument>
         </column>

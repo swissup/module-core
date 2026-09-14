@@ -25,21 +25,25 @@ class Version extends \Magento\Ui\Component\Listing\Columns\Column
 
     protected function prepareItem(array $item)
     {
-        if (empty($item[$this->getData('name')])) {
+        $value = $item[$this->getData('name')] ?? '';
+        if (empty($value)) {
             return __('N/A');
         }
 
-        $latestVersion = $item[$this->getData('config/compareWith')] ?: '';
+        if (empty($item['version'])) {
+            return $value;
+        }
+
         if (empty($item['is_outdated'])) {
             $severity = 'grid-severity-notice';
             $title = __('Module is up to date');
         } else {
             $severity = 'grid-severity-critical';
-            $title = __("The latest version is %1", $latestVersion);
+            $title = __('Module is outdated');
         }
 
         return '<span class="' . $severity . '" title="' . $title . '">'
-            . $item[$this->getData('name')]
+            . $value
             . '</span>';
     }
 }
