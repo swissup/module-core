@@ -2,16 +2,16 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">swissup_installer_listing.swissup_installer_listing_data_source</item>
-            <item name="deps" xsi:type="string">swissup_installer_listing.swissup_installer_listing_data_source</item>
+            <item name="provider" xsi:type="string">swissup_module_manager.swissup_module_manager_data_source</item>
+            <item name="deps" xsi:type="string">swissup_module_manager.swissup_module_manager_data_source</item>
         </item>
-        <item name="spinner" xsi:type="string">swissup_installer_columns</item>
-        <item name="acl" xsi:type="string">Swissup_Core::installer_index</item>
+        <item name="spinner" xsi:type="string">swissup_module_columns</item>
+        <item name="acl" xsi:type="string">Swissup_Core::module_manager</item>
     </argument>
-    <dataSource name="swissup_installer_listing_data_source">
+    <dataSource name="swissup_module_manager_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Swissup\Core\Ui\DataProvider\ModuleListingDataProvider</argument>
-            <argument name="name" xsi:type="string">swissup_installer_listing_data_source</argument>
+            <argument name="name" xsi:type="string">swissup_module_manager_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">code</argument>
             <argument name="requestFieldName" xsi:type="string">code</argument>
             <argument name="data" xsi:type="array">
@@ -39,7 +39,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="storageConfig" xsi:type="array">
-                        <item name="namespace" xsi:type="string">swissup_installer_listing</item>
+                        <item name="namespace" xsi:type="string">swissup_module_manager</item>
                     </item>
                 </item>
             </argument>
@@ -48,7 +48,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="columnsData" xsi:type="array">
-                        <item name="provider" xsi:type="string">swissup_installer_listing.swissup_installer_listing.swissup_installer_columns</item>
+                        <item name="provider" xsi:type="string">swissup_module_manager.swissup_module_manager.swissup_module_columns</item>
                     </item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
@@ -58,13 +58,13 @@
         <filterSearch name="fulltext">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="provider" xsi:type="string">swissup_installer_listing.swissup_installer_listing_data_source</item>
+                    <item name="provider" xsi:type="string">swissup_module_manager.swissup_module_manager_data_source</item>
                 </item>
             </argument>
         </filterSearch>
         <paging name="listing_paging"/>
     </container>
-    <columns name="swissup_installer_columns">
+    <columns name="swissup_module_columns">
         <column name="code">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

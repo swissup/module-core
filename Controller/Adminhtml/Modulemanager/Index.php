@@ -1,13 +1,13 @@
 <?php
 
-namespace Swissup\Core\Controller\Adminhtml\Installer;
+namespace Swissup\Core\Controller\Adminhtml\Modulemanager;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
 class Index extends \Magento\Backend\App\Action
 {
-    const ADMIN_RESOURCE = 'Swissup_Core::installer_index';
+    const ADMIN_RESOURCE = 'Swissup_Core::module_manager';
 
     /**
      * @var PageFactory

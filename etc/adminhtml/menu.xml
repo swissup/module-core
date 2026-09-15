@@ -23,13 +23,13 @@
             parent="Swissup_Core::swissup"
             resource="Swissup_Core::services"
         />
-        <add id="Swissup_Core::installer_index"
+        <add id="Swissup_Core::module_manager"
             title="Module Manager"
             module="Swissup_Core"
             sortOrder="10"
             parent="Swissup_Core::services"
-            action="swissup/installer/index"
-            resource="Swissup_Core::installer_index"
+            action="swissup/modulemanager/index"
+            resource="Swissup_Core::module_manager"
         />
     </menu>
 </config>

@@ -3,10 +3,10 @@
     <!-- <update handle="styles"/> -->
     <body>
         <referenceBlock name="page.actions.toolbar">
-            <block class="Swissup\Core\Block\Adminhtml\HowToUpdate" name="swissup.installer.how_to_update"/>
+            <block class="Swissup\Core\Block\Adminhtml\HowToUpdate" name="swissup.how_to_update"/>
         </referenceBlock>
         <referenceContainer name="content">
-            <uiComponent name="swissup_installer_listing"/>
+            <uiComponent name="swissup_module_manager"/>
         </referenceContainer>
     </body>
 </page>
