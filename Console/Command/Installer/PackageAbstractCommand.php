@@ -8,12 +8,14 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Setup\Declaration\Schema\FileSystem\Csv;
-use Swissup\Core\Model\Composer;
-use Swissup\Core\Model\ComposerRepository;
-use Swissup\Core\Model\Process;
+use Swissup\Core\Model\Installer\Composer;
+use Swissup\Core\Model\Installer\ComposerRepository;
+use Swissup\Core\Model\Installer\DisabledModules;
+use Swissup\Core\Model\Installer\Process;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 abstract class PackageAbstractCommand extends Command
 {
@@ -28,6 +30,7 @@ abstract class PackageAbstractCommand extends Command
     protected CleanupFiles $cleanupFiles;
     protected CacheManager $cacheManager;
     protected DirectoryList $directoryList;
+    protected DisabledModules $disabledModules;
 
     /**
      * Dependencies are injected (not proxied) on purpose:
@@ -41,9 +44,11 @@ abstract class PackageAbstractCommand extends Command
         MaintenanceMode $maintenanceMode,
         CleanupFiles $cleanupFiles,
         CacheManager $cacheManager,
-        DirectoryList $directoryList
+        DirectoryList $directoryList,
+        DisabledModules $disabledModules
     ) {
         $this->directoryList = $directoryList;
+        $this->disabledModules = $disabledModules;
         $this->composer = $composer;
         $this->repository = $repository;
         $this->process = $process;
@@ -116,6 +121,10 @@ abstract class PackageAbstractCommand extends Command
      */
     protected function runAndUpgrade(array $args, InputInterface $input, OutputInterface $output)
     {
+        if (!$this->confirmDisabledModules($input, $output)) {
+            return Cli::RETURN_FAILURE;
+        }
+
         $interactive = $input->isInteractive();
         $installArgs = $this->getInstallArgs(); // must be read before vendor is changed
         $backup = $this->composer->backupFiles();
@@ -172,6 +181,46 @@ abstract class PackageAbstractCommand extends Command
                 $this->maintenanceMode->set(false);
             }
         }
+    }
+
+    /**
+     * Ask before running setup:upgrade that will drop the tables
+     * of the modules disabled in app/etc/config.php
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return boolean
+     */
+    private function confirmDisabledModules(InputInterface $input, OutputInterface $output)
+    {
+        $modules = $this->disabledModules->getNamesWithDbSchema();
+        if (!$modules) {
+            return true;
+        }
+
+        $output->writeln(
+            '<comment>This command runs `setup:upgrade --safe-mode=1` ' .
+            'that drops the database tables of the disabled modules:</comment>'
+        );
+
+        foreach ($modules as $module) {
+            $output->writeln('   - ' . $module);
+        }
+
+        $output->writeln(
+            '<comment>Enable the modules or remove their packages to keep the tables. ' .
+            'Otherwise their data is dumped into ' . $this->getSchemaDumpsDir() . '</comment>'
+        );
+
+        if (!$input->isInteractive()) {
+            return true;
+        }
+
+        return $this->getHelper('question')->ask(
+            $input,
+            $output,
+            new ConfirmationQuestion('Continue? [y/N] ', false)
+        );
     }
 
     /**

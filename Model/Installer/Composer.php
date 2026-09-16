@@ -1,6 +1,6 @@
 <?php
 
-namespace Swissup\Core\Model;
+namespace Swissup\Core\Model\Installer;
 
 use Composer\Json\JsonFile;
 use Magento\Framework\Composer\ComposerJsonFinder;
