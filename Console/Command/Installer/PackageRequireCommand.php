@@ -2,12 +2,10 @@
 namespace Swissup\Core\Console\Command\Installer;
 
 use Magento\Framework\Console\Cli;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class PackageRequireCommand extends PackageAbstractCommand
 {
@@ -81,43 +79,6 @@ class PackageRequireCommand extends PackageAbstractCommand
         }
 
         return $args;
-    }
-
-    /**
-     * Offer to run swissup:repo:enable when repository or access key is missing
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return boolean
-     * @throws \RuntimeException
-     */
-    private function ensureRepositoryEnabled(InputInterface $input, OutputInterface $output)
-    {
-        if ($this->repository->isEnabled()) {
-            $credentials = $this->repository->getCredentials();
-            if ($credentials['username'] && $credentials['password']) {
-                return true;
-            }
-            $message = 'Access key is not found.';
-        } else {
-            $message = 'Swissuplabs repository is not enabled.';
-        }
-
-        if (!$input->isInteractive()) {
-            throw new \RuntimeException($message . ' Run bin/magento swissup:repo:enable first.');
-        }
-
-        $question = new ConfirmationQuestion(
-            sprintf('<comment>%s</comment> Run swissup:repo:enable now? [Y/n] ', $message),
-            true
-        );
-        if (!$this->getHelper('question')->ask($input, $output, $question)) {
-            return false;
-        }
-
-        return $this->getApplication()
-            ->find('swissup:repo:enable')
-            ->run(new ArrayInput([]), $output) === Cli::RETURN_SUCCESS;
     }
 
     /**

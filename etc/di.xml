@@ -10,6 +10,7 @@
                 <item name="repoEnableCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\RepoEnableCommand</item>
                 <item name="repoDisableCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\RepoDisableCommand</item>
                 <item name="packageRequireCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageRequireCommand</item>
+                <item name="packageUpdateCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageUpdateCommand</item>
                 <item name="packageRemoveCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageRemoveCommand</item>
                 <item name="authShowCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthShowCommand</item>
                 <item name="authAddCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthAddCommand</item>

@@ -25,8 +25,8 @@ Command                                 | Description
 **Packages**                            |
 `bin/magento swissup:require {package}` | Download package
 `bin/magento swissup:install {package}` | Run installer for downloaded package
-`bin/magento swissup:remove {package}`  | Remove package
 `bin/magento swissup:update`            | Update `swissup/*` packages
+`bin/magento swissup:remove {package}`  | Remove package
 
 ## Popup Message Manager
 
