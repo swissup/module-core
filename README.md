@@ -10,6 +10,24 @@ composer require swissup/module-core
 bin/magento setup:upgrade
 ```
 
+## Swissup installer
+
+Aavailable commands
+
+Command                                 | Description
+----------------------------------------|---------------------------------------
+`bin/magento swissup:repo:enable`       | Add repo to composer.json file
+`bin/magento swissup:repo:disable`      | Remove repo from composer.json file
+**Authorization**                       |
+`bin/magento swissup:auth:add {key}`    | Add auth key
+`bin/magento swissup:auth:remove {key}` | Remove auth key
+`bin/magento swissup:auth:show`         | Display auth keys info
+**Packages**                            |
+`bin/magento swissup:require {package}` | Download package
+`bin/magento swissup:install {package}` | Run installer for downloaded package
+`bin/magento swissup:remove {package}`  | Remove package
+`bin/magento swissup:update`            | Update `swissup/*` packages
+
 ## Popup Message Manager
 
 Popup message manager allows to show regular Magento messages with additional
