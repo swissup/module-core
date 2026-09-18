@@ -11,26 +11,10 @@ class Config
 {
     use LoggerAware;
 
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var \Magento\Framework\App\Config\Storage\WriterInterface
-     */
-    private $configWriter;
-
-    /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
-     */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
+        private \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        private \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->configWriter = $configWriter;
     }
 
     /**

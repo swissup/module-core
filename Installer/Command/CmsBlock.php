@@ -9,42 +9,12 @@ class CmsBlock
 {
     use LoggerAware;
 
-    /**
-     * @var \Magento\Cms\Model\BlockFactory
-     */
-    private $blockFactory;
-
-    /**
-     * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    private $localeDate;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @param \Magento\Cms\Model\BlockFactory $blockFactory
-     * @param \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     */
     public function __construct(
-        \Magento\Cms\Model\BlockFactory $blockFactory,
-        \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $collectionFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        private \Magento\Cms\Model\BlockFactory $blockFactory,
+        private \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $collectionFactory,
+        private \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        private \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
-        $this->blockFactory = $blockFactory;
-        $this->collectionFactory = $collectionFactory;
-        $this->localeDate = $localeDate;
-        $this->storeManager = $storeManager;
     }
 
     /**

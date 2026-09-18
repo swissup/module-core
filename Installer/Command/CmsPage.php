@@ -9,49 +9,13 @@ class CmsPage
 {
     use LoggerAware;
 
-    /**
-     * @var \Magento\Cms\Model\PageFactory
-     */
-    private $pageFactory;
-
-    /**
-     * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    private $localeDate;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory
-     */
-    private $urlRewriteCollectionFactory;
-
-    /**
-     * @param \Magento\Cms\Model\PageFactory $pageFactory
-     * @param \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     */
     public function __construct(
-        \Magento\Cms\Model\PageFactory $pageFactory,
-        \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collectionFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory $urlRewriteCollectionFactory
+        private \Magento\Cms\Model\PageFactory $pageFactory,
+        private \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collectionFactory,
+        private \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        private \Magento\Store\Model\StoreManagerInterface $storeManager,
+        private \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory $urlRewriteCollectionFactory
     ) {
-        $this->pageFactory = $pageFactory;
-        $this->collectionFactory = $collectionFactory;
-        $this->localeDate = $localeDate;
-        $this->storeManager = $storeManager;
-        $this->urlRewriteCollectionFactory = $urlRewriteCollectionFactory;
     }
 
     /**

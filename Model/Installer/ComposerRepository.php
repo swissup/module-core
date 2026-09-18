@@ -16,22 +16,14 @@ class ComposerRepository
     const URL = 'https://ci.swissuplabs.com/api/packages.json';
     const HOSTNAME = 'ci.swissuplabs.com';
 
-    private ComposerJsonFinder $composerJsonFinder;
-    private ScopeConfigInterface $scopeConfig;
-    private CurlFactory $curlFactory;
-    private Composer $composer;
     private ?array $credentials = null;
 
     public function __construct(
-        ComposerJsonFinder $composerJsonFinder,
-        ScopeConfigInterface $scopeConfig,
-        CurlFactory $curlFactory,
-        Composer $composer
+        private ComposerJsonFinder $composerJsonFinder,
+        private ScopeConfigInterface $scopeConfig,
+        private CurlFactory $curlFactory,
+        private Composer $composer
     ) {
-        $this->composerJsonFinder = $composerJsonFinder;
-        $this->scopeConfig = $scopeConfig;
-        $this->curlFactory = $curlFactory;
-        $this->composer = $composer;
     }
 
     /**

@@ -9,50 +9,13 @@ class ProductCollection
 {
     use LoggerAware;
 
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    private $localeDate;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
-     */
-    private $attributeCollectionFactory;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     */
-    private $productCollectionFactory;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\Visibility
-     */
-    private $catalogProductVisibility;
-
-    /**
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        private \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
+        private \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        private \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
+        private \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        private \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
-        $this->attributeCollectionFactory = $attributeCollectionFactory;
-        $this->productCollectionFactory = $productCollectionFactory;
-        $this->catalogProductVisibility = $catalogProductVisibility;
-        $this->localeDate = $localeDate;
-        $this->storeManager = $storeManager;
     }
 
     /**

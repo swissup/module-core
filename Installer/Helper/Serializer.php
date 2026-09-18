@@ -4,18 +4,9 @@ namespace Swissup\Core\Installer\Helper;
 
 class Serializer
 {
-    /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
-     */
-    private $jsonSerializer;
-
-    /**
-     * @param CollectionFactory $collectionFactory
-     */
     public function __construct(
-        \Magento\Framework\Serialize\Serializer\Json $jsonSerializer
+        private \Magento\Framework\Serialize\Serializer\Json $jsonSerializer
     ) {
-        $this->jsonSerializer = $jsonSerializer;
     }
 
     /**

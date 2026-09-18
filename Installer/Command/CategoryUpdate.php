@@ -10,15 +10,9 @@ class CategoryUpdate
 {
     use LoggerAware;
 
-    /**
-     * @var \Swissup\Core\Installer\Helper\Collection
-     */
-    private $collectionHelper;
-
     public function __construct(
-        \Swissup\Core\Installer\Helper\Collection $collectionHelper
+        private \Swissup\Core\Installer\Helper\Collection $collectionHelper
     ) {
-        $this->collectionHelper = $collectionHelper;
     }
 
     /**

@@ -33,83 +33,17 @@ class PackageInstallCommand extends Command
      */
     protected $logger;
 
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Symfony\Component\Console\Question\QuestionFactory
-     */
-    protected $questionFactory;
-
-    /**
-     * @var \Symfony\Component\Console\Question\ChoiceQuestionFactory
-     */
-    protected $choiceQuestionFactory;
-
-    /**
-     * @var \Symfony\Component\Console\Helper\QuestionHelper
-     */
-    protected $questionHelper;
-
-    /**
-     * @var \Swissup\Core\Installer\Installer
-     */
-    protected $installer;
-
-    /**
-     * @var \Magento\Framework\Component\ComponentRegistrarInterface
-     */
-    protected $componentRegistrar;
-
-    /**
-     * @var \Magento\Theme\Model\Theme\ThemePackageInfo
-     */
-    protected $themePackageInfo;
-
-    /**
-     * @var \Swissup\Core\Helper\Component
-     */
-    protected $componentHelper;
-
-    /**
-     * @var \Swissup\Core\Model\Installer\Process
-     */
-    protected $process;
-
-    /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Symfony\Component\Console\Question\QuestionFactory $questionFactory
-     * @param \Symfony\Component\Console\Question\ChoiceQuestionFactory $choiceQuestionFactory
-     * @param \Symfony\Component\Console\Helper\QuestionHelper $questionHelper
-     * @param \Swissup\Core\Installer\Installer $installer
-     * @param \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar
-     * @param \Magento\Theme\Model\Theme\ThemePackageInfo $themePackageInfo
-     * @param \Swissup\Core\Helper\Component $componentHelper
-     * @param \Swissup\Core\Model\Installer\Process $process
-     */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Symfony\Component\Console\Question\QuestionFactory $questionFactory,
-        \Symfony\Component\Console\Question\ChoiceQuestionFactory $choiceQuestionFactory,
-        \Symfony\Component\Console\Helper\QuestionHelper $questionHelper,
-        \Swissup\Core\Installer\Installer $installer,
-        \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar,
-        \Magento\Theme\Model\Theme\ThemePackageInfo $themePackageInfo,
-        \Swissup\Core\Helper\Component $componentHelper,
-        \Swissup\Core\Model\Installer\Process $process
+        protected \Magento\Store\Model\StoreManagerInterface $storeManager,
+        protected \Symfony\Component\Console\Question\QuestionFactory $questionFactory,
+        protected \Symfony\Component\Console\Question\ChoiceQuestionFactory $choiceQuestionFactory,
+        protected \Symfony\Component\Console\Helper\QuestionHelper $questionHelper,
+        protected \Swissup\Core\Installer\Installer $installer,
+        protected \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar,
+        protected \Magento\Theme\Model\Theme\ThemePackageInfo $themePackageInfo,
+        protected \Swissup\Core\Helper\Component $componentHelper,
+        protected \Swissup\Core\Model\Installer\Process $process
     ) {
-        $this->storeManager = $storeManager;
-        $this->questionFactory = $questionFactory;
-        $this->choiceQuestionFactory = $choiceQuestionFactory;
-        $this->questionHelper = $questionHelper;
-        $this->installer = $installer;
-        $this->componentRegistrar = $componentRegistrar;
-        $this->themePackageInfo = $themePackageInfo;
-        $this->componentHelper = $componentHelper;
-        $this->process = $process;
-
         parent::__construct();
     }
 

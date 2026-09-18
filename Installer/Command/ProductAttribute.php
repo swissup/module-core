@@ -9,42 +9,12 @@ class ProductAttribute
 {
     use LoggerAware;
 
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
-     */
-    private $attributeFactory;
-
-    /**
-     * @var \Magento\Catalog\Helper\Product
-     */
-    private $productHelper;
-
-    /**
-     * @var \Magento\Eav\Model\EntityFactory
-     */
-    private $eavEntityFactory;
-
-    /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
-     */
-    private $attributeSetCollectionFactory;
-
-    /**
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
-     * @param \Magento\Catalog\Helper\Product $productHelper
-     * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory
-     */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory,
-        \Magento\Catalog\Helper\Product $productHelper,
-        \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory
+        private \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory,
+        private \Magento\Catalog\Helper\Product $productHelper,
+        private \Magento\Eav\Model\EntityFactory $eavEntityFactory,
+        private \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory
     ) {
-        $this->attributeFactory = $attributeFactory;
-        $this->productHelper = $productHelper;
-        $this->eavEntityFactory = $eavEntityFactory;
-        $this->attributeSetCollectionFactory = $attributeSetCollectionFactory;
     }
 
     /**

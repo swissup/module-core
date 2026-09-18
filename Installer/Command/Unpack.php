@@ -11,26 +11,10 @@ class Unpack
 {
     use LoggerAware;
 
-    /**
-     * @var \Magento\Framework\Archive
-     */
-    private $archiver;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Io\File
-     */
-    private $ioFile;
-
-    /**
-     * @param \Magento\Framework\Archive $archiver
-     * @param \Magento\Framework\Filesystem\Io\File $ioFile
-     */
     public function __construct(
-        \Magento\Framework\Archive $archiver,
-        \Magento\Framework\Filesystem\Io\File $ioFile
+        private \Magento\Framework\Archive $archiver,
+        private \Magento\Framework\Filesystem\Io\File $ioFile
     ) {
-        $this->archiver = $archiver;
-        $this->ioFile = $ioFile;
     }
 
     /**

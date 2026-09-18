@@ -10,11 +10,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class AuthShowCommand extends Command
 {
-    private ComposerRepository $repository;
-
-    public function __construct(ComposerRepository $repository)
+    public function __construct(private ComposerRepository $repository)
     {
-        $this->repository = $repository;
         parent::__construct();
     }
 

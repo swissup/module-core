@@ -22,37 +22,20 @@ abstract class PackageAbstractCommand extends Command
     const INPUT_ARGUMENT_PACKAGES = 'packages';
     const INPUT_OPTION_DRY_RUN = 'dry-run';
 
-    protected Composer $composer;
-    protected ComposerRepository $repository;
-    protected Process $process;
-    protected State $appState;
-    protected MaintenanceMode $maintenanceMode;
-    protected CleanupFiles $cleanupFiles;
-    protected CacheManager $cacheManager;
-    protected DirectoryList $directoryList;
-
     /**
      * Dependencies are injected (not proxied) on purpose:
      * they must be loaded before composer changes the files.
      */
     public function __construct(
-        Composer $composer,
-        ComposerRepository $repository,
-        Process $process,
-        State $appState,
-        MaintenanceMode $maintenanceMode,
-        CleanupFiles $cleanupFiles,
-        CacheManager $cacheManager,
-        DirectoryList $directoryList
+        protected Composer $composer,
+        protected ComposerRepository $repository,
+        protected Process $process,
+        protected State $appState,
+        protected MaintenanceMode $maintenanceMode,
+        protected CleanupFiles $cleanupFiles,
+        protected CacheManager $cacheManager,
+        protected DirectoryList $directoryList
     ) {
-        $this->directoryList = $directoryList;
-        $this->composer = $composer;
-        $this->repository = $repository;
-        $this->process = $process;
-        $this->appState = $appState;
-        $this->maintenanceMode = $maintenanceMode;
-        $this->cleanupFiles = $cleanupFiles;
-        $this->cacheManager = $cacheManager;
         parent::__construct();
     }
 

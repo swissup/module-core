@@ -10,18 +10,8 @@ class CopyMediaDir
 {
     use LoggerAware;
 
-    /**
-     * @var \Magento\Framework\Filesystem
-     */
-    private $filesystem;
-
-    /**
-     *
-     * @param \Magento\Framework\Filesystem $filesystem
-     */
-    public function __construct(\Magento\Framework\Filesystem $filesystem)
+    public function __construct(private \Magento\Framework\Filesystem $filesystem)
     {
-        $this->filesystem = $filesystem;
     }
 
     /**

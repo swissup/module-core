@@ -11,11 +11,8 @@ use Symfony\Component\Console\Question\Question;
 
 class ChannelEnableCommand extends Command
 {
-    private ComposerRepository $repository;
-
-    public function __construct(ComposerRepository $repository)
+    public function __construct(private ComposerRepository $repository)
     {
-        $this->repository = $repository;
         parent::__construct();
     }
 

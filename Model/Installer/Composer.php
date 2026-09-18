@@ -15,15 +15,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Composer
 {
-    private ComposerJsonFinder $composerJsonFinder;
-    private Process $process;
-
     public function __construct(
-        ComposerJsonFinder $composerJsonFinder,
-        Process $process
+        private ComposerJsonFinder $composerJsonFinder,
+        private Process $process
     ) {
-        $this->composerJsonFinder = $composerJsonFinder;
-        $this->process = $process;
     }
 
     /**

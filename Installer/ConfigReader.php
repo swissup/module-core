@@ -24,50 +24,13 @@ class ConfigReader
      */
     protected $currentPath;
 
-    /**
-     * @var ComponentRegistrar
-     */
-    protected $componentRegistrar;
-
-    /**
-     * @var ReadFactory
-     */
-    protected $readDirFactory;
-
-    /**
-     * @var Manager
-     */
-    protected $moduleManager;
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
-     * @var ConfigFactory
-     */
-    protected $configFactory;
-
-    /**
-     * @param ComponentRegistrar $componentRegistrar
-     * @param ReadFactory $readDirFactory
-     * @param Manager $moduleManager
-     * @param ObjectManagerInterface $objectManager
-     * @param ConfigFactory $configFactory
-     */
     public function __construct(
-        ComponentRegistrar $componentRegistrar,
-        ReadFactory $readDirFactory,
-        Manager $moduleManager,
-        ObjectManagerInterface $objectManager,
-        ConfigFactory $configFactory
+        protected ComponentRegistrar $componentRegistrar,
+        protected ReadFactory $readDirFactory,
+        protected Manager $moduleManager,
+        protected ObjectManagerInterface $objectManager,
+        protected ConfigFactory $configFactory
     ) {
-        $this->componentRegistrar = $componentRegistrar;
-        $this->readDirFactory = $readDirFactory;
-        $this->moduleManager = $moduleManager;
-        $this->objectManager = $objectManager;
-        $this->configFactory = $configFactory;
     }
 
     /**

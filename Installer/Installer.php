@@ -13,52 +13,15 @@ class Installer
      */
     private $data;
 
-    /**
-     * @var \Magento\Framework\App\Cache\Manager
-     */
-    private $cache;
-
-    /**
-     * @var \Magento\Framework\App\State
-     */
-    private $appState;
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var ConfigReader
-     */
-    private $configReader;
-
-    /**
-     * @var RequestFactory
-     */
-    private $requestFactory;
-
     private $runOnlyIfRequired;
 
-    /**
-     * @param \Magento\Framework\App\Cache\Manager $cache
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param ConfigReader $configReader
-     * @param RequestFactory $requestFactory
-     */
     public function __construct(
-        \Magento\Framework\App\Cache\Manager $cache,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        ConfigReader $configReader,
-        RequestFactory $requestFactory
+        private \Magento\Framework\App\Cache\Manager $cache,
+        private \Magento\Framework\App\State $appState,
+        private \Magento\Framework\ObjectManagerInterface $objectManager,
+        private ConfigReader $configReader,
+        private RequestFactory $requestFactory
     ) {
-        $this->cache = $cache;
-        $this->appState = $appState;
-        $this->objectManager = $objectManager;
-        $this->configReader = $configReader;
-        $this->requestFactory = $requestFactory;
     }
 
     public function setRunOnlyIfRequired($flag)
