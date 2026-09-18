@@ -86,7 +86,7 @@ class ModuleListingDataProvider extends DataProvider
                     break;
                 }
 
-                $field = $sortOrder->getField();
+                $field = (string) $sortOrder->getField();
                 $result = $this->normalize($field, $a[$field] ?? null)
                     <=> $this->normalize($field, $b[$field] ?? null);
 
