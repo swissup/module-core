@@ -2,17 +2,21 @@
 
 namespace Swissup\Core\Console\Command\Installer;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class PackageInstallCommand extends Command
 {
     const INPUT_KEY_STORE = 'store';
+    const INPUT_KEY_NO_DOWNLOAD = 'no-download';
 
     /**
      * @var InputInterface
@@ -55,24 +59,56 @@ class PackageInstallCommand extends Command
     protected $installer;
 
     /**
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface
+     */
+    protected $componentRegistrar;
+
+    /**
+     * @var \Magento\Theme\Model\Theme\ThemePackageInfo
+     */
+    protected $themePackageInfo;
+
+    /**
+     * @var \Swissup\Core\Helper\Component
+     */
+    protected $componentHelper;
+
+    /**
+     * @var \Swissup\Core\Model\Installer\Process
+     */
+    protected $process;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Symfony\Component\Console\Question\QuestionFactory $questionFactory
      * @param \Symfony\Component\Console\Question\ChoiceQuestionFactory $choiceQuestionFactory
      * @param \Symfony\Component\Console\Helper\QuestionHelper $questionHelper
      * @param \Swissup\Core\Installer\Installer $installer
+     * @param \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar
+     * @param \Magento\Theme\Model\Theme\ThemePackageInfo $themePackageInfo
+     * @param \Swissup\Core\Helper\Component $componentHelper
+     * @param \Swissup\Core\Model\Installer\Process $process
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Symfony\Component\Console\Question\QuestionFactory $questionFactory,
         \Symfony\Component\Console\Question\ChoiceQuestionFactory $choiceQuestionFactory,
         \Symfony\Component\Console\Helper\QuestionHelper $questionHelper,
-        \Swissup\Core\Installer\Installer $installer
+        \Swissup\Core\Installer\Installer $installer,
+        \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar,
+        \Magento\Theme\Model\Theme\ThemePackageInfo $themePackageInfo,
+        \Swissup\Core\Helper\Component $componentHelper,
+        \Swissup\Core\Model\Installer\Process $process
     ) {
         $this->storeManager = $storeManager;
         $this->questionFactory = $questionFactory;
         $this->choiceQuestionFactory = $choiceQuestionFactory;
         $this->questionHelper = $questionHelper;
         $this->installer = $installer;
+        $this->componentRegistrar = $componentRegistrar;
+        $this->themePackageInfo = $themePackageInfo;
+        $this->componentHelper = $componentHelper;
+        $this->process = $process;
 
         parent::__construct();
     }
@@ -122,6 +158,12 @@ class PackageInstallCommand extends Command
             null,
             InputOption::VALUE_NONE,
             'Show available commands'
+        );
+        $this->addOption(
+            self::INPUT_KEY_NO_DOWNLOAD,
+            null,
+            InputOption::VALUE_NONE,
+            'Do not offer to download the packages missing in the codebase'
         );
 
         parent::configure();
@@ -183,6 +225,12 @@ class PackageInstallCommand extends Command
         $packages = $this->getPackages();
 
         if (!$this->installer->hasInstaller($packages)) {
+            $missing = $this->getMissingPackages($packages);
+
+            if ($missing && $this->confirmDownload($missing)) {
+                return $this->download($missing);
+            }
+
             $output->writeln('<error>Installer file is not found.</error>');
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
@@ -226,6 +274,98 @@ class PackageInstallCommand extends Command
         $output->writeln('<info>Done.</info>');
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Packages that are not registered in the codebase as a module or a theme
+     *
+     * @param array $packages
+     * @return array
+     */
+    private function getMissingPackages(array $packages)
+    {
+        if ($this->input->getOption(self::INPUT_KEY_NO_DOWNLOAD)) {
+            return [];
+        }
+
+        return array_filter($packages, function ($package) {
+            $moduleName = $this->componentHelper->convertPackageNameToModuleName($package);
+
+            return !$this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName)
+                && !$this->themePackageInfo->getFullThemePath($package);
+        });
+    }
+
+    /**
+     * @param array $packages
+     * @return boolean
+     */
+    private function confirmDownload(array $packages)
+    {
+        if (!$this->input->isInteractive()) {
+            return false;
+        }
+
+        $question = new ConfirmationQuestion(
+            sprintf(
+                '<comment>Package(s) are not downloaded yet: %s</comment> Download and run installer? [Y/n] ',
+                implode(' ', $packages)
+            ),
+            true
+        );
+
+        return $this->questionHelper->ask($this->input, $this->output, $question);
+    }
+
+    /**
+     * Downloaded code is not registered in the running process, so the
+     * installer is started again in a child process.
+     *
+     * @param array $packages
+     * @return int
+     */
+    private function download(array $packages)
+    {
+        $arrayInput = new ArrayInput([
+            PackageAbstractCommand::INPUT_ARGUMENT_PACKAGES => array_values($packages),
+        ]);
+        $arrayInput->setInteractive($this->input->isInteractive());
+
+        $code = $this->getApplication()
+            ->find('swissup:package:require')
+            ->run($arrayInput, $this->output);
+
+        if ($code !== \Magento\Framework\Console\Cli::RETURN_SUCCESS) {
+            return $code;
+        }
+
+        return $this->process->run(
+            $this->getRerunCommand(),
+            $this->output,
+            $this->input->isInteractive()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    private function getRerunCommand()
+    {
+        $command = array_merge(
+            [BP . '/bin/magento', $this->getName()],
+            $this->getArguments(),
+            ['--' . self::INPUT_KEY_NO_DOWNLOAD]
+        );
+
+        foreach ($this->input->getOption(self::INPUT_KEY_STORE) as $store) {
+            $command[] = '--' . self::INPUT_KEY_STORE . '=' . $store;
+        }
+
+        if ($this->input->getOption('commands')) {
+            $command[] = '--commands';
+        }
+
+        return $command;
     }
 
     private function getStoreIds()
