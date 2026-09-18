@@ -23,7 +23,7 @@ class AuthAddCommand extends Command
     protected function configure()
     {
         $this->setName('swissup:auth:add')
-            ->setDescription('Add access key')
+            ->setDescription('Add access key to use swissup packages repository')
             ->addArgument(self::INPUT_ARGUMENT_KEY, InputArgument::REQUIRED, 'Access key');
         parent::configure();
     }

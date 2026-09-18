@@ -23,7 +23,7 @@ class RepoEnableCommand extends Command
     {
         $this->setName('swissup:repo:enable')
             ->setAliases(['swissup:channel:enable'])
-            ->setDescription('Add swissuplabs repository to composer.json file');
+            ->setDescription('Add swissup packages repository to composer.json file');
         parent::configure();
     }
 

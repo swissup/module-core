@@ -21,7 +21,7 @@ class RepoDisableCommand extends Command
     {
         $this->setName('swissup:repo:disable')
             ->setAliases(['swissup:channel:disable'])
-            ->setDescription('Remove swissuplabs repository from composer.json file');
+            ->setDescription('Remove swissup packages repository from composer.json file');
         parent::configure();
     }
 
