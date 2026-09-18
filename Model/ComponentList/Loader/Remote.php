@@ -60,8 +60,6 @@ class Remote extends AbstractLoader
             'version' => 'latest_version',
             'type' => 'type',
             'time' => 'release_date',
-            'extra.marketplace.links.docs' => 'docs_link',
-            'extra.marketplace.links.changelog' => 'changelog_link',
             'extra.swissup.links.store' => 'link',
             'extra.swissup.links.docs' => 'docs_link',
             'extra.swissup.links.download' => 'download_link',
@@ -69,6 +67,8 @@ class Remote extends AbstractLoader
             'extra.swissup.links.marketplace' => 'marketplace_link',
             'extra.swissup.links.identity_key' => 'identity_key_link',
             'extra.swissup.purchase_code' => 'purchase_code',
+            'extra.marketplace.links.docs' => 'docs_link',
+            'extra.marketplace.links.changelog' => 'changelog_link',
         ];
     }
 
