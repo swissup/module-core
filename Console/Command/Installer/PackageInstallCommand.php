@@ -198,12 +198,11 @@ class PackageInstallCommand extends Command
             }
         }
 
-        $this->installer
-            ->setLogger($this->logger)
-            ->run($packages, array_merge($formData, [
-                'store_id' => $storeIds,
-                'packages' => $packages,
-            ]));
+        $this->installer->setLogger($this->logger);
+        $this->installer->run($packages, array_merge($formData, [
+            'store_id' => $storeIds,
+            'packages' => $packages,
+        ]));
 
         $output->writeln('<info>Done.</info>');
 
