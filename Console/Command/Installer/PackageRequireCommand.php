@@ -11,8 +11,8 @@ class PackageRequireCommand extends PackageAbstractCommand
 {
     protected function configure()
     {
-        $this->setName('swissup:require')
-            ->setDescription('Download swissup package(s) using composer and run setup:upgrade')
+        $this->setName('swissup:package:require')
+            ->setDescription('Download SwissupLabs package(s) using composer and run setup:upgrade')
             ->addArgument(
                 self::INPUT_ARGUMENT_PACKAGES,
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,

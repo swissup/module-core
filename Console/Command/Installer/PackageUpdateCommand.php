@@ -13,8 +13,8 @@ class PackageUpdateCommand extends PackageAbstractCommand
 
     protected function configure()
     {
-        $this->setName('swissup:update')
-            ->setDescription('Update swissup packages using composer and run setup:upgrade')
+        $this->setName('swissup:package:update')
+            ->setDescription('Update SwissupLabs packages using composer and run setup:upgrade')
             ->addOption(
                 self::INPUT_OPTION_DRY_RUN,
                 null,

@@ -14,19 +14,19 @@ bin/magento setup:upgrade
 
 Aavailable commands
 
-Command                                 | Description
-----------------------------------------|---------------------------------------
-`bin/magento swissup:repo:enable`       | Add repo to composer.json file
-`bin/magento swissup:repo:disable`      | Remove repo from composer.json file
-**Authorization**                       |
-`bin/magento swissup:auth:add {key}`    | Add auth key
-`bin/magento swissup:auth:remove {key}` | Remove auth key
-`bin/magento swissup:auth:show`         | Display auth keys info
-**Packages**                            |
-`bin/magento swissup:require {package}` | Download package
-`bin/magento swissup:install {package}` | Run installer for downloaded package
-`bin/magento swissup:update`            | Update `swissup/*` packages
-`bin/magento swissup:remove {package}`  | Remove package
+Command                                         | Description
+------------------------------------------------|---------------------------------------
+`bin/magento swissup:channel:enable`            | Add SwissupLabs repository to composer.json file
+`bin/magento swissup:channel:disable`           | Remove SwissupLabs repository from composer.json file
+**Authorization**                               |
+`bin/magento swissup:auth:add {key}`            | Add SwissupLabs access key
+`bin/magento swissup:auth:remove {key}`         | Remove SwissupLabs access key
+`bin/magento swissup:auth:show`                 | Display SwissupLabs access keys currently in use
+**Packages**                                    |
+`bin/magento swissup:package:require {package}` | Download SwissupLabs package(s) using composer and run setup:upgrade
+`bin/magento swissup:package:install {package}` | Run installer for downloaded package
+`bin/magento swissup:package:update`            | Update SwissupLabs package(s) using composer and run setup:upgrade
+`bin/magento swissup:package:remove {package}`  | Remove SwissupLabs package(s) using composer and run setup:upgrade
 
 ## Popup Message Manager
 

@@ -124,7 +124,7 @@ abstract class PackageAbstractCommand extends Command
             }
             $message = 'Access key is not found.';
         } else {
-            $message = 'Swissuplabs repository is not enabled.';
+            $message = 'SwissupLabs repository is not enabled.';
         }
 
         if (!$input->isInteractive()) {

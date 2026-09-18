@@ -11,8 +11,8 @@ class PackageRemoveCommand extends PackageAbstractCommand
 {
     protected function configure()
     {
-        $this->setName('swissup:remove')
-            ->setDescription('Remove swissup package(s) using composer and run setup:upgrade')
+        $this->setName('swissup:package:remove')
+            ->setDescription('Remove SwissupLabs package(s) using composer and run setup:upgrade')
             ->addArgument(
                 self::INPUT_ARGUMENT_PACKAGES,
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,
