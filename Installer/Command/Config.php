@@ -5,11 +5,11 @@ namespace Swissup\Core\Installer\Command;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Swissup\Core\Installer\Request;
-use Swissup\Core\Installer\LoggerAware;
+use Psr\Log\LoggerAwareTrait;
 
 class Config
 {
-    use LoggerAware;
+    use LoggerAwareTrait;
 
     public function __construct(
         private \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,

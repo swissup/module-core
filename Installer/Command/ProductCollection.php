@@ -3,11 +3,11 @@
 namespace Swissup\Core\Installer\Command;
 
 use Swissup\Core\Installer\Request;
-use Swissup\Core\Installer\LoggerAware;
+use Psr\Log\LoggerAwareTrait;
 
 class ProductCollection
 {
-    use LoggerAware;
+    use LoggerAwareTrait;
 
     public function __construct(
         private \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,

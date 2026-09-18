@@ -4,11 +4,11 @@ namespace Swissup\Core\Installer\Command;
 
 use Magento\Store\Model\Store;
 use Swissup\Core\Installer\Request;
-use Swissup\Core\Installer\LoggerAware;
+use Psr\Log\LoggerAwareTrait;
 
 class CategoryUpdate
 {
-    use LoggerAware;
+    use LoggerAwareTrait;
 
     public function __construct(
         private \Swissup\Core\Installer\Helper\Collection $collectionHelper

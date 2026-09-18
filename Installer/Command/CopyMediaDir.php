@@ -4,11 +4,11 @@ namespace Swissup\Core\Installer\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Swissup\Core\Installer\Request;
-use Swissup\Core\Installer\LoggerAware;
+use Psr\Log\LoggerAwareTrait;
 
 class CopyMediaDir
 {
-    use LoggerAware;
+    use LoggerAwareTrait;
 
     public function __construct(private \Magento\Framework\Filesystem $filesystem)
     {

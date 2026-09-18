@@ -4,11 +4,11 @@ namespace Swissup\Core\Installer\Command;
 
 use Magento\Widget\Model\Widget\Instance;
 use Swissup\Core\Installer\Request;
-use Swissup\Core\Installer\LoggerAware;
+use Psr\Log\LoggerAwareTrait;
 
 class Widget
 {
-    use LoggerAware;
+    use LoggerAwareTrait;
 
     public function __construct(
         private \Magento\Store\Model\StoreManagerInterface $storeManager,

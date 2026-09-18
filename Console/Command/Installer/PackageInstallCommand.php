@@ -3,6 +3,7 @@
 namespace Swissup\Core\Console\Command\Installer;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -19,11 +20,8 @@ class PackageInstallCommand extends Command
     const INPUT_KEY_NO_DOWNLOAD = 'no-download';
 
     protected InputInterface $input;
-
     protected OutputInterface $output;
-
-    /** @var \Psr\Log\LoggerInterface */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(
         protected \Magento\Store\Model\StoreManagerInterface $storeManager,

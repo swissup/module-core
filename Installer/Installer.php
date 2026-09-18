@@ -2,9 +2,13 @@
 
 namespace Swissup\Core\Installer;
 
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+
 class Installer
 {
-    use LoggerAware;
+    use LoggerAwareTrait;
 
     /**
      * @var array
@@ -142,6 +146,15 @@ class Installer
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $package
+     * @return array
+     */
+    private function getLogger(): LoggerInterface
+    {
+        return $this->logger ??= new NullLogger();
     }
 
     /**
