@@ -7,8 +7,8 @@
                 <item name="moduleListCommand" xsi:type="object">Swissup\Core\Console\Command\ModuleListCommand</item>
                 <item name="themeCreateCommand" xsi:type="object">Swissup\Core\Console\Command\ThemeCreateCommand</item>
                 <item name="storeCreateCommand" xsi:type="object">Swissup\Core\Console\Command\StoreCreateCommand</item>
-                <item name="repoEnableCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\RepoEnableCommand</item>
-                <item name="repoDisableCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\RepoDisableCommand</item>
+                <item name="channelEnableCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\ChannelEnableCommand</item>
+                <item name="channelDisableCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\ChannelDisableCommand</item>
                 <item name="packageRequireCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageRequireCommand</item>
                 <item name="packageUpdateCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageUpdateCommand</item>
                 <item name="packageRemoveCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageRemoveCommand</item>

@@ -7,7 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RepoDisableCommand extends Command
+class ChannelDisableCommand extends Command
 {
     private ComposerRepository $repository;
 
@@ -19,9 +19,8 @@ class RepoDisableCommand extends Command
 
     protected function configure()
     {
-        $this->setName('swissup:repo:disable')
-            ->setAliases(['swissup:channel:disable'])
-            ->setDescription('Remove swissup packages repository from composer.json file');
+        $this->setName('swissup:channel:disable')
+            ->setDescription('Remove SwissupLabs repository from composer.json file');
         parent::configure();
     }
 

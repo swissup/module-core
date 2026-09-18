@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
-class RepoEnableCommand extends Command
+class ChannelEnableCommand extends Command
 {
     private ComposerRepository $repository;
 
@@ -21,9 +21,8 @@ class RepoEnableCommand extends Command
 
     protected function configure()
     {
-        $this->setName('swissup:repo:enable')
-            ->setAliases(['swissup:channel:enable'])
-            ->setDescription('Add swissup packages repository to composer.json file');
+        $this->setName('swissup:channel:enable')
+            ->setDescription('Add SwissupLabs repository to composer.json file');
         parent::configure();
     }
 

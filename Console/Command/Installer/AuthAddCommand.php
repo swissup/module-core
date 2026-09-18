@@ -23,7 +23,7 @@ class AuthAddCommand extends Command
     protected function configure()
     {
         $this->setName('swissup:auth:add')
-            ->setDescription('Add access key to use swissup packages repository')
+            ->setDescription('Add SwissupLabs access key')
             ->addArgument(self::INPUT_ARGUMENT_KEY, InputArgument::REQUIRED, 'Access key');
         parent::configure();
     }
@@ -46,7 +46,7 @@ class AuthAddCommand extends Command
 
             if (!$this->repository->isEnabled()) {
                 $output->writeln(
-                    '<comment>Swissuplabs repository is not enabled. Run bin/magento swissup:repo:enable</comment>'
+                    '<comment>SwissupLabs repository is not enabled. Run bin/magento swissup:repo:enable</comment>'
                 );
             }
         } catch (\Exception $e) {

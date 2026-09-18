@@ -21,7 +21,7 @@ class AuthShowCommand extends Command
     protected function configure()
     {
         $this->setName('swissup:auth:show')
-            ->setDescription('Display access keys used to download swissup packages');
+            ->setDescription('Display SwissupLabs access keys currently in use');
         parent::configure();
     }
 
