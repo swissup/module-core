@@ -11,6 +11,7 @@
                 <item name="channelDisableCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\ChannelDisableCommand</item>
                 <item name="packageRequireCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageRequireCommand</item>
                 <item name="packageUpdateCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageUpdateCommand</item>
+                <item name="packageInstallCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageInstallCommand</item>
                 <item name="packageRemoveCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageRemoveCommand</item>
                 <item name="authShowCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthShowCommand</item>
                 <item name="authAddCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthAddCommand</item>
