@@ -17,10 +17,6 @@ class Widget
     ) {
     }
 
-    /**
-     * @param Request $request
-     * @return void
-     */
     public function execute(Request $request)
     {
         $this->logger->info('Widgets: Backup existing and create new widgets');

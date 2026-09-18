@@ -18,10 +18,6 @@ class CmsPage
     ) {
     }
 
-    /**
-     * @param Request $request
-     * @return void
-     */
     public function execute(Request $request)
     {
         $idsToInstall = array_flip($request->getExtraOptions());

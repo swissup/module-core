@@ -18,10 +18,6 @@ class ProductCollection
     ) {
     }
 
-    /**
-     * @param Request $request
-     * @return void
-     */
     public function execute(Request $request)
     {
         $this->logger->info('Product Collection: Prepare collections');

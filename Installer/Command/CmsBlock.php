@@ -17,10 +17,6 @@ class CmsBlock
     ) {
     }
 
-    /**
-     * @param Request $request
-     * @return void
-     */
     public function execute(Request $request)
     {
         $this->logger->info('Cms Blocks: Backup existing and create new blocks');

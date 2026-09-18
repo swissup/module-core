@@ -18,19 +18,11 @@ class PackageInstallCommand extends Command
     const INPUT_KEY_STORE = 'store';
     const INPUT_KEY_NO_DOWNLOAD = 'no-download';
 
-    /**
-     * @var InputInterface
-     */
-    protected $input;
+    protected InputInterface $input;
 
-    /**
-     * @var OutputInterface
-     */
-    protected $output;
+    protected OutputInterface $output;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
     public function __construct(

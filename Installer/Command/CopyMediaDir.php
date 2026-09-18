@@ -14,10 +14,6 @@ class CopyMediaDir
     {
     }
 
-    /**
-     * @param Request $request
-     * @return void
-     */
     public function execute(Request $request)
     {
         $this->logger->info('Resources: Copy media files');
