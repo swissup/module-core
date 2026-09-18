@@ -46,7 +46,7 @@ class AuthAddCommand extends Command
 
             if (!$this->repository->isEnabled()) {
                 $output->writeln(
-                    '<comment>SwissupLabs repository is not enabled. Run bin/magento swissup:repo:enable</comment>'
+                    '<comment>SwissupLabs repository is not enabled. Run bin/magento swissup:channel:enable</comment>'
                 );
             }
         } catch (\Exception $e) {

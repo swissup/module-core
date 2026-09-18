@@ -94,7 +94,7 @@ class PackageRequireCommand extends PackageAbstractCommand
         $credentials = $this->repository->getCredentials();
         if (!$credentials['username'] || !$credentials['password']) {
             throw new \RuntimeException(
-                'Access key is not found. Run bin/magento swissup:repo:enable first.'
+                'Access key is not found. Run bin/magento swissup:channel:enable first.'
             );
         }
 

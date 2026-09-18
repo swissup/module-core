@@ -108,7 +108,7 @@ abstract class PackageAbstractCommand extends Command
     }
 
     /**
-     * Offer to run swissup:repo:enable when repository or access key is missing
+     * Offer to run swissup:channel:enable when repository or access key is missing
      *
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -128,11 +128,11 @@ abstract class PackageAbstractCommand extends Command
         }
 
         if (!$input->isInteractive()) {
-            throw new \RuntimeException($message . ' Run bin/magento swissup:repo:enable first.');
+            throw new \RuntimeException($message . ' Run bin/magento swissup:channel:enable first.');
         }
 
         $question = new ConfirmationQuestion(
-            sprintf('<comment>%s</comment> Run swissup:repo:enable now? [Y/n] ', $message),
+            sprintf('<comment>%s</comment> Run swissup:channel:enable now? [Y/n] ', $message),
             true
         );
         if (!$this->getHelper('question')->ask($input, $output, $question)) {
@@ -140,7 +140,7 @@ abstract class PackageAbstractCommand extends Command
         }
 
         return $this->getApplication()
-            ->find('swissup:repo:enable')
+            ->find('swissup:channel:enable')
             ->run(new ArrayInput([]), $output) === Cli::RETURN_SUCCESS;
     }
 

@@ -303,9 +303,6 @@ class ComposerRepository
      */
     private function fetch($url, $username, $password)
     {
-        (new \Monolog\Logger('custom'))
-            ->pushHandler((new \Monolog\Handler\StreamHandler(BP . '/var/log/custom.log'))->setFormatter(new \Monolog\Formatter\LineFormatter(null, null, true, true)))
-            ->debug(print_r(__METHOD__, true));
         $client = $this->curlFactory->create();
         $client->setOption(CURLOPT_FOLLOWLOCATION, true);
         $client->setOption(CURLOPT_MAXREDIRS, 5);
