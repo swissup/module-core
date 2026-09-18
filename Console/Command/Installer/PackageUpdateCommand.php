@@ -2,19 +2,24 @@
 namespace Swissup\Core\Console\Command\Installer;
 
 use Magento\Framework\Console\Cli;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PackageUpdateCommand extends PackageAbstractCommand
 {
-    const PACKAGES_PATTERN = 'swissup/*';
     const INPUT_OPTION_WITH_DEPENDENCIES = 'with-dependencies';
 
     protected function configure()
     {
         $this->setName('swissup:package:update')
             ->setDescription('Update SwissupLabs packages using composer and run setup:upgrade')
+            ->addArgument(
+                self::INPUT_ARGUMENT_PACKAGES,
+                InputArgument::IS_ARRAY,
+                'Package name(s): swissup/firecheckout. All swissup packages are updated when omitted'
+            )
             ->addOption(
                 self::INPUT_OPTION_DRY_RUN,
                 null,
@@ -33,15 +38,21 @@ class PackageUpdateCommand extends PackageAbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $isDryRun = (bool) $input->getOption(self::INPUT_OPTION_DRY_RUN);
-        $args = $this->getUpdateArgs(
-            (bool) $input->getOption(self::INPUT_OPTION_WITH_DEPENDENCIES)
-        );
 
         try {
-            if (!$this->getInstalledPackages()) {
+            $packages = $this->validatePackages(
+                $input->getArgument(self::INPUT_ARGUMENT_PACKAGES)
+            );
+
+            if (!$packages) {
                 $output->writeln('<comment>There are no swissup packages to update</comment>');
                 return Cli::RETURN_SUCCESS;
             }
+
+            $args = $this->getUpdateArgs(
+                $packages,
+                (bool) $input->getOption(self::INPUT_OPTION_WITH_DEPENDENCIES)
+            );
 
             $this->validate([
                 'composer ' . implode(' ', $args),
@@ -71,16 +82,13 @@ class PackageUpdateCommand extends PackageAbstractCommand
      * --with-dependencies would also update the whole dependency tree of the
      * swissup packages (symfony, guzzle, etc).
      *
+     * @param array $packages
      * @param boolean $withDependencies
      * @return array
      */
-    private function getUpdateArgs($withDependencies)
+    private function getUpdateArgs(array $packages, $withDependencies)
     {
-        $args = [
-            'update',
-            self::PACKAGES_PATTERN,
-            '--no-progress',
-        ];
+        $args = array_merge(['update'], $packages, ['--no-progress']);
 
         if ($withDependencies) {
             $args[] = '--with-dependencies';
@@ -94,16 +102,55 @@ class PackageUpdateCommand extends PackageAbstractCommand
     }
 
     /**
+     * Only swissup packages listed in composer.json can be updated.
+     * Version constraint is dropped to keep composer.json untouched.
+     *
+     * @param array $packages
+     * @return array Package names, or the swissup pattern when nothing is requested
+     * @throws \RuntimeException
+     */
+    private function validatePackages(array $packages)
+    {
+        $installed = array_change_key_case($this->getInstalledPackages());
+
+        if (!$packages) {
+            return $installed ? ['swissup/*'] : [];
+        }
+
+        $names = [];
+
+        foreach ($packages as $package) {
+            $name = $this->getPackageName($package);
+
+            if (!str_starts_with($name, 'swissup/')) {
+                throw new \RuntimeException(sprintf(
+                    'Only swissup packages can be updated with this command. Run composer update %s instead.',
+                    $name
+                ));
+            }
+
+            if (!isset($installed[$name])) {
+                throw new \RuntimeException(sprintf(
+                    'Package "%s" is not required in composer.json.',
+                    $name
+                ));
+            }
+
+            $names[] = $name;
+        }
+
+        return $names;
+    }
+
+    /**
      * @return array Package name => version constraint
      */
     private function getInstalledPackages()
     {
-        $prefix = rtrim(self::PACKAGES_PATTERN, '*');
-
         return array_filter(
             $this->composer->getRequirements(),
-            function ($name) use ($prefix) {
-                return strpos(strtolower($name), $prefix) === 0;
+            function ($name) {
+                return str_starts_with(strtolower($name), 'swissup/');
             },
             ARRAY_FILTER_USE_KEY
         );

@@ -94,7 +94,7 @@ class PackageRemoveCommand extends PackageAbstractCommand
         foreach ($packages as $package) {
             $name = $this->getPackageName($package);
 
-            if (strpos($name, 'swissup/') !== 0) {
+            if (!str_starts_with($name, 'swissup/')) {
                 throw new \RuntimeException(sprintf(
                     'Only swissup packages can be removed with this command. Run composer remove %s instead.',
                     $name

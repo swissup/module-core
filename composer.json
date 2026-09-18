@@ -1,9 +1,12 @@
 {
     "name": "swissup/module-core",
-    "description": "Swissup core module. It's purpose is to add Swissup menu and config entries",
+    "description": "Swissup core module. Your starting point to use SwissupLabs packages.",
     "type": "magento2-module",
     "version": "1.13.1",
     "license": "OSL-3.0",
+    "require": {
+        "php": "^8.0"
+    },
     "autoload": {
         "files": [ "registration.php" ],
         "psr-4": {
