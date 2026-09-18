@@ -10,9 +10,6 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Swissup\Core\Model\ComponentList\Loader;
 
-/**
- * Swissup modules grid data, taken from the component list instead of the database
- */
 class ModuleListingDataProvider extends DataProvider
 {
     const SEARCH_FIELDS = ['code', 'name'];
