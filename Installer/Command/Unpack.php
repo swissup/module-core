@@ -5,7 +5,7 @@ namespace Swissup\Core\Installer\Command;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Swissup\Core\Installer\Request;
-use Swissup\Core\Model\Traits\LoggerAware;
+use Swissup\Core\Installer\LoggerAware;
 
 class Unpack
 {

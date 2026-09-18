@@ -4,7 +4,7 @@ namespace Swissup\Core\Installer\Command;
 
 use Magento\Store\Model\Store;
 use Swissup\Core\Installer\Request;
-use Swissup\Core\Model\Traits\LoggerAware;
+use Swissup\Core\Installer\LoggerAware;
 
 class CategoryUpdate
 {

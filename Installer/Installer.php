@@ -2,8 +2,6 @@
 
 namespace Swissup\Core\Installer;
 
-use Swissup\Core\Model\Traits\LoggerAware;
-
 class Installer
 {
     use LoggerAware;

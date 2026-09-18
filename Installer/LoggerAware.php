@@ -1,6 +1,6 @@
 <?php
 
-namespace Swissup\Core\Model\Traits;
+namespace Swissup\Core\Installer;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
