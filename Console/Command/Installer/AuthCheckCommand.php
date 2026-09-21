@@ -8,6 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class AuthCheckCommand extends Command
 {
@@ -56,12 +57,46 @@ class AuthCheckCommand extends Command
             }
 
             $table->render();
+
+            $this->cleanup($input, $output, $username, $keys);
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return Cli::RETURN_FAILURE;
         }
 
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Offer to drop the duplicates from the saved credentials
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @param string $username
+     * @param string[] $keys
+     * @return void
+     * @throws \RuntimeException
+     */
+    private function cleanup(InputInterface $input, OutputInterface $output, $username, array $keys)
+    {
+        $unique = array_unique($keys);
+        $duplicates = count($keys) - count($unique);
+
+        if (!$duplicates) {
+            return;
+        }
+
+        $question = new ConfirmationQuestion(
+            sprintf('%d duplicate key(s) found. Remove duplicates? [Y/n] ', $duplicates),
+            true
+        );
+
+        if (!$this->getHelper('question')->ask($input, $output, $question)) {
+            return;
+        }
+
+        $this->repository->saveCredentials($username, implode(' ', $unique));
+        $output->writeln('<info>Duplicate keys were removed</info>');
     }
 
     /**
