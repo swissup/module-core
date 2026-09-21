@@ -14,6 +14,7 @@
                 <item name="packageInstallCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageInstallCommand</item>
                 <item name="packageRemoveCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageRemoveCommand</item>
                 <item name="authShowCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthShowCommand</item>
+                <item name="authCheckCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthCheckCommand</item>
                 <item name="authAddCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthAddCommand</item>
                 <item name="authRemoveCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthRemoveCommand</item>
             </argument>

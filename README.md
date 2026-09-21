@@ -22,6 +22,7 @@ Command                                         | Description
 `bin/magento swissup:auth:add {key}`            | Add SwissupLabs access key
 `bin/magento swissup:auth:remove {key}`         | Remove SwissupLabs access key
 `bin/magento swissup:auth:show`                 | Display SwissupLabs access keys currently in use
+`bin/magento swissup:auth:check`                | Display SwissupLabs access keys currently in use with count of available packages per key
 **Packages**                                    |
 `bin/magento swissup:package:require {package}` | Download SwissupLabs package(s) using composer and run setup:upgrade
 `bin/magento swissup:package:install {package}` | Run installer for downloaded package

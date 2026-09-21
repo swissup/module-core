@@ -7,7 +7,9 @@ use Composer\Json\JsonManipulator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\HTTP\Client\CurlFactory;
+use Magento\Framework\HTTP\AsyncClient\Request;
+use Magento\Framework\HTTP\AsyncClient\Response;
+use Magento\Framework\HTTP\AsyncClientInterface;
 
 class ComposerRepository
 {
@@ -21,7 +23,7 @@ class ComposerRepository
     public function __construct(
         private ComposerJsonFinder $composerJsonFinder,
         private ScopeConfigInterface $scopeConfig,
-        private CurlFactory $curlFactory,
+        private AsyncClientInterface $asyncClient,
         private Composer $composer
     ) {
     }
@@ -271,38 +273,99 @@ class ComposerRepository
      */
     public function getPackages($username, $password)
     {
-        $response = $this->fetch(self::URL, $username, $password);
+        $packages = $this->getPackagesBatch($username, [$password])[$password];
 
-        // includes are relative to the repository base url
-        foreach (array_keys($response['includes'] ?? []) as $include) {
-            $url = dirname(self::URL) . '/' . ltrim($include, '/');
-            $response['packages'] = array_merge(
-                $response['packages'] ?? [],
-                $this->fetch($url, $username, $password)['packages'] ?? []
-            );
+        if ($packages instanceof \Exception) {
+            throw $packages;
         }
 
-        return $response['packages'] ?? [];
+        return $packages;
     }
 
     /**
-     * @param string $url
      * @param string $username
-     * @param string $password
+     * @param string[] $passwords
+     * @return array [password => array|\Exception]
+     */
+    public function getPackagesBatch($username, array $passwords)
+    {
+        $requests = [];
+        foreach ($passwords as $password) {
+            $requests[$password] = ['url' => self::URL, 'password' => $password];
+        }
+
+        $responses = $this->fetchAll($username, $requests);
+        $packages = [];
+        $includeRequests = [];
+
+        foreach ($responses as $password => $response) {
+            if ($response instanceof \Exception) {
+                $packages[$password] = $response;
+                continue;
+            }
+
+            $packages[$password] = $response['packages'] ?? [];
+            foreach (array_keys($response['includes'] ?? []) as $include) {
+                $includeRequests[] = [
+                    'url' => dirname(self::URL) . '/' . ltrim($include, '/'),
+                    'password' => $password,
+                ];
+            }
+        }
+
+        foreach ($this->fetchAll($username, $includeRequests) as $i => $response) {
+            $password = $includeRequests[$i]['password'];
+            $packages[$password] = $response instanceof \Exception
+                ? $response
+                : array_merge($packages[$password], $response['packages'] ?? []);
+        }
+
+        return $packages;
+    }
+
+    /**
+     * Send all the requests before reading any response, so that they are
+     * performed in parallel.
+     *
+     * @param string $username
+     * @param array $requests [id => ['url' => string, 'password' => string]]
+     * @return array [id => array|\Exception]
+     */
+    private function fetchAll($username, array $requests)
+    {
+        $deferred = [];
+        foreach ($requests as $id => $request) {
+            $deferred[$id] = $this->asyncClient->request(new Request(
+                $request['url'],
+                Request::METHOD_GET,
+                ['Authorization' => 'Basic ' . base64_encode($username . ':' . $request['password'])],
+                null
+            ));
+        }
+
+        $responses = [];
+        foreach ($deferred as $id => $response) {
+            try {
+                $responses[$id] = $this->parse($username, $requests[$id]['url'], $response->get());
+            } catch (\Exception $e) {
+                $responses[$id] = $e;
+            }
+        }
+
+        return $responses;
+    }
+
+    /**
+     * @param string $username
+     * @param string $url
+     * @param Response $response
      * @return array
      * @throws AuthenticationException
      * @throws \RuntimeException
      */
-    private function fetch($url, $username, $password)
+    private function parse($username, $url, Response $response)
     {
-        $client = $this->curlFactory->create();
-        $client->setOption(CURLOPT_FOLLOWLOCATION, true);
-        $client->setOption(CURLOPT_MAXREDIRS, 5);
-        $client->setTimeout(30);
-        $client->setCredentials($username, $password);
-        $client->get($url);
-
-        $status = $client->getStatus();
+        $status = $response->getStatusCode();
         if ($status === 401 || $status === 403) {
             throw new AuthenticationException(__(
                 'Access denied for "%1". Make sure the domain is activated and the key is correct.',
@@ -314,7 +377,7 @@ class ComposerRepository
             throw new \RuntimeException(sprintf('%s returned %s response code', $url, $status));
         }
 
-        $data = json_decode($client->getBody(), true);
+        $data = json_decode($response->getBody(), true);
         if (!is_array($data)) {
             throw new \RuntimeException(sprintf('%s returned malformed response', $url));
         }
