@@ -279,6 +279,7 @@ class PackageInstallCommand extends Command
         $command = array_merge(
             [BP . '/bin/magento', $this->getName()],
             $this->getArguments(),
+            // stop the child from downloading again if the package is still missing
             ['--' . self::INPUT_KEY_NO_DOWNLOAD]
         );
 
