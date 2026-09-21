@@ -4,6 +4,7 @@ namespace Swissup\Core\Console\Command\Installer;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -45,9 +46,10 @@ class PackageInstallCommand extends Command
     {
         $this->input = $input;
         $this->output = $output;
-        $this->logger = new ConsoleLogger($output);
-
-        $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
+        $this->logger = new ConsoleLogger($output, [
+            LogLevel::NOTICE => OutputInterface::VERBOSITY_NORMAL,
+            LogLevel::INFO => OutputInterface::VERBOSITY_NORMAL,
+        ]);
 
         if (!function_exists('exec') || !function_exists('shell_exec')) {
             if (method_exists(QuestionHelper::class, 'disableStty')) {
