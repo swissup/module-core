@@ -35,18 +35,24 @@ class AuthCheckCommand extends Command
                 return Cli::RETURN_SUCCESS;
             }
 
+            $username = $this->repository->getUsername();
             $latest = $this->remote->getComponentsInfo();
-            $packages = $this->repository->getPackagesBatch($this->repository->getUsername(), $keys);
+            $packages = $this->repository->getPackagesBatch($username, $keys);
 
             $table = new Table($output);
-            $table->setHeaders(['Provider', 'Key', 'Packages']);
+            $table->setHeaders(['Username', 'Key', 'Provider', 'Packages']);
 
-            foreach ($keys as $key) {
+            foreach ($keys as $i => $key) {
                 $summary = $packages[$key] instanceof \Exception
                     ? '<error>' . $packages[$key]->getMessage() . '</error>'
                     : $this->summarize($packages[$key], $latest);
 
-                $table->addRow([$this->repository->getKeyDomain($key) ?: '', $key, $summary]);
+                $table->addRow([
+                    $i ? '' : $username,
+                    $key,
+                    $this->repository->getKeyDomain($key) ?: '',
+                    $summary,
+                ]);
             }
 
             $table->render();
