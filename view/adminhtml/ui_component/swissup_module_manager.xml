@@ -103,11 +103,11 @@
             <argument name="data" xsi:type="array">
                 <item name="links" xsi:type="array">
                     <item name="docs" xsi:type="array">
-                        <item name="label" xsi:type="string">Read Documentation</item>
+                        <item name="label" xsi:type="string">Documentation</item>
                         <item name="key" xsi:type="string">docs_link</item>
                     </item>
                     <item name="changelog" xsi:type="array">
-                        <item name="label" xsi:type="string">Read Changelog</item>
+                        <item name="label" xsi:type="string">Changelog</item>
                         <item name="key" xsi:type="string">changelog_link</item>
                     </item>
                 </item>
