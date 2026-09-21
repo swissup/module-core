@@ -26,20 +26,20 @@ class ModuleCommand extends Command
 
     /**
      *
-     * @var \Swissup\Core\Model\ModuleFactory
+     * @var \Magento\Framework\Module\PackageInfo
      */
-    private $moduleFactory;
+    private $packageInfo;
 
     /**
      * Inject dependencies
      *
      * @param \Swissup\Core\Model\ComponentList\Loader $loader
-     * @param \Swissup\Core\Model\ModuleFactory $moduleFactory
+     * @param \Magento\Framework\Module\PackageInfo $packageInfo
      */
-    public function __construct(Loader $loader, \Swissup\Core\Model\ModuleFactory $moduleFactory)
+    public function __construct(Loader $loader, \Magento\Framework\Module\PackageInfo $packageInfo)
     {
         $this->loader = $loader;
-        $this->moduleFactory = $moduleFactory;
+        $this->packageInfo = $packageInfo;
         parent::__construct();
     }
 
@@ -145,15 +145,12 @@ class ModuleCommand extends Command
             }
         }
 
-        $moduleModel = $this->moduleFactory->create();
-        $moduleModel->load($moduleCode);
-
-        $identityKey = $moduleModel->getData('identity_key');
-        if (!empty($identityKey)) {
-            $rows[] = ["<info>Identity Key</info>", $identityKey];
+        try {
+            // array_filter to remove empty items caused by non-magento modules requirements
+            $depends = array_filter($this->packageInfo->getRequire($moduleCode));
+        } catch (\Exception $e) {
+            $depends = [];
         }
-
-        $depends = $moduleModel->getData('depends');
         if (!empty($depends)) {
             $rows[] = ["<info>Depends</info>", implode(' ', $depends)];
         }
