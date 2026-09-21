@@ -99,22 +99,26 @@ class ModuleCommand extends Command
 
         $items = $this->loader->getItems();
 
-        $codes = array_column($items, 'code', 'name');
-        $packages = array_keys($codes);
-        if (in_array('Swissup_' . $moduleCode, $codes)) {
-            $moduleCode = 'Swissup_' . $moduleCode;
-        } elseif (in_array('Swissup_' . ucfirst($moduleCode), $codes)) {
-            $moduleCode = 'Swissup_' . ucfirst($moduleCode);
-        } elseif (in_array('swissup/' . $moduleCode, $packages)) {
-            $moduleCode = 'swissup/' . $moduleCode;
-        } elseif (in_array('swissup/module-' . $moduleCode, $packages)) {
-            $moduleCode = 'swissup/module-' . $moduleCode;
+        // only the real components have a unique module code: a metapackage
+        // shares its code with the module it requires
+        $packages = array_column($this->loader->getModuleItems(), 'name', 'code');
+
+        $candidates = [
+            $packages[$moduleCode] ?? null,
+            $packages['Swissup_' . $moduleCode] ?? null,
+            $packages['Swissup_' . ucfirst($moduleCode)] ?? null,
+            $moduleCode,
+            'swissup/module-' . $moduleCode,
+            'swissup/' . $moduleCode,
+        ];
+
+        foreach ($candidates as $candidate) {
+            if ($candidate !== null && isset($items[$candidate])) {
+                $moduleCode = $candidate;
+                break;
+            }
         }
 
-        if (in_array($moduleCode, $packages)) {
-            $moduleCode = $codes[$moduleCode];
-        }
-        // $output->writeln($moduleName);
         if (!isset($items[$moduleCode])) {
             $output->writeln('<error>Package[Module] ' . $moduleCode .' doesn\'t exist</error>');
             $output->writeln('Run : <fg=yellow>php bin/magento swissup:module:list</>');

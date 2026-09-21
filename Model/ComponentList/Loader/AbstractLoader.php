@@ -57,13 +57,12 @@ abstract class AbstractLoader implements LoaderInterface
         }
 
         foreach ($components as $name => $config) {
-            $code = $this->componentHelper->convertPackageNameToModuleName(
-                $config['name']
-            );
+            $id = $config['name'];
+            $this->items[$id]['code'] = $this->componentHelper
+                ->convertPackageNameToModuleName($id);
 
-            $this->items[$code]['code'] = $code;
             foreach ($this->getMapping() as $source => $destination) {
-                if (!empty($this->items[$code][$destination])) {
+                if (!empty($this->items[$id][$destination])) {
                     continue;
                 }
 
@@ -78,7 +77,7 @@ abstract class AbstractLoader implements LoaderInterface
                 if (is_array($value)) {
                     $value = implode(',', $value);
                 }
-                $this->items[$code][$destination] = $value;
+                $this->items[$id][$destination] = $value;
             }
         }
         return $this->items;

@@ -108,7 +108,7 @@ class ModuleListCommand extends Command
             $this->loader->refresh();
         }
 
-        $items = $this->loader->getItems();
+        $items = $this->loader->getModuleItems();
         $output->writeln('<info>List of swissup modules</info> : ' . count($items));
 
         $rows = [];

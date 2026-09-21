@@ -92,12 +92,6 @@ class Remote extends AbstractLoader
                     return $carry;
                 }, $versions[0] ?? 0);
 
-                if (!empty($info[$latestVersion]['type']) &&
-                    $info[$latestVersion]['type'] === 'metapackage'
-                ) {
-                    continue;
-                }
-
                 $modules[$packageName] = $info[$latestVersion];
 
                 if (isset($info['dev-master']['extra']['swissup'])) {
@@ -106,22 +100,6 @@ class Remote extends AbstractLoader
                 }
             }
         }
-
-        $modules['swissup/subscription'] = [
-            'name'          => 'swissup/subscription',
-            'type'          => 'subscription-plan',
-            'description'   => 'SwissUpLabs Modules Subscription',
-            'version'       => '',
-            'extra' => [
-                'swissup' => [
-                    'links' => [
-                        'store' => 'https://swissuplabs.com',
-                        'download' => 'https://swissuplabs.com/subscription/customer/products/',
-                        'identity_key' => 'https://swissuplabs.com/license/customer/identity/'
-                    ]
-                ]
-            ]
-        ];
 
         return $modules;
     }

@@ -59,7 +59,7 @@ class ModuleListingDataProvider extends DataProvider
     public function getData()
     {
         $criteria = $this->getSearchCriteria();
-        $items = $this->loader->getItems();
+        $items = $this->loader->getModuleItems();
 
         foreach ($criteria->getFilterGroups() as $group) {
             foreach ($group->getFilters() as $filter) {
