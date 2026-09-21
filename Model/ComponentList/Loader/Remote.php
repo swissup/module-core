@@ -323,8 +323,8 @@ class Remote extends AbstractLoader
     /**
      * Get packages url from satis repository.
      *
-     * To do that we send a request to http://docs.swissuplabs.com/packages/packages.json,
-     * which returns actual packages list url: http://docs.swissuplabs.com/packages/include/all${sha1}.json
+     * To do that we send a request to https://swissup.github.io/packages-latest/packages.json,
+     * which returns actual packages list url: https://swissup.github.io/packages-latest/include/all${sha1}.json
      *
      * @return mixed
      */
@@ -362,7 +362,7 @@ class Remote extends AbstractLoader
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        // docs.swissuplabs.com/packages
+        // swissup.github.io/packages-latest
         return ($useHttps ? 'https://' : 'http://') . $url;
     }
 }
