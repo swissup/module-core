@@ -7,15 +7,13 @@ to Magento backend. It also provides a set of common tasks used by other modules
 
 ```bash
 composer require swissup/module-core
-bin/magento setup:upgrade
+bin/magento module:enable Swissup_Core
 ```
 
 ## Swissup Installer
 
-Available commands
-
 Command                                         | Description
-------------------------------------------------|---------------------------------------
+:-----------------------------------------------|:------------------------------
 `bin/magento swissup:channel:enable`            | Add SwissupLabs repository to composer.json file
 `bin/magento swissup:channel:disable`           | Remove SwissupLabs repository from composer.json file
 **Authorization**                               |
@@ -31,20 +29,18 @@ Command                                         | Description
 
 ## Popup Message Manager
 
-Popup message manager allows to show regular Magento messages with additional
-information in popup window.
+Popup message manager allows to show regular Magento message with additional
+information in modal popup.
 
-![Popup Message Example](/resources/docs/images/popup_message_example.gif)
+### Usage example
 
-**Usage example**
-
-Inject `\Swissup\Helper\PopupMessageManager` component into your controller
-action and use it instead of built-in `\Magento\Framework\Message\Manager`:
+Inject `\Swissup\Helper\PopupMessageManager` class and use it instead of
+built-in `\Magento\Framework\Message\Manager`:
 
 ```php
 $this->popupMessageManager->addError(
     __('Decoding failed: Syntax error'),
-    $popupText,
-    $popupTitle
+    'Popup text',
+    'Popup title'
 );
 ```
