@@ -17,10 +17,5 @@
                 <url>/license/validate</url>
             </license>
         </swissup_core>
-        <subscriptionchecker>
-            <ignore>
-                <swissup_core/>
-            </ignore>
-        </subscriptionchecker>
     </default>
 </config>
