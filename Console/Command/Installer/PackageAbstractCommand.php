@@ -14,6 +14,7 @@ use Swissup\Core\Installer\Process;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
@@ -21,6 +22,7 @@ abstract class PackageAbstractCommand extends Command
 {
     const INPUT_ARGUMENT_PACKAGES = 'packages';
     const INPUT_OPTION_DRY_RUN = 'dry-run';
+    const INPUT_OPTION_CLEAR_STATIC_CONTENT = 'clear-static-content';
 
     /**
      * Dependencies are injected (not proxied) on purpose:
@@ -37,6 +39,17 @@ abstract class PackageAbstractCommand extends Command
         protected DirectoryList $directoryList
     ) {
         parent::__construct();
+    }
+
+    protected function configure()
+    {
+        $this->addOption(
+            self::INPUT_OPTION_CLEAR_STATIC_CONTENT,
+            'c',
+            InputOption::VALUE_NONE,
+            'Clear generated static view files after setup:upgrade'
+        );
+        parent::configure();
     }
 
     /**
@@ -184,6 +197,11 @@ abstract class PackageAbstractCommand extends Command
                     'Fix the error, run bin/magento setup:upgrade and bin/magento maintenance:disable</error>'
                 );
                 return Cli::RETURN_FAILURE;
+            }
+
+            if ($input->getOption(self::INPUT_OPTION_CLEAR_STATIC_CONTENT)) {
+                $output->writeln('<info>Clearing generated static view files</info>');
+                $this->cleanupFiles->clearMaterializedViewFiles();
             }
 
             $output->writeln('<info>Done</info>');
