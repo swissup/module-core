@@ -24,6 +24,7 @@ class ProductCollection
 
         $data = $request->getParams();
         $visibility = $this->catalogProductVisibility->getVisibleInCatalogIds();
+        $isAllStores = in_array(0, $request->getStoreIds());
         $attributes = $this->attributeCollectionFactory->create()
             ->addFieldToFilter('attribute_code', ['in' => array_keys($data)]);
 
@@ -35,10 +36,13 @@ class ProductCollection
             switch ($attribute->getFrontendInput()) {
                 case 'boolean':
                     $value = 1;
+                    $unsetValue = 0;
                     $collection->addAttributeToFilter($attribute, 1);
                     break;
                 case 'date':
                     $value = $this->localeDate->date()->format('Y-m-d H:i:s');
+                    // far future date never matches the 'to now' filter
+                    $unsetValue = '2222-12-31 00:00:00';
                     $collection->addAttributeToFilter(
                         $attribute,
                         [
@@ -80,7 +84,7 @@ class ProductCollection
                 foreach ($visibleProducts as $product) {
                     $product->addAttributeUpdate(
                         $attribute->getAttributeCode(),
-                        (int) in_array(0, $request->getStoreIds()), // value
+                        $isAllStores ? $value : $unsetValue,
                         \Magento\Store\Model\Store::DEFAULT_STORE_ID
                     );
 
