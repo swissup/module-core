@@ -7,6 +7,16 @@
                 <item name="moduleListCommand" xsi:type="object">Swissup\Core\Console\Command\ModuleListCommand</item>
                 <item name="themeCreateCommand" xsi:type="object">Swissup\Core\Console\Command\ThemeCreateCommand</item>
                 <item name="storeCreateCommand" xsi:type="object">Swissup\Core\Console\Command\StoreCreateCommand</item>
+                <item name="channelEnableCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\ChannelEnableCommand</item>
+                <item name="channelDisableCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\ChannelDisableCommand</item>
+                <item name="packageRequireCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageRequireCommand</item>
+                <item name="packageUpdateCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageUpdateCommand</item>
+                <item name="packageInstallCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageInstallCommand</item>
+                <item name="packageRemoveCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\PackageRemoveCommand</item>
+                <item name="authShowCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthShowCommand</item>
+                <item name="authCheckCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthCheckCommand</item>
+                <item name="authAddCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthAddCommand</item>
+                <item name="authRemoveCommand" xsi:type="object">Swissup\Core\Console\Command\Installer\AuthRemoveCommand</item>
             </argument>
         </arguments>
     </type>

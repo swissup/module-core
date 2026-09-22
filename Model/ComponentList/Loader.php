@@ -101,6 +101,13 @@ class Loader
         return $this->load();
     }
 
+    public function getModuleItems()
+    {
+        return array_filter($this->getItems(), function ($item) {
+            return ($item['type'] ?? '') !== 'metapackage';
+        });
+    }
+
     public function getInstalledItems()
     {
         return array_filter($this->getItems(), function ($item) {

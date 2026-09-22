@@ -1,0 +1,32 @@
+<?php
+
+namespace Swissup\Core\Installer\Helper;
+
+use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
+
+class Theme
+{
+    /**
+     * @var array
+     */
+    private $memo = [];
+
+    public function __construct(private CollectionFactory $collectionFactory)
+    {
+    }
+
+    /**
+     * @param array $request
+     * @param string $path
+     * @return int
+     */
+    public function getId(array $request, $path)
+    {
+        if (!isset($this->memo[$path])) {
+            $this->memo[$path] = $this->collectionFactory->create()
+                ->getThemeByFullPath($path)
+                ->getThemeId();
+        }
+        return $this->memo[$path];
+    }
+}

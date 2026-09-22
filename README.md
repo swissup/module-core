@@ -1,7 +1,7 @@
-# Core
+# Swissup Core
 
-Swissup_Core module adds menu and config entries to Magento backend. It also
-utilize some common tasks used by other modules.
+This module ships Swissup Installer and adds Swissup menu and config entries
+to Magento backend. It also provides a set of common tasks used by other modules.
 
 ## Installation
 
@@ -9,6 +9,25 @@ utilize some common tasks used by other modules.
 composer require swissup/module-core
 bin/magento setup:upgrade
 ```
+
+## Swissup Installer
+
+Available commands
+
+Command                                         | Description
+------------------------------------------------|---------------------------------------
+`bin/magento swissup:channel:enable`            | Add SwissupLabs repository to composer.json file
+`bin/magento swissup:channel:disable`           | Remove SwissupLabs repository from composer.json file
+**Authorization**                               |
+`bin/magento swissup:auth:add {key}`            | Add SwissupLabs access key
+`bin/magento swissup:auth:check`                | Display SwissupLabs access keys currently in use with count of available packages per key
+`bin/magento swissup:auth:remove {key}`         | Remove SwissupLabs access key
+`bin/magento swissup:auth:show`                 | Display SwissupLabs access username and password currently in use
+**Packages**                                    |
+`bin/magento swissup:package:require {package}` | Download SwissupLabs package(s) using composer and run setup:upgrade
+`bin/magento swissup:package:install {package}` | Run installer for downloaded package
+`bin/magento swissup:package:update`            | Update SwissupLabs package(s) using composer and run setup:upgrade
+`bin/magento swissup:package:remove {package}`  | Remove SwissupLabs package(s) using composer and run setup:upgrade
 
 ## Popup Message Manager
 

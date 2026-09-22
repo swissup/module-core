@@ -60,8 +60,6 @@ class Remote extends AbstractLoader
             'version' => 'latest_version',
             'type' => 'type',
             'time' => 'release_date',
-            'extra.marketplace.links.docs' => 'docs_link',
-            'extra.marketplace.links.changelog' => 'changelog_link',
             'extra.swissup.links.store' => 'link',
             'extra.swissup.links.docs' => 'docs_link',
             'extra.swissup.links.download' => 'download_link',
@@ -69,6 +67,8 @@ class Remote extends AbstractLoader
             'extra.swissup.links.marketplace' => 'marketplace_link',
             'extra.swissup.links.identity_key' => 'identity_key_link',
             'extra.swissup.purchase_code' => 'purchase_code',
+            'extra.marketplace.links.docs' => 'docs_link',
+            'extra.marketplace.links.changelog' => 'changelog_link',
         ];
     }
 
@@ -92,12 +92,6 @@ class Remote extends AbstractLoader
                     return $carry;
                 }, $versions[0] ?? 0);
 
-                if (!empty($info[$latestVersion]['type']) &&
-                    $info[$latestVersion]['type'] === 'metapackage'
-                ) {
-                    continue;
-                }
-
                 $modules[$packageName] = $info[$latestVersion];
 
                 if (isset($info['dev-master']['extra']['swissup'])) {
@@ -106,22 +100,6 @@ class Remote extends AbstractLoader
                 }
             }
         }
-
-        $modules['swissup/subscription'] = [
-            'name'          => 'swissup/subscription',
-            'type'          => 'subscription-plan',
-            'description'   => 'SwissUpLabs Modules Subscription',
-            'version'       => '',
-            'extra' => [
-                'swissup' => [
-                    'links' => [
-                        'store' => 'https://swissuplabs.com',
-                        'download' => 'https://swissuplabs.com/subscription/customer/products/',
-                        'identity_key' => 'https://swissuplabs.com/license/customer/identity/'
-                    ]
-                ]
-            ]
-        ];
 
         return $modules;
     }
@@ -323,8 +301,8 @@ class Remote extends AbstractLoader
     /**
      * Get packages url from satis repository.
      *
-     * To do that we send a request to http://docs.swissuplabs.com/packages/packages.json,
-     * which returns actual packages list url: http://docs.swissuplabs.com/packages/include/all${sha1}.json
+     * To do that we send a request to https://swissup.github.io/packages-latest/packages.json,
+     * which returns actual packages list url: https://swissup.github.io/packages-latest/include/all${sha1}.json
      *
      * @return mixed
      */
@@ -362,7 +340,7 @@ class Remote extends AbstractLoader
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        // docs.swissuplabs.com/packages
+        // swissup.github.io/packages-latest
         return ($useHttps ? 'https://' : 'http://') . $url;
     }
 }
