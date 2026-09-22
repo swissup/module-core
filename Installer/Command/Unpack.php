@@ -21,9 +21,9 @@ class Unpack
     {
         $this->logger->info('Unpack');
         $params = $request->getParams();
-        $destanation = $params['destination'];
-        $this->ioFile->checkAndCreateFolder($destanation);
+        $destination = $params['destination'];
+        $this->ioFile->checkAndCreateFolder($destination);
         $archive = $params['archive'];
-        $this->archiver->unpack($archive, $destanation);
+        $this->archiver->unpack($archive, $destination);
     }
 }

@@ -84,6 +84,8 @@ class Widget
 
     private function getPageGroupData($data, $defaultData)
     {
+        $groupName = $groupData = null;
+
         if (isset($data['handle'])) {
             $groupName = $this->getGroupName($data['handle']);
             $groupData = [

@@ -350,7 +350,7 @@ class ConfigReader
         $result = $subdir . $value;
         $result = realpath($result);
 
-        if (strpos($result, $subdir) !== 0) {
+        if ($result === false || strpos($result, $subdir) !== 0) {
             throw new SecurityViolationException(
                 __(
                     'Error during "%1" processing. Relative paths are forbidden: "%2"',

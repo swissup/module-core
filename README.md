@@ -1,7 +1,7 @@
 # Swissup Core
 
 This module ships Swissup Installer and adds Swissup menu and config entries
-to Magento backend. It also utilize some common tasks used by other modules.
+to Magento backend. It also provides a set of common tasks used by other modules.
 
 ## Installation
 
@@ -12,7 +12,7 @@ bin/magento setup:upgrade
 
 ## Swissup Installer
 
-Aavailable commands
+Available commands
 
 Command                                         | Description
 ------------------------------------------------|---------------------------------------

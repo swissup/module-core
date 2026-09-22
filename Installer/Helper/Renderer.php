@@ -16,9 +16,7 @@ class Renderer
         if (!is_readable($path)) {
             throw new FileSystemException(__(
                 'File %1 can\'t be read. Please check if it exists and has read permissions.',
-                [
-                    $path
-                ]
+                $path
             ));
         }
 
