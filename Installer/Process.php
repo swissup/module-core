@@ -1,6 +1,6 @@
 <?php
 
-namespace Swissup\Core\Model\Installer;
+namespace Swissup\Core\Installer;
 
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

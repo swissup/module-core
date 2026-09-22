@@ -2,7 +2,7 @@
 namespace Swissup\Core\Console\Command\Installer;
 
 use Magento\Framework\Console\Cli;
-use Swissup\Core\Model\Installer\ComposerRepository;
+use Swissup\Core\Installer\ComposerRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

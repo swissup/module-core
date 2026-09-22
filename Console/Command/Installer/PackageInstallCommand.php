@@ -33,7 +33,7 @@ class PackageInstallCommand extends Command
         protected \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar,
         protected \Magento\Theme\Model\Theme\ThemePackageInfo $themePackageInfo,
         protected \Swissup\Core\Helper\Component $componentHelper,
-        protected \Swissup\Core\Model\Installer\Process $process
+        protected \Swissup\Core\Installer\Process $process
     ) {
         parent::__construct();
     }
