@@ -58,7 +58,7 @@ class Modules extends \Magento\Config\Block\System\Config\Form\Field
 
         $result = [];
         foreach ($links as $key => $label) {
-            if (!empty($item[$key])) {
+            if (!empty($item[$key]) && str_starts_with($item[$key], 'https://')) {
                 $result[$item[$key]] = $label;
             }
         }

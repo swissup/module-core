@@ -19,7 +19,7 @@ class ModuleActions extends \Magento\Ui\Component\Listing\Columns\Column
         foreach ($dataSource['data']['items'] as & $item) {
             // add external links
             foreach ($this->getData('links') as $link) {
-                if (empty($item[$link['key']])) {
+                if (empty($item[$link['key']]) || !str_starts_with($item[$link['key']], 'https://')) {
                     continue;
                 }
 

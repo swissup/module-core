@@ -2,8 +2,25 @@
 
 namespace Swissup\Core\Ui\Component\Listing\Columns;
 
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+
 class Version extends \Magento\Ui\Component\Listing\Columns\Column
 {
+    private Escaper $escaper;
+
+    public function __construct(
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        Escaper $escaper,
+        array $components = [],
+        array $data = []
+    ) {
+        parent::__construct($context, $uiComponentFactory, $components, $data);
+        $this->escaper = $escaper;
+    }
+
     /**
      * Prepare Data Source
      *
@@ -26,6 +43,8 @@ class Version extends \Magento\Ui\Component\Listing\Columns\Column
         if (empty($value)) {
             return __('N/A');
         }
+
+        $value = $this->escaper->escapeHtml($value);
 
         if (empty($item['version'])) {
             return $value;

@@ -12,8 +12,7 @@ define([
             { url: item.docs_link, label: $t('Docs') },
             { url: item.changelog_link, label: $t('Changelog') }
         ].filter(function (link) {
-            // the same schemes the php escapeUrl() lets through
-            return /^https?:\/\//.test(link.url);
+            return typeof link.url === 'string' && link.url.startsWith('https://');
         }).map(function (link) {
             return $('<a target="_blank"/>').attr('href', link.url).text(link.label);
         });
