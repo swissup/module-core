@@ -1,10 +1,19 @@
 <?php
 /** @var \Swissup\Core\Block\Adminhtml\OutdatedBadge $block */
+$count = $block->getCount();
+$securityCount = $block->getSecurityCount();
+$counts = array_filter([
+    'outdated' => $count,
+    'security' => $securityCount,
+    'total' => $count + $securityCount,
+]);
 ?>
-<?php if ($count = $block->getCount()): ?>
+<?php if ($counts): ?>
 <style id="swissup-outdated-badge-style">
     :root {
-        --swissup-outdated-count: '<?= (int) $count ?>';
+        <?php foreach ($counts as $name => $value): ?>
+        --swissup-<?= /* @noEscape */ $name ?>-count: '<?= (int) $value ?>';
+        <?php endforeach; ?>
     }
 </style>
 <?php endif; ?>
