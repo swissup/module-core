@@ -1,10 +1,16 @@
 <div class="data-grid-cell-content">
     <span text="$col.getLabel($row())"></span>
-    <a href="#" class="swissup-copy" data-bind="attr: {'data-copied': $t('Copied')}, click: function (data, event) {
-        var link = event.currentTarget;
-        navigator.clipboard.writeText($col.getLabel($row())).then(function () {
-            link.textContent = link.dataset.copied;
-            setTimeout(function () { link.textContent = $t('Copy'); }, 2000);
-        });
-    }"><translate args="'Copy'"/></a>
+    <a href="#" class="swissup-copy"
+        data-bind="
+        i18n: 'Copy',
+        attr: {
+            'data-copied': $t('Copied')
+        },
+        click: function (data, event) {
+            var link = event.currentTarget;
+            navigator.clipboard.writeText($col.getLabel($row())).then(function () {
+                link.textContent = link.dataset.copied;
+                setTimeout(function () { link.textContent = $t('Copy'); }, 2000);
+            });
+        }"></a>
 </div>
