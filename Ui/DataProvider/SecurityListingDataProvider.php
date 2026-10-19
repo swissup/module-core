@@ -72,15 +72,9 @@ class SecurityListingDataProvider extends DataProvider
             }
         }
 
-        $totalRecords = count($items);
-        if ($pageSize = (int) $criteria->getPageSize()) {
-            $page = max(1, (int) $criteria->getCurrentPage());
-            $items = array_slice($items, ($page - 1) * $pageSize, $pageSize);
-        }
-
         return [
             'items' => array_values($items),
-            'totalRecords' => $totalRecords,
+            'totalRecords' => count($items),
         ];
     }
 }
