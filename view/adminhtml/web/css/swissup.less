@@ -141,3 +141,21 @@
         }
     }
 }
+
+// opacity instead of visibility keeps the link focusable from the keyboard
+.data-row:not(:hover) .swissup-copy {
+    opacity: 0;
+}
+
+// invisible "Copied" label reserves the width, so the column keeps its size
+.swissup-copy {
+    display: inline-block;
+    vertical-align: top;
+
+    &::after {
+        content: attr(data-copied);
+        display: block;
+        height: 0;
+        visibility: hidden;
+    }
+}

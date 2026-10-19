@@ -59,13 +59,15 @@
                 <item name="config" xsi:type="array">
                     <item name="sortable" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Patch</item>
+                    <item name="bodyTmpl" xsi:type="string">Swissup_Core/grid/cells/copy</item>
                 </item>
             </argument>
         </column>
         <column name="status" class="Swissup\Core\Ui\Component\Listing\Columns\PatchStatus">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
                 </item>
             </argument>
