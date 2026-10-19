@@ -47,10 +47,18 @@ class PatchStatus
             'patches' => [],
         ];
 
+        // A request killed by the server timeout saves nothing, and the check
+        // would restart on every page load. The previous result, marked as
+        // checked, makes it wait for the next interval instead.
+        $this->storage->save(
+            json_encode(['checked_at' => $this->result['checked_at']] + ($this->getStored() ?: $this->result)),
+            self::STORAGE_KEY
+        );
+
         try {
             $this->result['patches'] = $this->execute();
         } catch (\DomainException $e) {
-            // git installations are not recognized by the tool
+            // the tool can't check git installations or run on restricted hosts
             $this->result['error'] = $e->getMessage();
             $this->result['unsupported'] = true;
         } catch (\Exception $e) {
@@ -106,7 +114,7 @@ class PatchStatus
     /**
      * @return array Patch statuses keyed by patch id: not applied first
      * @throws \RuntimeException
-     * @throws \DomainException when the installation is not recognized
+     * @throws \DomainException when the installation can't be checked
      */
     private function execute()
     {
@@ -116,6 +124,14 @@ class PatchStatus
             throw new \RuntimeException(
                 (string) __('%1 tool is not installed.', self::TOOL_PATH)
             );
+        }
+
+        // a hosting restriction, the badge shouldn't nag about what can't be fixed
+        if (!function_exists('proc_open')) {
+            throw new \DomainException((string) __(
+                '%1 tool can\'t run: the proc_open function is disabled on this server.',
+                self::TOOL_PATH
+            ));
         }
 
         $process = new Process([$this->getPhpBinary(), $tool, '--root=' . BP, '--format=json'], BP);
