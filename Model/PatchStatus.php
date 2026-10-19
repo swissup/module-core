@@ -81,9 +81,13 @@ class PatchStatus
         }
 
         // the tool is updated along with the patches
-        $tool = BP . '/' . self::TOOL_PATH;
+        return $this->isToolInstalled()
+            && filemtime(BP . '/' . self::TOOL_PATH) >= $data['checked_at'];
+    }
 
-        return is_file($tool) && filemtime($tool) >= $data['checked_at'];
+    public function isToolInstalled(): bool
+    {
+        return is_file(BP . '/' . self::TOOL_PATH);
     }
 
     public function getCount($data): int
@@ -108,7 +112,7 @@ class PatchStatus
     {
         $tool = BP . '/' . self::TOOL_PATH;
 
-        if (!is_file($tool)) {
+        if (!$this->isToolInstalled()) {
             throw new \RuntimeException(
                 (string) __('%1 tool is not installed.', self::TOOL_PATH)
             );

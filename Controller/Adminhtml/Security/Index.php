@@ -23,15 +23,8 @@ class Index extends Action implements HttpGetActionInterface
 
     public function execute()
     {
-        $result = $this->patchStatus->run();
-
-        if ($result['error']) {
-            $this->messageManager->addErrorMessage($result['error']);
-        } elseif (array_diff($result['patches'], ['applied'])) {
-            $this->messageManager->addErrorMessage(
-                __('Your store is missing one or more Adobe security patches. We recommend reviewing and applying the updates as soon as possible.')
-            );
-        }
+        // the grid shows the stored result, so the check runs before rendering
+        $this->patchStatus->run();
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
