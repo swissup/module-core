@@ -13,16 +13,15 @@ class PatchStatus extends \Magento\Ui\Component\Listing\Columns\Column
     public function prepareDataSource(array $dataSource)
     {
         $labels = [
-            'missing' => __('Not Applied'),
-            'unknown' => __('Unknown'),
-            'applied' => __('Applied'),
+            'missing' => [__('Not Applied'), 'critical'],
+            'unknown' => [__('Unknown'), 'minor'],
+            'applied' => [__('Applied'), 'notice'],
         ];
 
         foreach ($dataSource['data']['items'] ?? [] as $i => $item) {
-            $status = $item['status'];
-            $severity = $status === 'applied' ? 'notice' : 'critical';
+            [$label, $severity] = $labels[$item['status']];
             $dataSource['data']['items'][$i]['status'] = '<span class="grid-severity-' . $severity . '"><span>'
-                . $labels[$status]
+                . $label
                 . '</span></span>';
         }
 
