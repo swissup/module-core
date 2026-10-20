@@ -1,0 +1,17 @@
+<?php
+/** @var \Swissup\Core\Block\Adminhtml\SecurityMessage $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$message = $block->getMessage();
+?>
+<?php if ($message): ?>
+<div class="messages">
+    <div class="message message-error error">
+        <div data-ui-id="messages-message-error">
+            <?= $escaper->escapeHtml($message['text']) ?>
+            <?php if (isset($message['url'])): ?>
+                <a href="<?= $escaper->escapeUrl($message['url']) ?>" target="_blank" rel="noopener"><?= $escaper->escapeHtml($message['link']) ?></a>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

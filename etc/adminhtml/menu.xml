@@ -31,5 +31,13 @@
             action="swissup/modulemanager/index"
             resource="Swissup_Core::module_manager"
         />
+        <add id="Swissup_Core::security_patches"
+            title="Security"
+            module="Swissup_Core"
+            sortOrder="20"
+            parent="Swissup_Core::services"
+            action="swissup/security/index"
+            resource="Swissup_Core::security"
+        />
     </menu>
 </config>

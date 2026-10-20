@@ -45,10 +45,10 @@
     }
 }
 
-// Outdated badge
+// Menu badges
 .admin__menu {
     .item-swissup.level-0 > a::after {
-        content: var(--swissup-outdated-count);
+        content: var(--swissup-total-count);
         position: absolute;
         top: .5rem;
         right: 1.5rem;
@@ -59,7 +59,8 @@
         font-weight: 600;
     }
 
-    .item-module-manager > a > span::after {
+    .item-module-manager > a > span::after,
+    .item-security-patches > a > span::after {
         display: inline-block;
         margin-left: .8rem;
         background: #cc1017;
@@ -73,6 +74,10 @@
         padding: 0 5px;
         text-align: center;
         vertical-align: top;
+    }
+
+    .item-security-patches > a > span::after {
+        content: var(--swissup-security-count);
     }
 }
 
@@ -134,5 +139,23 @@
                 content: '';
             }
         }
+    }
+}
+
+// opacity instead of visibility keeps the link focusable from the keyboard
+.data-row:not(:hover) .swissup-copy {
+    opacity: 0;
+}
+
+// invisible "Copied" label reserves the width, so the column keeps its size
+.swissup-copy {
+    display: inline-block;
+    vertical-align: top;
+
+    &::after {
+        content: attr(data-copied);
+        display: block;
+        height: 0;
+        visibility: hidden;
     }
 }
