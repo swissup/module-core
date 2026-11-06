@@ -5,6 +5,7 @@ namespace Swissup\Core\Block\Adminhtml;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Serialize\Serializer\Json;
 use Swissup\Core\Model\ComponentList\Loader;
+use Swissup\Core\Model\PageSpeedStatus;
 use Swissup\Core\Model\PatchStatus;
 
 class OutdatedBadge extends \Magento\Backend\Block\Template
@@ -12,6 +13,8 @@ class OutdatedBadge extends \Magento\Backend\Block\Template
     const ADMIN_RESOURCE = 'Swissup_Core::swissup';
 
     const SECURITY_RESOURCE = 'Swissup_Core::security';
+
+    const PAGESPEED_RESOURCE = 'Swissup_Core::pagespeed';
 
     protected $_template = 'Swissup_Core::outdated-badge.phtml';
 
@@ -21,17 +24,21 @@ class OutdatedBadge extends \Magento\Backend\Block\Template
 
     private PatchStatus $patchStatus;
 
+    private PageSpeedStatus $pageSpeedStatus;
+
     public function __construct(
         Context $context,
         Loader $loader,
         Json $json,
         PatchStatus $patchStatus,
+        PageSpeedStatus $pageSpeedStatus,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->loader = $loader;
         $this->json = $json;
         $this->patchStatus = $patchStatus;
+        $this->pageSpeedStatus = $pageSpeedStatus;
     }
 
     public function getCount()
@@ -46,6 +53,15 @@ class OutdatedBadge extends \Magento\Backend\Block\Template
         }
 
         return $this->patchStatus->getCount($this->patchStatus->getStored());
+    }
+
+    public function getPageSpeedCount()
+    {
+        if (!$this->_authorization->isAllowed(self::PAGESPEED_RESOURCE)) {
+            return 0;
+        }
+
+        return $this->pageSpeedStatus->getCount();
     }
 
     private function isSecurityAllowed()
@@ -79,6 +95,7 @@ class OutdatedBadge extends \Magento\Backend\Block\Template
             'securityCount' => $this->getSecurityCount(),
             'securityCheckRequired' => $this->isSecurityAllowed()
                 && $this->patchStatus->isCheckRequired(),
+            'pagespeedCount' => $this->getPageSpeedCount(),
         ]);
     }
 

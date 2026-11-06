@@ -8,6 +8,7 @@
                     <resource id="Swissup_Core::services" title="Services" sortOrder="0">
                         <resource id="Swissup_Core::module_manager" title="Module Manager" sortOrder="10" />
                         <resource id="Swissup_Core::security" title="Security" sortOrder="20" />
+                        <resource id="Swissup_Core::pagespeed" title="PageSpeed" sortOrder="30" />
                     </resource>
                     <resource id="Swissup_Core::general" title="General" sortOrder="5" />
                 </resource>

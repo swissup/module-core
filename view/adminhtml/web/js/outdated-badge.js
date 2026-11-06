@@ -7,7 +7,7 @@ define([
 
     return function (config) {
         var style = document.documentElement.style,
-            counts = { outdated: 0, security: 0 },
+            counts = { outdated: 0, security: 0, pagespeed: 0 },
             setVar = function (name, count) {
                 var property = '--swissup-' + name + '-count';
 
@@ -21,7 +21,7 @@ define([
                 counts[name] = count;
                 setVar(name, count);
                 // the Swissup menu badge sums up all of the counters
-                setVar('total', counts.outdated + counts.security);
+                setVar('total', counts.outdated + counts.security + counts.pagespeed);
             },
             render = function (count) {
                 var $title = $('.swissup-tab > .admin__page-nav-title');
@@ -47,6 +47,7 @@ define([
         // drive the badges from now on
         setCount('outdated', config.count);
         setCount('security', config.securityCount);
+        setCount('pagespeed', config.pagespeedCount);
         $('#swissup-outdated-badge-style').remove();
 
         modules.onLoad(function (response) {

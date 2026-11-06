@@ -60,7 +60,8 @@
     }
 
     .item-module-manager > a > span::after,
-    .item-security-patches > a > span::after {
+    .item-security-patches > a > span::after,
+    .item-swissup .item-pagespeed > a > span::after {
         display: inline-block;
         margin-left: .8rem;
         background: #cc1017;
@@ -78,6 +79,10 @@
 
     .item-security-patches > a > span::after {
         content: var(--swissup-security-count);
+    }
+
+    .item-swissup .item-pagespeed > a > span::after {
+        content: var(--swissup-pagespeed-count);
     }
 }
 
@@ -140,6 +145,77 @@
             }
         }
     }
+}
+
+// PageSpeed page
+.swissup-pagespeed-intro {
+    margin-bottom: 2rem;
+
+    p {
+        margin-bottom: .5rem;
+    }
+}
+
+.swissup-pagespeed-table.data-grid {
+    td {
+        vertical-align: top;
+    }
+
+    .swissup-pagespeed-status {
+        width: 12rem;
+    }
+
+    td:nth-child(3),
+    td:nth-child(4) {
+        width: 18rem;
+    }
+}
+
+.swissup-pagespeed-title {
+    font-weight: 600;
+}
+
+.swissup-pagespeed-scope {
+    color: #6d6d6d;
+    font-size: 1.2rem;
+    margin-top: .3rem;
+}
+
+.swissup-pagespeed-description {
+    margin-top: .5rem;
+}
+
+.swissup-pagespeed-fix {
+    margin-top: 1rem;
+
+    p {
+        margin: .5rem 0 0;
+    }
+}
+
+.swissup-pagespeed-fix-title {
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+
+.swissup-pagespeed-fix,
+.swissup-pagespeed-after {
+    pre {
+        background: #f8f8f8;
+        border: 1px solid #e3e3e3;
+        color: #303030;
+        font-family: 'Menlo', 'Consolas', monospace;
+        font-size: 1.2rem;
+        line-height: 1.8;
+        margin: 0;
+        overflow-x: auto;
+        padding: .5rem 1rem;
+        white-space: pre;
+    }
+}
+
+.swissup-pagespeed-after {
+    margin-top: 2rem;
 }
 
 // opacity instead of visibility keeps the link focusable from the keyboard

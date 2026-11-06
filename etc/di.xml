@@ -25,4 +25,215 @@
     <type name="Magento\Store\Block\Switcher">
         <plugin name="addViewModelBeforeToHtml" type="Swissup\Core\Plugin\StoreSwitcherBlock" />
     </type>
+
+    <!-- PageSpeed checks: other modules can add their own recommendations -->
+    <type name="Swissup\Core\Model\PageSpeed\CheckPool">
+        <arguments>
+            <argument name="checks" xsi:type="array">
+                <item name="deploy_mode" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\DeployMode</item>
+                </item>
+                <item name="cache_types" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\CacheTypes</item>
+                </item>
+                <item name="workflow_type" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\WorkflowType</item>
+                </item>
+                <item name="minify_html" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\MinifyHtml</item>
+                </item>
+                <item name="minify_js" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\MinifyJs</item>
+                </item>
+                <item name="minify_css" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\MinifyCss</item>
+                </item>
+                <item name="static_sign" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">70</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\StaticSign</item>
+                </item>
+                <item name="template_hints" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">80</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\TemplateHints</item>
+                </item>
+                <item name="translate_inline" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">90</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\TranslateInline</item>
+                </item>
+                <item name="js_session_logging" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">100</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\JsSessionLogging</item>
+                </item>
+                <item name="merge_js" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">200</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\MergeJs</item>
+                </item>
+                <item name="js_bundling" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">210</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\JsBundling</item>
+                </item>
+                <item name="move_script_to_bottom" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">220</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\MoveScriptToBottom</item>
+                </item>
+                <item name="merge_css" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">230</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\MergeCss</item>
+                </item>
+                <item name="critical_css" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">240</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\CriticalCss</item>
+                </item>
+                <item name="cache_user_defined_attributes" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">250</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\CacheUserDefinedAttributes</item>
+                </item>
+                <item name="full_page_cache" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">500</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\FullPageCache</item>
+                </item>
+                <item name="cache_backend" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">510</item>
+                    <item name="check" xsi:type="object">Swissup\Core\Model\PageSpeed\Check\CacheBackend</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\WorkflowType" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/front_end_development_workflow/type</argument>
+            <argument name="value" xsi:type="string">server_side_compilation</argument>
+            <argument name="options" xsi:type="array">
+                <item name="server_side_compilation" xsi:type="string" translate="true">Server side less compilation</item>
+                <item name="client_side_compilation" xsi:type="string" translate="true">Client side less compilation</item>
+            </argument>
+            <argument name="global" xsi:type="boolean">true</argument>
+            <argument name="title" xsi:type="string" translate="true">Frontend Development Workflow</argument>
+            <argument name="description" xsi:type="string" translate="true">Client side compilation builds the styles in the browser on every page load.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\MinifyHtml" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/template/minify_html</argument>
+            <argument name="title" xsi:type="string" translate="true">Minify Html</argument>
+            <argument name="description" xsi:type="string" translate="true">Removes whitespace and comments from the page source, so the page downloads faster.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\MinifyJs" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/js/minify_files</argument>
+            <argument name="title" xsi:type="string" translate="true">Minify JavaScript Files</argument>
+            <argument name="description" xsi:type="string" translate="true">Reduces the size of JavaScript files.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\MinifyCss" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/css/minify_files</argument>
+            <argument name="title" xsi:type="string" translate="true">Minify CSS Files</argument>
+            <argument name="description" xsi:type="string" translate="true">Reduces the size of CSS files.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\StaticSign" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/static/sign</argument>
+            <argument name="global" xsi:type="boolean">true</argument>
+            <argument name="title" xsi:type="string" translate="true">Sign Static Files</argument>
+            <argument name="description" xsi:type="string" translate="true">Adds the deployment version to static file URLs, so browsers can cache the files for a long time and still get the updated ones after each deployment.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\TemplateHints" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/debug/template_hints_storefront</argument>
+            <argument name="value" xsi:type="string">0</argument>
+            <argument name="title" xsi:type="string" translate="true">Enable Template Path Hints for Storefront</argument>
+            <argument name="description" xsi:type="string" translate="true">Adds debug information to every page. Use it for development only.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\TranslateInline" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/translate_inline/active</argument>
+            <argument name="value" xsi:type="string">0</argument>
+            <argument name="title" xsi:type="string" translate="true">Enable Inline Translation for Storefront</argument>
+            <argument name="description" xsi:type="string" translate="true">Adds the translation editor scripts and markup to every page. Use it for content editing only.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\JsSessionLogging" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/js/session_storage_logging</argument>
+            <argument name="value" xsi:type="string">0</argument>
+            <argument name="global" xsi:type="boolean">true</argument>
+            <argument name="title" xsi:type="string" translate="true">Log JS Errors to Session Storage</argument>
+            <argument name="description" xsi:type="string" translate="true">Collects JavaScript errors for functional tests. It is not needed on a live store.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\MergeJs" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/js/merge_files</argument>
+            <argument name="type" xsi:type="const">Swissup\Core\Model\PageSpeed\CheckInterface::TYPE_TEST</argument>
+            <argument name="title" xsi:type="string" translate="true">Merge JavaScript Files</argument>
+            <argument name="description" xsi:type="string" translate="true">Combines JavaScript files to reduce the number of requests. With HTTP/2, separate files may load faster.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\JsBundling" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/js/enable_js_bundling</argument>
+            <argument name="value" xsi:type="string">0</argument>
+            <argument name="type" xsi:type="const">Swissup\Core\Model\PageSpeed\CheckInterface::TYPE_TEST</argument>
+            <argument name="title" xsi:type="string" translate="true">Enable JavaScript Bundling</argument>
+            <argument name="description" xsi:type="string" translate="true">Magento bundles often include code the page doesn't need and delay the first page render.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\MoveScriptToBottom" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/js/move_script_to_bottom</argument>
+            <argument name="type" xsi:type="const">Swissup\Core\Model\PageSpeed\CheckInterface::TYPE_TEST</argument>
+            <argument name="title" xsi:type="string" translate="true">Move JS Code to the Bottom of the Page</argument>
+            <argument name="description" xsi:type="string" translate="true">Scripts at the bottom of the page don't block the page rendering. Check that third-party scripts still work.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\MergeCss" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/css/merge_css_files</argument>
+            <argument name="type" xsi:type="const">Swissup\Core\Model\PageSpeed\CheckInterface::TYPE_TEST</argument>
+            <argument name="title" xsi:type="string" translate="true">Merge CSS Files</argument>
+            <argument name="description" xsi:type="string" translate="true">Combines CSS files to reduce the number of requests. With HTTP/2, separate files may load faster.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\CriticalCss" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/css/use_css_critical_path</argument>
+            <argument name="type" xsi:type="const">Swissup\Core\Model\PageSpeed\CheckInterface::TYPE_TEST</argument>
+            <argument name="title" xsi:type="string" translate="true">Use CSS Critical Path</argument>
+            <argument name="description" xsi:type="string" translate="true">Inlines the critical styles and loads the rest of CSS without blocking the page rendering. The theme must provide the css/critical.css file.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Swissup\Core\Model\PageSpeed\Check\CacheUserDefinedAttributes" type="Swissup\Core\Model\PageSpeed\Check\ConfigValue">
+        <arguments>
+            <argument name="path" xsi:type="string">dev/caching/cache_user_defined_attributes</argument>
+            <argument name="type" xsi:type="const">Swissup\Core\Model\PageSpeed\CheckInterface::TYPE_TEST</argument>
+            <argument name="global" xsi:type="boolean">true</argument>
+            <argument name="title" xsi:type="string" translate="true">Cache User Defined Attributes</argument>
+            <argument name="description" xsi:type="string" translate="true">Caches the attributes created by the store admin. Speeds up pages, but requires more cache storage.</argument>
+            <argument name="url" xsi:type="string">https://experienceleague.adobe.com/en/docs/commerce-admin/config/advanced/developer</argument>
+        </arguments>
+    </virtualType>
 </config>

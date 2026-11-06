@@ -1,0 +1,89 @@
+<?php
+/** @var \Swissup\Core\Block\Adminhtml\PageSpeed $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$results = $block->getResults();
+$issues = $block->getIssuesCount();
+?>
+<div class="swissup-pagespeed">
+    <div class="messages">
+        <?php if ($issues): ?>
+            <div class="message message-warning warning">
+                <div><?= $escaper->escapeHtml(__('%1 required settings are not optimal. Apply the recommendations below to speed up your store.', $issues)) ?></div>
+            </div>
+        <?php else: ?>
+            <div class="message message-success success">
+                <div><?= $escaper->escapeHtml(__('Great! All required settings are optimal.')) ?></div>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <div class="swissup-pagespeed-intro">
+        <p><?= $escaper->escapeHtml(__('The page compares your store settings with the recommended values for a fast storefront.')) ?></p>
+        <?php if ($block->hasTests()): ?>
+            <p>
+                <?= $escaper->escapeHtml(__('"Test It" settings make most stores faster, but the result depends on the theme, modules, and server. For example, merging JavaScript files sometimes makes the page slower.')) ?>
+                <?= $escaper->escapeHtml(__('Change one setting at a time, compare the page speed before and after the change, and keep the value that works better for your store.')) ?>
+                <a href="<?= $escaper->escapeUrl($block->getPageSpeedInsightsUrl()) ?>" target="_blank" rel="noopener"><?= $escaper->escapeHtml(__('Test with PageSpeed Insights')) ?></a>
+            </p>
+        <?php endif; ?>
+        <p><?= $escaper->escapeHtml(__('Suggestions require server changes and are optional.')) ?></p>
+    </div>
+
+    <table class="data-grid swissup-pagespeed-table">
+        <thead>
+            <tr>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Status')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Setting')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Current Value')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Recommended')) ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($results as $id => $result): ?>
+                <?php $status = $block->getStatus($result); ?>
+                <tr class="data-row" data-check="<?= $escaper->escapeHtmlAttr($id) ?>">
+                    <td class="swissup-pagespeed-status">
+                        <span class="<?= $escaper->escapeHtmlAttr($status['class']) ?>"><span><?= $escaper->escapeHtml($status['label']) ?></span></span>
+                    </td>
+                    <td>
+                        <div class="swissup-pagespeed-title"><?= $escaper->escapeHtml($result['title']) ?></div>
+                        <div class="swissup-pagespeed-description">
+                            <?= $escaper->escapeHtml($result['description']) ?>
+                            <?php if (!empty($result['url'])): ?>
+                                <a href="<?= $escaper->escapeUrl($result['url']) ?>" target="_blank" rel="noopener"><?= $escaper->escapeHtml(__('Learn more')) ?></a>
+                            <?php endif; ?>
+                        </div>
+                        <?php if (!$result['passed']): ?>
+                            <?php if (!empty($result['scope'])): ?>
+                                <div class="swissup-pagespeed-scope"><?= $escaper->escapeHtml(__('Different value in: %1', implode(', ', $result['scope']))) ?></div>
+                            <?php endif; ?>
+                            <?php if (!empty($result['commands']) || !empty($result['note'])): ?>
+                                <div class="swissup-pagespeed-fix">
+                                    <div class="swissup-pagespeed-fix-title">
+                                        <?= $escaper->escapeHtml($result['type'] === \Swissup\Core\Model\PageSpeed\CheckInterface::TYPE_TEST ? __('How to try') : __('How to fix')) ?>
+                                    </div>
+                                    <?php if (!empty($result['commands'])): ?>
+                                        <pre><?= $escaper->escapeHtml(implode("\n", $result['commands'])) ?></pre>
+                                    <?php endif; ?>
+                                    <?php if (!empty($result['note'])): ?>
+                                        <p><?= $escaper->escapeHtml($result['note']) ?></p>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </td>
+                    <td><?= $escaper->escapeHtml($result['current']) ?></td>
+                    <td><?= $escaper->escapeHtml($result['recommended']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <?php if ($block->hasCommands()): ?>
+        <div class="swissup-pagespeed-after">
+            <p><?= $escaper->escapeHtml(__('Run the commands from the Magento root folder, then clean the cache. In production mode, deploy static content again after changing JavaScript or CSS settings:')) ?></p>
+            <pre>bin/magento cache:clean
+bin/magento setup:static-content:deploy</pre>
+        </div>
+    <?php endif; ?>
+</div>

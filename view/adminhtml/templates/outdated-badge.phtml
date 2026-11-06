@@ -2,10 +2,12 @@
 /** @var \Swissup\Core\Block\Adminhtml\OutdatedBadge $block */
 $count = $block->getCount();
 $securityCount = $block->getSecurityCount();
+$pagespeedCount = $block->getPageSpeedCount();
 $counts = array_filter([
     'outdated' => $count,
     'security' => $securityCount,
-    'total' => $count + $securityCount,
+    'pagespeed' => $pagespeedCount,
+    'total' => $count + $securityCount + $pagespeedCount,
 ]);
 ?>
 <?php if ($counts): ?>
