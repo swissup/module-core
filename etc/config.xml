@@ -5,12 +5,10 @@
         <swissup_core>
             <notification>
                 <enabled>1</enabled>
+                <performance_warning>1</performance_warning>
                 <use_https>1</use_https>
                 <feed_url>swissuplabs.com/notifier</feed_url>
             </notification>
-            <performance>
-                <show_message>1</show_message>
-            </performance>
             <modules>
                 <use_https>1</use_https>
                 <url>swissup.github.io/packages-latest</url>
