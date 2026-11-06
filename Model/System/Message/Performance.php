@@ -15,7 +15,8 @@ class Performance implements MessageInterface
         private \Magento\Framework\FlagManager $flagManager,
         private \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         private \Magento\Backend\Model\UrlInterface $urlBuilder,
-        private PageSpeedStatus $pageSpeedStatus
+        private PageSpeedStatus $pageSpeedStatus,
+        private \Magento\Framework\Escaper $escaper
     ) {
     }
 
@@ -59,10 +60,16 @@ class Performance implements MessageInterface
      */
     public function getText()
     {
-        return __(
-            "<b>Swissup PageSpeed Analytics:</b> Some of your store's PageSpeed settings are not optimized. <a href=\"%1\">Review our recommendations</a> to improve performance.",
-            $this->urlBuilder->getUrl('swissup/pagespeed/index')
-        );
+        // the markup is kept out of translations, so they can't inject html
+        $title = $this->escaper->escapeHtml(__('Swissup PageSpeed Analytics:'));
+        $text = $this->escaper->escapeHtml(__(
+            "Some of your store's PageSpeed settings are not optimized. %1Review our recommendations%2 to improve performance.",
+            '[link]',
+            '[/link]'
+        ));
+        $link = '<a href="' . $this->escaper->escapeUrl($this->urlBuilder->getUrl('swissup/pagespeed/index')) . '">';
+
+        return '<b>' . $title . '</b> ' . str_replace(['[link]', '[/link]'], [$link, '</a>'], $text);
     }
 
     /**

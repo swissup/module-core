@@ -19,15 +19,18 @@ class ModuleActions extends \Magento\Ui\Component\Listing\Columns\Column
         foreach ($dataSource['data']['items'] as & $item) {
             // add external links
             foreach ($this->getData('links') as $link) {
-                if (empty($item[$link['key']]) || !str_starts_with($item[$link['key']], 'https://')) {
+                $url = $item[$link['key']] ?? null;
+                if (!is_string($url) || !str_starts_with($url, 'https://')) {
                     continue;
                 }
 
                 $item[$this->getData('name')][$link['key']] = [
-                    'href'  => $item[$link['key']],
+                    'href'  => $url,
                     'label' => __($link['label']),
                     'target' => '_blank',
                     'rel' => 'noreferrer noopener',
+                    // the grid evaluates ${...} in action properties as js templates
+                    '__disableTmpl' => true,
                 ];
             }
         }

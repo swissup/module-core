@@ -26,7 +26,7 @@ class SecurityMessage extends \Magento\Backend\Block\Template
     public function getMessage()
     {
         $url = 'https://swissuplabs.com/magento-2-security-patch-monitor';
-        $result = $this->patchStatus->run();
+        $result = $this->patchStatus->getResult();
 
         if ($result['error']) {
             return $this->patchStatus->isToolInstalled() ? ['text' => $result['error']] : [

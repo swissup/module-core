@@ -3,13 +3,16 @@
 namespace Swissup\Core\Controller\Adminhtml\Theme;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
 use Swissup\Core\Model\Theme\SourceFiles;
 
-class FixVirtualThemes extends \Magento\Backend\App\Action
+class FixVirtualThemes extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
+    const ADMIN_RESOURCE = 'Swissup_Core::core_config';
+
     private CollectionFactory $collectionFactory;
 
     private SourceFiles $sourceFiles;

@@ -73,6 +73,53 @@ class Remote extends AbstractLoader
     }
 
     /**
+     * Load components and drop the links that are not safe to render
+     *
+     * @return array
+     */
+    public function load()
+    {
+        if ($this->isLoaded()) {
+            return $this->items;
+        }
+
+        parent::load();
+
+        $links = [];
+        foreach ($this->getMapping() as $source => $destination) {
+            if (strpos($source, '.links.') !== false) {
+                $links[$destination] = true;
+            }
+        }
+
+        foreach ($this->items as &$item) {
+            foreach (array_keys($links) as $key) {
+                if (isset($item[$key]) && !$this->isSafeUrl($item[$key])) {
+                    unset($item[$key]);
+                }
+            }
+        }
+        unset($item);
+
+        return $this->items;
+    }
+
+    /**
+     * The feed links are rendered in the admin, so only plain https urls are allowed
+     *
+     * @param mixed $url
+     * @return bool
+     */
+    private function isSafeUrl($url): bool
+    {
+        return is_string($url)
+            && str_starts_with($url, 'https://')
+            && filter_var($url, FILTER_VALIDATE_URL) !== false
+            && strpos($url, '${') === false
+            && !preg_match('/\s/', $url);
+    }
+
+    /**
      * Retrieve component names and configs from remote satis repository
      *
      * @return \Traversable

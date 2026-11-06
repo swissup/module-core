@@ -2,6 +2,7 @@
 
 namespace Swissup\Core\Model;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -13,11 +14,26 @@ class PatchStatus
 
     private FileStorage $storage;
 
+    private LoggerInterface $logger;
+
     private ?array $result = null;
 
-    public function __construct(FileStorage $storage)
+    public function __construct(FileStorage $storage, LoggerInterface $logger)
     {
         $this->storage = $storage;
+        $this->logger = $logger;
+    }
+
+    /**
+     * The stored result, or a new one when the check is due
+     */
+    public function getResult(): array
+    {
+        if (!$this->isCheckRequired() && $stored = $this->getStored()) {
+            return $stored;
+        }
+
+        return $this->run();
     }
 
     public function run(): array
@@ -50,10 +66,7 @@ class PatchStatus
         // A request killed by the server timeout saves nothing, and the check
         // would restart on every page load. The previous result, marked as
         // checked, makes it wait for the next interval instead.
-        $this->storage->save(
-            json_encode(['checked_at' => $this->result['checked_at']] + ($this->getStored() ?: $this->result)),
-            self::STORAGE_KEY
-        );
+        $this->save(['checked_at' => $this->result['checked_at']] + ($this->getStored() ?: $this->result));
 
         try {
             $this->result['patches'] = $this->execute();
@@ -65,9 +78,21 @@ class PatchStatus
             $this->result['error'] = $e->getMessage();
         }
 
-        $this->storage->save(json_encode($this->result), self::STORAGE_KEY);
+        $this->save($this->result);
 
         return $this->result;
+    }
+
+    /**
+     * An unwritable var folder shouldn't break the admin pages
+     */
+    private function save(array $data): void
+    {
+        try {
+            $this->storage->save(json_encode($data), self::STORAGE_KEY);
+        } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
+        }
     }
 
     /**
@@ -77,7 +102,20 @@ class PatchStatus
     {
         $data = json_decode((string) $this->storage->load(self::STORAGE_KEY), true);
 
-        return is_array($data) ? $data : null;
+        // a broken file shouldn't break the badge and the grid
+        if (!is_array($data)
+            || !isset($data['checked_at'], $data['patches'])
+            || !is_int($data['checked_at'])
+            || !is_array($data['patches'])
+            || !array_key_exists('error', $data)
+            || !(is_string($data['error']) || $data['error'] === null)
+        ) {
+            return null;
+        }
+
+        $data['patches'] = array_filter($data['patches'], 'is_string');
+
+        return $data;
     }
 
     public function isCheckRequired(): bool

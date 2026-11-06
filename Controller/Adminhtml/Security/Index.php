@@ -23,8 +23,8 @@ class Index extends Action implements HttpGetActionInterface
 
     public function execute()
     {
-        // the grid shows the stored result, so the check runs before rendering
-        $this->patchStatus->run();
+        // the grid shows the stored result, so the check runs before rendering when it's due
+        $this->patchStatus->getResult();
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
