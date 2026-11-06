@@ -18,7 +18,10 @@ $issues = $block->getIssuesCount();
     </div>
 
     <div class="swissup-pagespeed-intro">
-        <p><?= $escaper->escapeHtml(__('The page compares your store settings with the recommended values for a fast storefront.')) ?></p>
+        <p>
+            <?= $escaper->escapeHtml(__('The page compares your store settings with the recommended values for a fast storefront.')) ?>
+            <a href="<?= $escaper->escapeUrl($block->getGuideUrl()) ?>" target="_blank" rel="noopener"><?= $escaper->escapeHtml(__('Read the performance guide')) ?></a>
+        </p>
         <?php if ($block->hasTests()): ?>
             <p>
                 <?= $escaper->escapeHtml(__('"Test It" settings make most stores faster, but the result depends on the theme, modules, and server. For example, merging JavaScript files sometimes makes the page slower.')) ?>

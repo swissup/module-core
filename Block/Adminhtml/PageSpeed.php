@@ -49,6 +49,11 @@ class PageSpeed extends \Magento\Backend\Block\Template
         return 'https://pagespeed.web.dev/';
     }
 
+    public function getGuideUrl(): string
+    {
+        return 'https://breezefront.com/docs/performance';
+    }
+
     public function hasCommands(): bool
     {
         foreach ($this->getResults() as $result) {

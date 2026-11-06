@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Swissup\Core\Model\System\Message;
 
 use Magento\Framework\Notification\MessageInterface;
+use Swissup\Core\Model\PageSpeedStatus;
 
 class Performance implements MessageInterface
 {
@@ -12,7 +13,9 @@ class Performance implements MessageInterface
 
     public function __construct(
         private \Magento\Framework\FlagManager $flagManager,
-        private \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        private \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        private \Magento\Backend\Model\UrlInterface $urlBuilder,
+        private PageSpeedStatus $pageSpeedStatus
     ) {
     }
 
@@ -29,7 +32,8 @@ class Performance implements MessageInterface
      */
     public function isDisplayed()
     {
-        return $this->isEnabled() && $this->isDismissed() && !$this->checkConfigs();
+        // the same check as the PageSpeed page and its menu badge
+        return $this->isEnabled() && $this->isDismissed() && $this->pageSpeedStatus->getCount() > 0;
     }
 
     /**
@@ -38,34 +42,6 @@ class Performance implements MessageInterface
     private function isEnabled()
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_SHOW_MESSAGE);
-    }
-
-    /**
-     * @return bool
-     */
-    private function checkConfigs()
-    {
-        $configs = [
-            'dev/template/minify_html' => true,
-            'dev/js/merge_files' => true,
-            'dev/js/enable_js_bundling' => false,
-            'dev/js/minify_files' => true,
-            'dev/js/move_script_to_bottom' => true,
-            'dev/css/merge_css_files' => true,
-            'dev/css/minify_files' => true,
-            'dev/css/use_css_critical_path' => true,
-        ];
-        //$scope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
-        $result = true;
-        foreach($configs as $path => $correctValue) {
-            $value = $this->scopeConfig->isSetFlag($path/*, $scope*/);
-            $result = $result && $value === $correctValue;
-            if (!$result) {
-                break;
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -84,10 +60,8 @@ class Performance implements MessageInterface
     public function getText()
     {
         return __(
-            "<b>Swissup Breeze:</b> Warning! Your store's page speed settings are not optimized."
-                . ' When your store is ready to sell, optimize Magento settings and enable production mode.'
-                . ' <a href="%1" target="_blank" rel="noopener noreferer">Open detailed instructions</a>',
-            'https://breezefront.com/docs/performance'
+            "<b>Swissup PageSpeed Analytics:</b> Some of your store's PageSpeed settings are not optimized. <a href=\"%1\">Review our recommendations</a> to improve performance.",
+            $this->urlBuilder->getUrl('swissup/pagespeed/index')
         );
     }
 
