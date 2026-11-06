@@ -19,6 +19,14 @@
                     <frontend_model>Swissup\Core\Block\Adminhtml\Config\Form\Field\Modules</frontend_model>
                 </field>
             </group>
+            <group id="performance" translate="label" type="text" sortOrder="240" showInDefault="1">
+                <label>Performance</label>
+                <field id="show_message" translate="label comment" type="select" sortOrder="10" showInDefault="1">
+                    <label>Show Performance Warning</label>
+                    <comment>Show the admin notification when the store's page speed settings are not optimized (Swissup Breeze).</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
             <group id="notification" translate="label" type="text" sortOrder="250" showInDefault="1">
                 <label>Notifications</label>
                 <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1">
