@@ -2,6 +2,7 @@
 
 namespace Swissup\Core\Model;
 
+use Magento\Framework\App\CacheInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -11,21 +12,26 @@ class PatchStatus
     const STORAGE_KEY = 'patch_status';
     const CHECK_INTERVAL = 3600;
     const TOOL_PATH = 'vendor/bin/patch-status';
+    const CACHE_KEY = 'swissup_core_patch_status_checked_at';
 
     private FileStorage $storage;
 
     private LoggerInterface $logger;
 
+    private CacheInterface $cache;
+
     private ?array $result = null;
 
-    public function __construct(FileStorage $storage, LoggerInterface $logger)
+    public function __construct(FileStorage $storage, LoggerInterface $logger, CacheInterface $cache)
     {
         $this->storage = $storage;
         $this->logger = $logger;
+        $this->cache = $cache;
     }
 
     /**
-     * The stored result, or a new one when the check is due
+     * The stored result, or a new one when the check is due. The Security page
+     * calls run() instead, to show the result right after applying patches.
      */
     public function getResult(): array
     {
@@ -66,7 +72,21 @@ class PatchStatus
         // A request killed by the server timeout saves nothing, and the check
         // would restart on every page load. The previous result, marked as
         // checked, makes it wait for the next interval instead.
-        $this->save(['checked_at' => $this->result['checked_at']] + ($this->getStored() ?: $this->result));
+        if (!$this->save(['checked_at' => $this->result['checked_at']] + ($this->getStored() ?: $this->result))) {
+            // Without the storage there is no lock and no stored result - the
+            // tool would run on every admin page. The cache keeps the interval.
+            $this->cache->save((string) $this->result['checked_at'], self::CACHE_KEY, [], self::CHECK_INTERVAL);
+
+            return $this->result = [
+                'checked_at' => $this->result['checked_at'],
+                'error' => (string) __(
+                    'The %1 folder is not writable, so the security patches can\'t be checked.',
+                    'var/swissup/core'
+                ),
+                'unsupported' => true,
+                'patches' => [],
+            ];
+        }
 
         try {
             $this->result['patches'] = $this->execute();
@@ -86,13 +106,16 @@ class PatchStatus
     /**
      * An unwritable var folder shouldn't break the admin pages
      */
-    private function save(array $data): void
+    private function save(array $data): bool
     {
         try {
             $this->storage->save(json_encode($data), self::STORAGE_KEY);
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -122,7 +145,12 @@ class PatchStatus
     {
         $data = $this->getStored();
 
-        if (!$data || $data['checked_at'] < time() - self::CHECK_INTERVAL) {
+        if (!$data) {
+            // the storage failed within the interval, see run()
+            return !$this->cache->load(self::CACHE_KEY);
+        }
+
+        if ($data['checked_at'] < time() - self::CHECK_INTERVAL) {
             return true;
         }
 
