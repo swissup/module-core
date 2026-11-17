@@ -143,11 +143,14 @@ class PatchStatus
 
     public function isCheckRequired(): bool
     {
+        if ($this->cache->load(self::CACHE_KEY)) {
+            return false;
+        }
+
         $data = $this->getStored();
 
         if (!$data) {
-            // the storage failed within the interval, see run()
-            return !$this->cache->load(self::CACHE_KEY);
+            return true;
         }
 
         if ($data['checked_at'] < time() - self::CHECK_INTERVAL) {
