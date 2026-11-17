@@ -2,6 +2,7 @@
 
 namespace Swissup\Core\Model\ComponentList\Loader;
 
+use Magento\Framework\App\CacheInterface;
 use Swissup\Core\Model\FileStorage;
 
 class Remote extends AbstractLoader
@@ -12,6 +13,8 @@ class Remote extends AbstractLoader
     const VERSION_STORAGE_KEY = 'packages_version';
     const LASTCHECK_STORAGE_KEY = 'packages_lastcheck';
     const VERSION_CHECK_INTERVAL = 3600;
+    const ATTEMPT_CACHE_KEY = 'swissup_core_packages_attempt';
+    const ATTEMPT_INTERVAL = 900;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -30,6 +33,8 @@ class Remote extends AbstractLoader
 
     private FileStorage $storage;
 
+    private CacheInterface $cache;
+
     private ?string $packagesVersion = null;
 
     private bool $offlineMode = false;
@@ -42,13 +47,15 @@ class Remote extends AbstractLoader
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\HTTP\ClientFactory $httpClientFactory,
-        FileStorage $storage
+        FileStorage $storage,
+        CacheInterface $cache
     ) {
         parent::__construct($componentHelper, $logger);
         $this->scopeConfig = $scopeConfig;
         $this->jsonHelper = $jsonHelper;
         $this->httpClientFactory = $httpClientFactory;
         $this->storage = $storage;
+        $this->cache = $cache;
     }
 
     public function getMapping()
@@ -194,7 +201,7 @@ class Remote extends AbstractLoader
 
     protected function loadPackagesData()
     {
-        if ($this->offlineMode) {
+        if ($this->offlineMode || $this->isAttemptThrottled()) {
             return $this->loadStoredPackages();
         }
 
@@ -204,6 +211,10 @@ class Remote extends AbstractLoader
                 return $packages;
             }
         }
+
+        // A failed check doesn't update the check time, so a feed that is down
+        // would be asked on every admin page. The attempt waits a while instead.
+        $this->cache->save((string) time(), self::ATTEMPT_CACHE_KEY, [], self::ATTEMPT_INTERVAL);
 
         if (!$version = $this->fetchPackagesVersion()) {
             return $this->loadStoredPackages();
@@ -281,17 +292,30 @@ class Remote extends AbstractLoader
     }
 
     /**
-     * Whether the remote source was not checked within the last hour
+     * Whether the remote source was not checked within the last hour, and
+     * was not asked within the last attempt interval
      *
      * @return bool
      */
     public function isVersionCheckRequired()
     {
+        if ($this->isAttemptThrottled()) {
+            return false;
+        }
+
         $time = $this->getLastCheckTime();
 
         return $this->forceVersionCheck
             || !$time
             || time() - $time >= self::VERSION_CHECK_INTERVAL;
+    }
+
+    /**
+     * The feed was asked recently - a refresh asks it anyway
+     */
+    private function isAttemptThrottled(): bool
+    {
+        return !$this->forceVersionCheck && (bool) $this->cache->load(self::ATTEMPT_CACHE_KEY);
     }
 
     private function updateVersionCheckTime()
@@ -320,6 +344,8 @@ class Remote extends AbstractLoader
         $client = $this->httpClientFactory->create();
         $client->setOption(CURLOPT_FOLLOWLOCATION, true);
         $client->setOption(CURLOPT_MAXREDIRS, 5);
+        // a host that is down fails fast, a slow download still has the full timeout
+        $client->setOption(CURLOPT_CONNECTTIMEOUT, 5);
         $client->setTimeout(30);
 
         try {
