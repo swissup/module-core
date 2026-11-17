@@ -33,6 +33,9 @@ abstract class AbstractList extends Action
 
     protected function getModulesJson()
     {
+        // the remote feed can be slow, the admin's other requests shouldn't wait for it
+        $this->_session->writeClose();
+
         $fields = array_flip(self::RESPONSE_FIELDS);
 
         return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData([
