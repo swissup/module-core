@@ -42,12 +42,18 @@ class StoreCreateCommand extends Command
      * @param \Magento\Store\Model\GroupFactory $groupFactory
      * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @param \Magento\Store\Model\ResourceModel\Group $groupResource
+     * @param \Magento\Store\Model\ResourceModel\Store $storeResource
+     * @param \Magento\Store\Model\ResourceModel\Group\CollectionFactory $groupCollectionFactory
      * @param null $name
      */
     public function __construct(
         \Magento\Store\Model\GroupFactory $groupFactory,
         \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
+        private \Magento\Store\Model\ResourceModel\Group $groupResource,
+        private \Magento\Store\Model\ResourceModel\Store $storeResource,
+        private \Magento\Store\Model\ResourceModel\Group\CollectionFactory $groupCollectionFactory,
         $name = null
     ) {
         $this->groupFactory = $groupFactory;
@@ -124,11 +130,10 @@ class StoreCreateCommand extends Command
             );
 
             $storeModel->setData($data);
-            $groupModel = $this->groupFactory->create()->load(
-                $storeModel->getGroupId()
-            );
+            $groupModel = $this->groupFactory->create();
+            $this->groupResource->load($groupModel, $storeModel->getGroupId());
             $storeModel->setWebsiteId($groupModel->getWebsiteId());
-            $storeModel->save();
+            $this->storeResource->save($storeModel);
             $io->success('You created the store view.');
 
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
@@ -147,7 +152,7 @@ class StoreCreateCommand extends Command
      */
     private function getDefaultStoreGroupId()
     {
-        return $this->groupFactory->create()->getCollection()
+        return $this->groupCollectionFactory->create()
             ->setPageSize(1)
             ->getFirstItem()
             ->getId();

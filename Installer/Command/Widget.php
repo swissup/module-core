@@ -13,7 +13,8 @@ class Widget
     public function __construct(
         private \Magento\Store\Model\StoreManagerInterface $storeManager,
         private \Magento\Widget\Model\Widget\InstanceFactory $widgetFactory,
-        private \Magento\Widget\Model\ResourceModel\Widget\Instance\CollectionFactory $collectionFactory
+        private \Magento\Widget\Model\ResourceModel\Widget\Instance\CollectionFactory $collectionFactory,
+        private \Magento\Widget\Model\ResourceModel\Widget\Instance $widgetResource
     ) {
     }
 
@@ -38,12 +39,12 @@ class Widget
                     $widget->setStoreIds($storesToLeave);
                 } else {
                     // re-create widget with new params
-                    $widget->delete();
+                    $this->widgetResource->delete($widget);
                     continue;
                 }
 
                 try {
-                    $widget->save();
+                    $this->widgetResource->save($widget);
                 } catch (\Exception $e) {
                     $this->logger->warning($e->getMessage());
                 }
@@ -75,7 +76,8 @@ class Widget
             $data['page_groups'] = $pageGroups;
 
             try {
-                $this->widgetFactory->create()->addData($data)->save();
+                $widget = $this->widgetFactory->create()->addData($data);
+                $this->widgetResource->save($widget);
             } catch (\Exception $e) {
                 $this->logger->warning($e->getMessage());
             }

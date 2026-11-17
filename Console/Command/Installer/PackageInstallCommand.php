@@ -33,7 +33,8 @@ class PackageInstallCommand extends Command
         protected \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar,
         protected \Magento\Theme\Model\Theme\ThemePackageInfo $themePackageInfo,
         protected \Swissup\Core\Helper\Component $componentHelper,
-        protected \Swissup\Core\Installer\Process $process
+        protected \Swissup\Core\Installer\Process $process,
+        private \Magento\Framework\App\Filesystem\DirectoryList $directoryList
     ) {
         parent::__construct();
     }
@@ -277,7 +278,7 @@ class PackageInstallCommand extends Command
     private function getRerunCommand()
     {
         $command = array_merge(
-            [BP . '/bin/magento', $this->getName()],
+            [$this->directoryList->getRoot() . '/bin/magento', $this->getName()],
             $this->getArguments(),
             // stop the child from downloading again if the package is still missing
             ['--' . self::INPUT_KEY_NO_DOWNLOAD]

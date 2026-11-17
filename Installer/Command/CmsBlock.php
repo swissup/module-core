@@ -13,7 +13,8 @@ class CmsBlock
         private \Magento\Cms\Model\BlockFactory $blockFactory,
         private \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $collectionFactory,
         private \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        private \Magento\Store\Model\StoreManagerInterface $storeManager
+        private \Magento\Store\Model\StoreManagerInterface $storeManager,
+        private \Magento\Cms\Model\ResourceModel\Block $blockResource
     ) {
     }
 
@@ -34,7 +35,7 @@ class CmsBlock
                 ->addFieldToFilter('identifier', $data['identifier']);
 
             foreach ($collection as $block) {
-                $block->load($block->getId()); // load stores
+                $this->blockResource->load($block, $block->getId()); // load stores
 
                 $storesToLeave = array_diff($block->getStoreId(), $request->getStoreIds());
 
@@ -46,7 +47,7 @@ class CmsBlock
                 }
 
                 try {
-                    $block->save();
+                    $this->blockResource->save($block);
                 } catch (\Exception $e) {
                     $this->logger->warning($e->getMessage());
                 }
@@ -57,10 +58,10 @@ class CmsBlock
             ], $data);
 
             try {
-                $this->blockFactory->create()
+                $block = $this->blockFactory->create()
                     ->setData($data)
-                    ->setStores($request->getStoreIds()) // see Magento\Cms\Model\ResourceModel\Block::_afterSave
-                    ->save();
+                    ->setStores($request->getStoreIds()); // see Magento\Cms\Model\ResourceModel\Block::_afterSave
+                $this->blockResource->save($block);
             } catch (\Exception $e) {
                 $this->logger->warning($e->getMessage());
             }

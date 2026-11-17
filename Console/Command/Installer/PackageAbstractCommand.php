@@ -183,7 +183,7 @@ abstract class PackageAbstractCommand extends Command
             $dumps = $this->getSchemaDumps();
             // safe-mode to dump the DB data of the disabled modules
             $code = $this->process->run(
-                [BP . '/bin/magento', 'setup:upgrade', '--safe-mode=1'],
+                [$this->directoryList->getRoot() . '/bin/magento', 'setup:upgrade', '--safe-mode=1'],
                 $output,
                 $interactive
             );

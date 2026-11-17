@@ -13,7 +13,8 @@ class ProductAttribute
         private \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory,
         private \Magento\Catalog\Helper\Product $productHelper,
         private \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        private \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory
+        private \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attributeSetCollectionFactory,
+        private \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
     ) {
     }
 
@@ -29,8 +30,8 @@ class ProductAttribute
 
         foreach ($request->getParams() as $data) {
             /* @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-            $model = $this->attributeFactory->create()
-                ->load($data['attribute_code'], 'attribute_code');
+            $model = $this->attributeFactory->create();
+            $this->attributeResource->load($model, $data['attribute_code'], 'attribute_code');
             if ($model->getId()) {
                 continue;
             }
@@ -60,7 +61,7 @@ class ProductAttribute
                 $model->setAttributeSetId($set->getId());
                 $model->setAttributeGroupId($set->getDefaultGroupId());
                 try {
-                    $model->save();
+                    $this->attributeResource->save($model);
                 } catch (\Exception $e) {
                     $this->logger->warning($e->getMessage());
                 }
@@ -68,7 +69,7 @@ class ProductAttribute
 
             if (!$attributeSets->count()) {
                 try {
-                    $model->save();
+                    $this->attributeResource->save($model);
                 } catch (\Exception $e) {
                     $this->logger->warning($e->getMessage());
                 }

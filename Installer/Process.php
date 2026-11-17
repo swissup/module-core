@@ -11,6 +11,11 @@ use Symfony\Component\Process\Process as SymfonyProcess;
  */
 class Process
 {
+    public function __construct(
+        private \Magento\Framework\App\Filesystem\DirectoryList $directoryList
+    ) {
+    }
+
     /**
      * @return boolean
      */
@@ -51,7 +56,7 @@ class Process
 
         array_unshift($command, PHP_BINARY);
 
-        $process = new SymfonyProcess($command, BP, $env);
+        $process = new SymfonyProcess($command, $this->directoryList->getRoot(), $env);
         $process->setTimeout(null);
 
         if ($interactive && SymfonyProcess::isTtySupported()) {
@@ -85,7 +90,7 @@ class Process
         $command[] = '--no-ansi';
         $command[] = '--no-interaction';
 
-        $process = new SymfonyProcess($command, BP, $env);
+        $process = new SymfonyProcess($command, $this->directoryList->getRoot(), $env);
         $process->setTimeout(null);
         $process->run();
 
