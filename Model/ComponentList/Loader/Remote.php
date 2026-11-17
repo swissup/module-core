@@ -344,9 +344,9 @@ class Remote extends AbstractLoader
         $client = $this->httpClientFactory->create();
         $client->setOption(CURLOPT_FOLLOWLOCATION, true);
         $client->setOption(CURLOPT_MAXREDIRS, 5);
-        // a host that is down fails fast, a slow download still has the full timeout
         $client->setOption(CURLOPT_CONNECTTIMEOUT, 5);
-        $client->setTimeout(30);
+        $client->setTimeout(10);
+        $client->setOption(CURLOPT_ENCODING, '');
 
         try {
             $client->get($url);
