@@ -22,8 +22,12 @@ class PatchStatus
 
     private ?array $result = null;
 
-    public function __construct(FileStorage $storage, LoggerInterface $logger, CacheInterface $cache)
-    {
+    public function __construct(
+        FileStorage $storage,
+        LoggerInterface $logger,
+        CacheInterface $cache,
+        private \Magento\Framework\App\Filesystem\DirectoryList $directoryList
+    ) {
         $this->storage = $storage;
         $this->logger = $logger;
         $this->cache = $cache;
@@ -159,12 +163,12 @@ class PatchStatus
 
         // the tool is updated along with the patches
         return $this->isToolInstalled()
-            && filemtime(BP . '/' . self::TOOL_PATH) >= $data['checked_at'];
+            && filemtime($this->directoryList->getRoot() . '/' . self::TOOL_PATH) >= $data['checked_at'];
     }
 
     public function isToolInstalled(): bool
     {
-        return is_file(BP . '/' . self::TOOL_PATH);
+        return is_file($this->directoryList->getRoot() . '/' . self::TOOL_PATH);
     }
 
     public function getCount($data): int
@@ -187,7 +191,7 @@ class PatchStatus
      */
     private function execute()
     {
-        $tool = BP . '/' . self::TOOL_PATH;
+        $tool = $this->directoryList->getRoot() . '/' . self::TOOL_PATH;
 
         if (!$this->isToolInstalled()) {
             throw new \RuntimeException(
@@ -203,7 +207,8 @@ class PatchStatus
             ));
         }
 
-        $process = new Process([$this->getPhpBinary(), $tool, '--root=' . BP, '--format=json'], BP);
+        $root = $this->directoryList->getRoot();
+        $process = new Process([$this->getPhpBinary(), $tool, '--root=' . $root, '--format=json'], $root);
         $process->setTimeout(120);
         $process->run();
 
